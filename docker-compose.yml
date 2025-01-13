@@ -18,6 +18,8 @@ services:
 
   postgres:
     image: postgres:latest
+    volumes:
+      - /private/var/lib/postgresql:/var/lib/postgresql
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
