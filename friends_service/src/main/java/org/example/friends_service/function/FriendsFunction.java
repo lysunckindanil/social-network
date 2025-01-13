@@ -22,11 +22,11 @@ public class FriendsFunction {
 
     @Bean
     public Consumer<AddAndDeleteFriendDto> addFriend() {
-        return (dto) -> friendsService.addFriendByUsernames(dto.getProfile_username(), dto.getFriend_username());
+        return friendsService::addFriendByUsernames;
     }
 
     @Bean
     public Consumer<AddAndDeleteFriendDto> deleteFriend() {
-        return (dto) -> friendsService.deleteFriendsByUsernames(dto.getProfile_username(), dto.getFriend_username());
+        return friendsService::deleteFriendsByUsernames;
     }
 }
