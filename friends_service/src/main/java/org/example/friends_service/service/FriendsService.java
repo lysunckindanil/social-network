@@ -45,4 +45,17 @@ public class FriendsService {
             friendsRepository.save(friends_new);
         }
     }
+
+    public void deleteFriendsByUsernames(String profile_username, String friend_username) {
+        Profile profile = profileRepository.findByUsername(profile_username).orElseThrow(() -> new RuntimeException("User is not found"));
+        Profile friend = profileRepository.findByUsername(friend_username).orElseThrow(() -> new RuntimeException("User is not found"));
+
+        Optional<ProfileFriend> friends_optional = friendsRepository.findProfileFriendByProfile(profile);
+        if (friends_optional.isPresent()) {
+            friends_optional.get().deleteFriend(friend);
+            friendsRepository.save(friends_optional.get());
+        }
+    }
+
+
 }

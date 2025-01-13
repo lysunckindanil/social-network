@@ -28,4 +28,8 @@ public class ProfileFriend {
     public void addFriend(Profile friend) {
         friends.add(friend);
     }
+
+    public void deleteFriend(Profile friend) {
+        friends.remove(friend);
+    }
 }
