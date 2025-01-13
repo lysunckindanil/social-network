@@ -3,6 +3,9 @@ package org.example.friends_service.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +19,13 @@ public class ProfileFriend {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Profile profile;
 
-    @OneToOne
-    private Profile friend;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Profile> friends = new ArrayList<>();
+
+    public void addFriend(Profile friend) {
+        friends.add(friend);
+    }
 }

@@ -5,10 +5,10 @@ import org.example.friends_service.model.ProfileFriend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProfileFriendRepository extends JpaRepository<ProfileFriend, Long> {
 
-    List<ProfileFriend> findProfileFriendsByProfile(Profile profile);
+    Optional<ProfileFriend> findProfileFriendByProfile(Profile profile);
 }

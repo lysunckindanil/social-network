@@ -1,7 +1,7 @@
 package org.example.friends_service.function;
 
 import lombok.RequiredArgsConstructor;
-import org.example.friends_service.dto.AddFriendDto;
+import org.example.friends_service.dto.AddAndDeleteFriendDto;
 import org.example.friends_service.service.FriendsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class FriendsFunction {
     }
 
     @Bean
-    public Consumer<AddFriendDto> addFriend() {
+    public Consumer<AddAndDeleteFriendDto> addFriend() {
         return (dto) -> friendsService.addFriendByUsernames(dto.getProfile_username(), dto.getFriend_username());
     }
 }
