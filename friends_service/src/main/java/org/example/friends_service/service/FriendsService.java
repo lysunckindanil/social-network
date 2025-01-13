@@ -20,8 +20,8 @@ public class FriendsService {
     public List<String> getFriendsUsernamesByProfileUsername(String username) {
         Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
         if (optionalProfile.isPresent()) {
-            ProfileFriend friends = friendsRepository.findProfileFriendByProfile(optionalProfile.get());
-            return friends.getFriends().stream().map(Profile::getUsername).toList();
+            List<ProfileFriend> friends = friendsRepository.findProfileFriendsByProfile(optionalProfile.get());
+            return friends.stream().map(ProfileFriend::getFriend).map(Profile::getUsername).toList();
         }
         return new ArrayList<>();
     }
@@ -29,8 +29,7 @@ public class FriendsService {
     public void addFriendByUsernames(String profile_username, String friend_username) {
         Profile profile = profileRepository.findByUsername(profile_username).orElseThrow(() -> new RuntimeException("User is not found"));
         Profile friend = profileRepository.findByUsername(friend_username).orElseThrow(() -> new RuntimeException("User is not found"));
-        ProfileFriend friends = friendsRepository.findProfileFriendByProfile(profile);
-        friends.addFriend(friend);
+        ProfileFriend friends = ProfileFriend.builder().profile(profile).friend(friend).build();
         friendsRepository.save(friends);
     }
 

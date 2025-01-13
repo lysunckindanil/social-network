@@ -1,12 +1,11 @@
 package org.example.friends_service.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -18,14 +17,8 @@ public class ProfileFriend {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "friend_id")
-    private List<Profile> friends = new ArrayList<>();
-
-    public void addFriend(Profile friend) {
-        friends.add(friend);
-    }
+    @OneToOne
+    private Profile friend;
 }
