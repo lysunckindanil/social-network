@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 @Builder
 @AllArgsConstructor
-@Data
 @EqualsAndHashCode
 public class ProfileDto implements Serializable {
     private final String username;
