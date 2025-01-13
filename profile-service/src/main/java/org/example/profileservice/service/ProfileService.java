@@ -26,15 +26,6 @@ public class ProfileService {
                 .build();
     }
 
-    public ProfileDto getProfileByEmail(String email) {
-        Profile profile = profileRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        return ProfileDto.builder()
-                .username(profile.getUsername())
-                .email(profile.getEmail())
-                .photoUrl(profile.getPhotoUrl())
-                .build();
-    }
-
     @Transactional
     public void deleteProfile(String username) {
         profileRepository.deleteByUsername(username);

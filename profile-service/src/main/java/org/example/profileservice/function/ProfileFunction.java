@@ -16,11 +16,6 @@ public class ProfileFunction {
     private final ProfileService profileService;
 
     @Bean
-    public Function<String, ProfileDto> getByEmail() {
-        return profileService::getProfileByEmail;
-    }
-
-    @Bean
     public Function<String, ProfileDto> getByUsername() {
         return profileService::getProfileByUsername;
     }
