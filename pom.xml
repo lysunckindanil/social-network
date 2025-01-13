@@ -53,6 +53,6 @@
     <module>configuration-service</module>
     <module>gateway-service</module>
     <module>profile-service</module>
-    <module>friends_service</module>
+    <module>friends-service</module>
   </modules>
 </project>
