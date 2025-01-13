@@ -9,15 +9,9 @@ pipeline {
   }
 
   stages {
-    stage('Test') {
+    stage('Test & Build Images') {
       steps {
-        sh 'mvn clean test -Pprod'
-      }
-    }
-
-    stage('Build Images') {
-      steps {
-        sh 'mvn spring-boot:build-image -Pprod'
+        sh 'mvn clean spring-boot:build-image -Pprod'
       }
     }
 
