@@ -1,11 +1,12 @@
 package org.example.profileservice.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.model.Profile;
 import org.example.profileservice.repo.ProfileRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -13,9 +14,6 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
 
-    public void saveProfile(Profile profile) {
-        profileRepository.save(profile);
-    }
 
     public ProfileDto getProfileByUsername(String username) {
         Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
@@ -26,8 +24,13 @@ public class ProfileService {
                 .build();
     }
 
-    @Transactional
-    public void deleteProfile(String username) {
-        profileRepository.deleteByUsername(username);
+    public List<ProfileDto> getAllProfiles() {
+        return profileRepository.findAll().stream().map((profile ->
+                ProfileDto.builder()
+                        .username(profile.getUsername())
+                        .email(profile.getEmail())
+                        .photoUrl(profile.getPhotoUrl())
+                        .build()
+        )).toList();
     }
 }
