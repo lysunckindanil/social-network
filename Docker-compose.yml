@@ -1,0 +1,51 @@
+services:
+  zipkin-service:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+
+  configuration-service:
+    image: docker.io/library/configuration-service:0.0.1-SNAPSHOT
+    ports:
+      - "8888:8888"
+
+  discovery-service:
+    image: docker.io/library/discovery-service:0.0.1-SNAPSHOT
+    depends_on:
+      - configuration-service
+    ports:
+      - "8761:8761"
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
+  friends-service:
+    image: docker.io/library/friends-service:0.0.1-SNAPSHOT
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - HIBERNATE_DDL_AUTO
+    depends_on:
+      - discovery-service
+
+  profile-service:
+    image: docker.io/library/profile-service:0.0.1-SNAPSHOT
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - HIBERNATE_DDL_AUTO
+    depends_on:
+      - discovery-service
+
+  gateway-service:
+    image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
+    depends_on:
+      - discovery-service
+    ports:
+      - "8000:8000"
