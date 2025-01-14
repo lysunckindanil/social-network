@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_friend")
+@Table(name = "profile_post")
 public class ProfilePost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class ProfilePost {
     @OneToOne
     private Profile profile;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Post> posts = new ArrayList<>();
 
     public void addPost(Post post) {
