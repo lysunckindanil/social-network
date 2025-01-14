@@ -1,9 +1,8 @@
-package org.example.friendspostsservice.model;
+package org.example.sharepostsservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
 import java.util.Objects;
 
 @Builder
@@ -12,25 +11,26 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "profiles")
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String label;
-    private String content;
-    private Date createdAt;
+    private String username;
+    private String password;
+    private String email;
+    private String photoUrl;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(createdAt, post.createdAt);
+        Profile profile = (Profile) o;
+        return Objects.equals(id, profile.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(createdAt);
+        return Objects.hashCode(id);
     }
 }

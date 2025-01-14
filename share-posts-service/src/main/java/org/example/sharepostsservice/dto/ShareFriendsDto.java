@@ -1,4 +1,4 @@
-package org.example.friendspostsservice.dto;
+package org.example.sharepostsservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

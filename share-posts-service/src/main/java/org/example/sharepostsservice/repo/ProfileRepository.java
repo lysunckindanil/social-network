@@ -1,6 +1,6 @@
-package org.example.friendspostsservice.repo;
+package org.example.sharepostsservice.repo;
 
-import org.example.friendspostsservice.model.Profile;
+import org.example.sharepostsservice.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

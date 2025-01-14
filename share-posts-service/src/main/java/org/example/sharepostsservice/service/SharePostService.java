@@ -1,15 +1,15 @@
-package org.example.friendspostsservice.service;
+package org.example.sharepostsservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.friendspostsservice.dto.ShareFriendsDto;
-import org.example.friendspostsservice.model.FriendPost;
-import org.example.friendspostsservice.model.Post;
-import org.example.friendspostsservice.model.Profile;
-import org.example.friendspostsservice.model.ProfileFriend;
-import org.example.friendspostsservice.repo.FriendPostRepository;
-import org.example.friendspostsservice.repo.PostRepository;
-import org.example.friendspostsservice.repo.ProfileFriendRepository;
-import org.example.friendspostsservice.repo.ProfileRepository;
+import org.example.sharepostsservice.dto.ShareFriendsDto;
+import org.example.sharepostsservice.model.FriendPost;
+import org.example.sharepostsservice.model.Post;
+import org.example.sharepostsservice.model.Profile;
+import org.example.sharepostsservice.model.ProfileFriend;
+import org.example.sharepostsservice.repo.FriendPostRepository;
+import org.example.sharepostsservice.repo.PostRepository;
+import org.example.sharepostsservice.repo.ProfileFriendRepository;
+import org.example.sharepostsservice.repo.ProfileRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 

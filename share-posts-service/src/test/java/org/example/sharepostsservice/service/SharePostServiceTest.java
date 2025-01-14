@@ -1,13 +1,13 @@
-package org.example.friendspostsservice.service;
+package org.example.sharepostsservice.service;
 
-import org.example.friendspostsservice.dto.ShareFriendsDto;
-import org.example.friendspostsservice.model.Post;
-import org.example.friendspostsservice.model.Profile;
-import org.example.friendspostsservice.model.ProfileFriend;
-import org.example.friendspostsservice.repo.FriendPostRepository;
-import org.example.friendspostsservice.repo.PostRepository;
-import org.example.friendspostsservice.repo.ProfileFriendRepository;
-import org.example.friendspostsservice.repo.ProfileRepository;
+import org.example.sharepostsservice.dto.ShareFriendsDto;
+import org.example.sharepostsservice.model.Post;
+import org.example.sharepostsservice.model.Profile;
+import org.example.sharepostsservice.model.ProfileFriend;
+import org.example.sharepostsservice.repo.FriendPostRepository;
+import org.example.sharepostsservice.repo.PostRepository;
+import org.example.sharepostsservice.repo.ProfileFriendRepository;
+import org.example.sharepostsservice.repo.ProfileRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +37,7 @@ class SharePostServiceTest {
     void setUp() {
         sharePostService = new SharePostService(postRepository,profileRepository,profileFriendRepository, friendPostRepository);
     }
+
     @Test
     void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
         Profile profile = Profile.builder().username("user1").build();

@@ -1,4 +1,4 @@
-package org.example.friendspostsservice;
+package org.example.sharepostsservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

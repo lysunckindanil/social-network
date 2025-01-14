@@ -1,4 +1,4 @@
-package org.example.friendspostsservice.model;
+package org.example.sharepostsservice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

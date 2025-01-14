@@ -1,4 +1,4 @@
-package org.example.friendspostsservice.config;
+package org.example.sharepostsservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

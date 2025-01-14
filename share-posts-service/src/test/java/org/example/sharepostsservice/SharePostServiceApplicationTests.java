@@ -1,4 +1,4 @@
-package org.example.friendspostsservice;
+package org.example.sharepostsservice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

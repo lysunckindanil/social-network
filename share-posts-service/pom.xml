@@ -11,8 +11,8 @@
     <groupId>org.example</groupId>
     <artifactId>share-posts-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>friends-posts-service</name>
-    <description>friends-posts-service</description>
+    <name>share-posts-service</name>
+    <description>share-posts-service</description>
     <url/>
     <licenses>
         <license/>
