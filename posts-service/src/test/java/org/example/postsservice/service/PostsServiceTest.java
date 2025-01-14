@@ -55,9 +55,8 @@ class PostsServiceTest {
         Profile profile2 = Profile.builder().username("username2").build();
         profileRepository.save(profile);
         profileRepository.save(profile2);
-        Date date = new Date();
-        PostDto postDto = PostDto.builder().createdAt(date).build();
-        PostDto postDto2 = PostDto.builder().createdAt(date).build();
+        PostDto postDto = PostDto.builder().build();
+        PostDto postDto2 = PostDto.builder().build();
         AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         AddAndDeletePostDto addAndDeletePostDto2 = AddAndDeletePostDto.builder().profile_username(profile2.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addAndDeletePostDto);
@@ -71,9 +70,8 @@ class PostsServiceTest {
     void addPostByUsername_AddSomePosts_AddsSomePostToRepository() {
         Profile profile = Profile.builder().username("username").build();
         profileRepository.save(profile);
-        Date date = new Date();
-        PostDto postDto = PostDto.builder().createdAt(date).build();
-        PostDto postDto2 = PostDto.builder().createdAt(date).build();
+        PostDto postDto = PostDto.builder().build();
+        PostDto postDto2 = PostDto.builder().build();
         AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         AddAndDeletePostDto addAndDeletePostDto2 = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addAndDeletePostDto);
@@ -87,10 +85,12 @@ class PostsServiceTest {
     void deletePostByUsername_DeletePost_DeletesPostFromRepository() {
         Profile profile = Profile.builder().username("username").build();
         profileRepository.save(profile);
-        Date date = new Date();
-        PostDto postDto = PostDto.builder().createdAt(date).build();
+        PostDto postDto = PostDto.builder().build();
         AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addAndDeletePostDto);
+        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
+        System.out.println(createdAt);
+        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
         postsService.deletePostByUsername(addAndDeletePostDto);
 
         Assertions.assertEquals(0, postRepository.findAll().size());

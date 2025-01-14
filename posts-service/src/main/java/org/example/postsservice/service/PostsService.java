@@ -12,6 +12,7 @@ import org.example.postsservice.repo.ProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class PostsService {
         if (optionalProfile.isPresent()) {
             Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(optionalProfile.get());
             if (optionalProfilePosts.isPresent()) {
-                return optionalProfilePosts.get().getPosts().stream().map(PostsService::wrapVersaPost).toList();
+                return optionalProfilePosts.get().getPosts().stream().map(PostsService::wrapPost).toList();
             }
         }
         return new ArrayList<>();
@@ -35,7 +36,8 @@ public class PostsService {
 
     public void addPostByUsername(AddAndDeletePostDto postDto) {
         String username = postDto.getProfile_username();
-        Post post = wrapPost(postDto.getPost());
+        Post post = unwrapPost(postDto.getPost());
+        post.setCreatedAt(new Date());
         postRepository.save(post);
         Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
         if (optionalProfile.isPresent()) {
@@ -54,7 +56,7 @@ public class PostsService {
 
     public void deletePostByUsername(AddAndDeletePostDto postDto) {
         String username = postDto.getProfile_username();
-        Post post = wrapPost(postDto.getPost());
+        Post post = unwrapPost(postDto.getPost());
         Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
         if (optionalProfile.isPresent()) {
             Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(optionalProfile.get());
@@ -72,19 +74,18 @@ public class PostsService {
     }
 
 
-    private static Post wrapPost(PostDto post) {
+    private static Post unwrapPost(PostDto post) {
         return Post.builder()
                 .label(post.getLabel())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
                 .build();
     }
-    private static PostDto wrapVersaPost(Post post) {
+    private static PostDto wrapPost(Post post) {
         return PostDto.builder()
                 .label(post.getLabel())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
                 .build();
     }
-
 }
