@@ -16,10 +16,10 @@ public class ProfileFriend {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Profile profile;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Profile> friends = new ArrayList<>();
 
     public void addFriend(Profile friend) {

@@ -44,11 +44,19 @@ class FriendsServiceTest {
         profileRepository.save(Profile.builder().username("user1").build());
         profileRepository.save(Profile.builder().username("user2").build());
         profileRepository.save(Profile.builder().username("user3").build());
+        profileRepository.save(Profile.builder().username("user4").build());
+        profileRepository.save(Profile.builder().username("user5").build());
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
-
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user3").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user4").friend_username("user5").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user4").friend_username("user3").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user5").friend_username("user1").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user3").friend_username("user1").build());
 
         Assertions.assertArrayEquals(new String[]{"user2", "user3"}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
+        Assertions.assertArrayEquals(new String[]{"user5", "user3"}, friendsService.getFriendsUsernamesByProfileUsername("user4").toArray());
+        Assertions.assertArrayEquals(new String[]{"user1"}, friendsService.getFriendsUsernamesByProfileUsername("user5").toArray());
+        Assertions.assertArrayEquals(new String[]{"user1"}, friendsService.getFriendsUsernamesByProfileUsername("user3").toArray());
     }
 
     @Test
