@@ -61,6 +61,4 @@ public class FriendsService {
             friendsRepository.save(friends_optional.get());
         }
     }
-
-
 }
