@@ -22,6 +22,7 @@ public class PostsService {
     private final ProfileRepository profileRepository;
     private final PostRepository postRepository;
     private final ProfilePostRepository profilePostRepository;
+    private final ShareFriendsClient shareFriendsClient;
 
     public List<PostDto> getPostsByProfileUsername(String username) {
         Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
@@ -49,6 +50,8 @@ public class PostsService {
                 profilePost = new ProfilePost();
                 profilePost.setProfile(optionalProfile.get());
             }
+
+            shareFriendsClient.shareFriends(optionalProfile.get().getId(), post.getId());
             profilePost.addPost(post);
             profilePostRepository.save(profilePost);
         }
@@ -81,6 +84,7 @@ public class PostsService {
                 .createdAt(post.getCreatedAt())
                 .build();
     }
+
     private static PostDto wrapPost(Post post) {
         return PostDto.builder()
                 .label(post.getLabel())

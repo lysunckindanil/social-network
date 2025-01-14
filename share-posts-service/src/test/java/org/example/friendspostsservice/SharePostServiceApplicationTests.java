@@ -1,4 +1,4 @@
-package org.example.postsservice;
+package org.example.friendspostsservice;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableAutoConfiguration(exclude = {KafkaAutoConfiguration.class, DataSourceAutoConfiguration.class})
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-class PostsServiceApplicationTests {
+class SharePostServiceApplicationTests {
 
     @Test
     void contextLoads() {
