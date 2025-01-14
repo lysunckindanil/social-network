@@ -19,11 +19,13 @@ public class ProfileFriend {
     @OneToOne
     private Profile profile;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Profile> friends = new ArrayList<>();
 
     public void addFriend(Profile friend) {
-        friends.add(friend);
+        if(!friends.contains(friend)) {
+            friends.add(friend);
+        }
     }
 
     public void deleteFriend(Profile friend) {

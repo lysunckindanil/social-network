@@ -20,7 +20,7 @@ public class ProfileFriend {
     @OneToOne
     private Profile profile;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Profile> friends = new ArrayList<>();
 
     public void addFriend(Profile friend) {

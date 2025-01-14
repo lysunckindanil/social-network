@@ -40,6 +40,15 @@ class FriendsServiceTest {
     }
 
     @Test
+    void addFriendByUsernames_AddOneFriendDouble_AddsOnlyOneFriend() {
+        profileRepository.save(Profile.builder().username("user1").build());
+        profileRepository.save(Profile.builder().username("user2").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
+        Assertions.assertArrayEquals(new String[]{"user2"}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
+    }
+
+    @Test
     void addFriendByUsernames_AddSomeFriend_ReturnsFriends() {
         profileRepository.save(Profile.builder().username("user1").build());
         profileRepository.save(Profile.builder().username("user2").build());
