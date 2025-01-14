@@ -56,5 +56,6 @@
     <module>friends-service</module>
     <module>posts-service</module>
     <module>share-posts-service</module>
+    <module>friend-posts-service</module>
   </modules>
 </project>
