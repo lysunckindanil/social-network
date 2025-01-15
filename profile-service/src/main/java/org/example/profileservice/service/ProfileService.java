@@ -7,6 +7,7 @@ import org.example.profileservice.repo.ProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,9 @@ public class ProfileService {
 
 
     public ProfileDto getProfileByUsername(String username) {
-        Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<Profile> profile_optional = profileRepository.findByUsername(username);
+        if (profile_optional.isEmpty()) return ProfileDto.builder().build();
+        Profile profile = profile_optional.get();
         return ProfileDto.builder()
                 .username(profile.getUsername())
                 .email(profile.getEmail())

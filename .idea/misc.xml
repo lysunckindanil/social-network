@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/posts-service/pom.xml" />
         <option value="$PROJECT_DIR$/friends-posts-service/pom.xml" />
         <option value="$PROJECT_DIR$/friend-posts-service/pom.xml" />
+        <option value="$PROJECT_DIR$/web-service/pom.xml" />
       </list>
     </option>
   </component>
