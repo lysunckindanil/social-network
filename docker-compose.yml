@@ -29,6 +29,9 @@ services:
     image: docker.io/library/configuration-service:0.0.1-SNAPSHOT
     ports:
       - "8888:8888"
+    depends_on:
+      - kafka
+      - zipkin-service
 
   discovery-service:
     image: docker.io/library/discovery-service:0.0.1-SNAPSHOT
