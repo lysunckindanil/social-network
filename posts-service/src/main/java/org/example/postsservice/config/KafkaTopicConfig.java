@@ -9,7 +9,12 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaTopicConfig {
 
     @Bean
-    public NewTopic topic() {
+    public NewTopic share_friends() {
         return TopicBuilder.name("share-friends").build();
+    }
+
+    @Bean
+    public NewTopic delete_from_friends() {
+        return TopicBuilder.name("delete-from-friends").build();
     }
 }

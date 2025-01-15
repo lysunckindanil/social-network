@@ -35,27 +35,16 @@ public class FriendsService {
         Profile profile = profileRepository.findByUsername(profile_username).orElseThrow(() -> new RuntimeException("User is not found"));
         Profile friend = profileRepository.findByUsername(friend_username).orElseThrow(() -> new RuntimeException("User is not found"));
 
-        Optional<ProfileFriend> friends_optional = friendsRepository.findProfileFriendByProfile(profile);
+        Optional<ProfileFriend> friends_optional = friendsRepository.findProfileFriendByProfile(friend);
         if (friends_optional.isPresent()) {
-            friends_optional.get().addFriend(friend);
-            friendsRepository.save(friends_optional.get());
+            ProfileFriend friends = friends_optional.get();
+            friends.addFriend(profile);
+            friendsRepository.save(friends);
         } else {
             ProfileFriend friends_new = new ProfileFriend();
-            friends_new.setProfile(profile);
-            friends_new.addFriend(friend);
+            friends_new.setProfile(friend);
+            friends_new.addFriend(profile);
             friendsRepository.save(friends_new);
-        }
-
-        // make friends vice versa
-        Optional<ProfileFriend> friends_versa_optional = friendsRepository.findProfileFriendByProfile(friend);
-        if (friends_versa_optional.isPresent()) {
-            friends_versa_optional.get().addFriend(profile);
-            friendsRepository.save(friends_versa_optional.get());
-        } else {
-            ProfileFriend friends_versa_new = new ProfileFriend();
-            friends_versa_new.setProfile(friend);
-            friends_versa_new.addFriend(profile);
-            friendsRepository.save(friends_versa_new);
         }
     }
 
@@ -65,17 +54,11 @@ public class FriendsService {
         Profile profile = profileRepository.findByUsername(profile_username).orElseThrow(() -> new RuntimeException("User is not found"));
         Profile friend = profileRepository.findByUsername(friend_username).orElseThrow(() -> new RuntimeException("User is not found"));
 
-        Optional<ProfileFriend> friends_optional = friendsRepository.findProfileFriendByProfile(profile);
+        Optional<ProfileFriend> friends_optional = friendsRepository.findProfileFriendByProfile(friend);
         if (friends_optional.isPresent()) {
-            friends_optional.get().deleteFriend(friend);
-            friendsRepository.save(friends_optional.get());
-        }
-
-        // delete friends vice versa
-        Optional<ProfileFriend> friends_versa_optional = friendsRepository.findProfileFriendByProfile(friend);
-        if (friends_versa_optional.isPresent()) {
-            friends_versa_optional.get().deleteFriend(profile);
-            friendsRepository.save(friends_versa_optional.get());
+            ProfileFriend friends = friends_optional.get();
+            friends.deleteFriend(profile);
+            friendsRepository.save(friends);
         }
     }
 }

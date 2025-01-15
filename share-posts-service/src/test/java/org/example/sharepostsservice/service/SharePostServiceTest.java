@@ -35,7 +35,7 @@ class SharePostServiceTest {
 
     @BeforeEach
     void setUp() {
-        sharePostService = new SharePostService(postRepository,profileRepository,profileFriendRepository, friendPostRepository);
+        sharePostService = new SharePostService(postRepository, profileRepository, profileFriendRepository, friendPostRepository);
     }
 
     @Test
@@ -62,5 +62,33 @@ class SharePostServiceTest {
 
         Assertions.assertEquals(1, friendPostRepository.findFriendPostByProfile(friend1).get().getPosts().size());
         Assertions.assertEquals(1, friendPostRepository.findFriendPostByProfile(friend2).get().getPosts().size());
+    }
+
+    @Test
+    void deletePostsFromFriends_ProfilePosts_FriendsGetPosts_ProfileDeletes_PostsDeleted() {
+        Profile profile = Profile.builder().username("user1").build();
+        Profile friend1 = Profile.builder().username("user2").build();
+        Profile friend2 = Profile.builder().username("user3").build();
+        Long profile_id = profileRepository.save(profile).getId();
+        profileRepository.save(friend1);
+        profileRepository.save(friend2);
+
+        ProfileFriend profileFriend = new ProfileFriend();
+        profileFriend.setProfile(profile);
+        profileFriend.addFriend(friend1);
+        profileFriend.addFriend(friend2);
+        profileFriendRepository.save(profileFriend);
+
+        Post post = Post.builder().build();
+        postRepository.save(post);
+
+        ShareFriendsDto dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+
+        sharePostService.sharePostsToFriends(dto);
+        sharePostService.deletePostsFromFriends(dto);
+
+        Assertions.assertEquals(0, friendPostRepository.findFriendPostByProfile(friend1).get().getPosts().size());
+        Assertions.assertEquals(0, friendPostRepository.findFriendPostByProfile(friend2).get().getPosts().size());
+        Assertions.assertFalse(postRepository.findById(post.getId()).isPresent());
     }
 }

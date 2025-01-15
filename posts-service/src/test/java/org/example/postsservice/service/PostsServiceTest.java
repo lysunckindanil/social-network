@@ -99,7 +99,6 @@ class PostsServiceTest {
         addAndDeletePostDto.getPost().setId(id);
         postsService.deletePostByUsername(addAndDeletePostDto);
 
-        Assertions.assertEquals(0, postRepository.findAll().size());
         Assertions.assertEquals(0, profilePostRepository.findAll().getFirst().getPosts().size());
     }
 }

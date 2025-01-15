@@ -26,4 +26,8 @@ public class FriendPost {
     public void addPost(Post post) {
         posts.add(post);
     }
+
+    public void deletePost(Post post) {
+        posts.remove(post);
+    }
 }

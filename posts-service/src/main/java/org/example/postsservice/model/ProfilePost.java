@@ -20,7 +20,7 @@ public class ProfilePost {
     @OneToOne
     private Profile profile;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Post> posts = new ArrayList<>();
 
     public void addPost(Post post) {
