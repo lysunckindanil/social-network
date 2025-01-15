@@ -95,9 +95,8 @@ class PostsServiceTest {
         PostDto postDto = PostDto.builder().build();
         AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addAndDeletePostDto);
-        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
-        System.out.println(createdAt);
-        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
+        Long id = postRepository.findAll().getFirst().getId();
+        addAndDeletePostDto.getPost().setId(id);
         postsService.deletePostByUsername(addAndDeletePostDto);
 
         Assertions.assertEquals(0, postRepository.findAll().size());

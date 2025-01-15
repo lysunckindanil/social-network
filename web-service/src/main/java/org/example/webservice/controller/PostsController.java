@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -23,8 +24,13 @@ public class PostsController {
     }
 
     @PostMapping("/delete")
-    public String deletePost(@ModelAttribute PostDto post, Principal principal) {
-        postsService.deletePost(principal.getName(), post);
+    public String deletePost(@RequestParam("post_delete") String post, Principal principal) {
+        // dont do in prod
+        postsService.getPosts(principal.getName())
+                .stream()
+                .filter(x -> x.getCreatedAt().toString().equals(post))
+                .findFirst()
+                .ifPresent(x -> postsService.deletePost(principal.getName(), x));
         return "redirect:/profile/" + principal.getName();
     }
 }

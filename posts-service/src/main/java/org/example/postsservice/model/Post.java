@@ -26,11 +26,11 @@ public class Post {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(createdAt, post.createdAt);
+        return Objects.equals(id, post.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(createdAt);
+        return Objects.hashCode(id);
     }
 }

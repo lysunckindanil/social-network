@@ -35,8 +35,8 @@
         <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
         <p>Content: <span th:text="${post.getContent()}"></span></p>
         <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
-        <form method="post" th:action="@{/posts/delete}" th:object="${post}">
-            <button type="submit">Delete post</button>
+        <form method="post" th:action="@{/posts/delete}">
+            <button type="submit" name="post_delete" th:value="${post.getCreatedAt()}">Delete post</button>
         </form>
     </div>
 </div>

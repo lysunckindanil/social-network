@@ -79,6 +79,7 @@ public class PostsService {
 
     private static Post unwrapPost(PostDto post) {
         return Post.builder()
+                .id(post.getId())
                 .label(post.getLabel())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
@@ -87,6 +88,7 @@ public class PostsService {
 
     private static PostDto wrapPost(Post post) {
         return PostDto.builder()
+                .id(post.getId())
                 .label(post.getLabel())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
