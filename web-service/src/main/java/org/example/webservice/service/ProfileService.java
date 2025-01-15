@@ -26,7 +26,7 @@ public class ProfileService {
         return profileServiceClient.getByUsername(username);
     }
 
-    @FeignClient(name = "profile-service")
+    @FeignClient(value = "profile-service")
     interface ProfileServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getByUsername")
         ProfileDto getByUsername(@RequestBody String username);
