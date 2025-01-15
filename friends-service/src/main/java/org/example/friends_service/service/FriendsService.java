@@ -21,12 +21,10 @@ public class FriendsService {
     private final ProfileRepository profileRepository;
 
     public List<String> getFriendsUsernamesByProfileUsername(String username) {
-        Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
-        if (optionalProfile.isPresent()) {
-            Optional<ProfileFriend> friends = friendsRepository.findProfileFriendByProfile(optionalProfile.get());
-            if (friends.isPresent()) {
-                return friends.get().getFriends().stream().map(Profile::getUsername).toList();
-            }
+        Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User is not found"));
+        Optional<ProfileFriend> friends = friendsRepository.findProfileFriendByProfile(profile);
+        if (friends.isPresent()) {
+            return friends.get().getFriends().stream().map(Profile::getUsername).toList();
         }
         return new ArrayList<>();
     }

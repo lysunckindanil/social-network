@@ -25,12 +25,10 @@ public class PostsService {
     private final ShareFriendsClient shareFriendsClient;
 
     public List<PostDto> getPostsByProfileUsername(String username) {
-        Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
-        if (optionalProfile.isPresent()) {
-            Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(optionalProfile.get());
-            if (optionalProfilePosts.isPresent()) {
-                return optionalProfilePosts.get().getPosts().stream().map(PostsService::wrapPost).toList();
-            }
+        Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User is not found"));
+        Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(profile);
+        if (optionalProfilePosts.isPresent()) {
+            return optionalProfilePosts.get().getPosts().stream().map(PostsService::wrapPost).toList();
         }
         return new ArrayList<>();
     }
@@ -40,40 +38,30 @@ public class PostsService {
         Post post = unwrapPost(postDto.getPost());
         post.setCreatedAt(new Date());
         postRepository.save(post);
-        Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
-        if (optionalProfile.isPresent()) {
-            Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(optionalProfile.get());
-            ProfilePost profilePost;
-            if (optionalProfilePosts.isPresent()) {
-                profilePost = optionalProfilePosts.get();
-            } else {
-                profilePost = new ProfilePost();
-                profilePost.setProfile(optionalProfile.get());
-            }
-
-            shareFriendsClient.shareFriends(optionalProfile.get().getId(), post.getId());
-            profilePost.addPost(post);
-            profilePostRepository.save(profilePost);
+        Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User is not found"));
+        Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(profile);
+        ProfilePost profilePost;
+        if (optionalProfilePosts.isPresent()) {
+            profilePost = optionalProfilePosts.get();
+        } else {
+            profilePost = new ProfilePost();
+            profilePost.setProfile(profile);
         }
+
+        shareFriendsClient.shareFriends(profile.getId(), post.getId());
+        profilePost.addPost(post);
+        profilePostRepository.save(profilePost);
     }
 
     public void deletePostByUsername(AddAndDeletePostDto postDto) {
         String username = postDto.getProfile_username();
         Post post = unwrapPost(postDto.getPost());
-        Optional<Profile> optionalProfile = profileRepository.findByUsername(username);
-        if (optionalProfile.isPresent()) {
-            Optional<ProfilePost> optionalProfilePosts = profilePostRepository.findProfilePostByProfile(optionalProfile.get());
-            ProfilePost profilePost;
-            if (optionalProfilePosts.isPresent()) {
-                profilePost = optionalProfilePosts.get();
-                Optional<Post> postToDelete = profilePost.getPosts().stream().filter((p) -> p.equals(post)).findFirst();
-                if (postToDelete.isPresent()) {
-                    profilePost.deletePost(post);
-                    profilePostRepository.save(profilePost);
-                    postRepository.delete(postToDelete.get());
-                }
-            }
-        }
+        Profile profile = profileRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User is not found"));
+        ProfilePost profilePost = profilePostRepository.findProfilePostByProfile(profile).orElseThrow(() -> new RuntimeException("User doesnt have posts"));
+        Post postToDelete = profilePost.getPosts().stream().filter((p) -> p.equals(post)).findFirst().orElseThrow(() -> new RuntimeException("Post doesnt exist"));
+        profilePost.deletePost(post);
+        profilePostRepository.save(profilePost);
+        postRepository.delete(postToDelete);
     }
 
 

@@ -27,6 +27,7 @@
     </label>
     <button type="submit">Create post</button>
 </form>
+
 <br>
 
 <div th:if="${!posts.isEmpty()}">
@@ -36,7 +37,7 @@
         <p>Content: <span th:text="${post.getContent()}"></span></p>
         <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
         <form method="post" th:action="@{/posts/delete}">
-            <button type="submit" name="post_delete" th:value="${post.getCreatedAt()}">Delete post</button>
+            <button type="submit" name="post_id" th:value="${post.getId()}">Delete post</button>
         </form>
     </div>
 </div>

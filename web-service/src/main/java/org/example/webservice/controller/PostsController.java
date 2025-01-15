@@ -24,13 +24,8 @@ public class PostsController {
     }
 
     @PostMapping("/delete")
-    public String deletePost(@RequestParam("post_delete") String post, Principal principal) {
-        // dont do in prod
-        postsService.getPosts(principal.getName())
-                .stream()
-                .filter(x -> x.getCreatedAt().toString().equals(post))
-                .findFirst()
-                .ifPresent(x -> postsService.deletePost(principal.getName(), x));
+    public String deletePost(@RequestParam("post_id") Long post_id, Principal principal) {
+        postsService.deletePost(principal.getName(), PostDto.builder().id(post_id).build());
         return "redirect:/profile/" + principal.getName();
     }
 }
