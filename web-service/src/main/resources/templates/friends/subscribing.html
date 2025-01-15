@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friends</title>
+</head>
+<body>
+
+<a th:href="@{/home}">Главная</a>
+
+<br>
+
+<h1>You subscribed on</h1>
+<div th:each="sub: ${subscribing}">
+    <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
+</div>
+</body>
+</html>

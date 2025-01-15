@@ -39,11 +39,11 @@ public class ProfileController {
                 model.addAttribute("new_post", PostDto.builder().build());
                 return "profile/my_profile";
             }
-            List<String> friends = friendsService.getFriends(username);
-            model.addAttribute("friends", friends);
-            if (friendsService.isMyFriend(principal.getName(), username)){
+            model.addAttribute("subscribed", friendsService.getSubscribed(username));
+            model.addAttribute("subscribing", friendsService.getSubscribing(username));
+            if (friendsService.isISubscribedOn(principal.getName(), username)) {
                 return "profile/profile_friend";
-            } else{
+            } else {
                 return "profile/profile_nofriend";
             }
         }

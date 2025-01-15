@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("friends")
 @RequiredArgsConstructor
 @Controller
-public class FriendsController {
+public class SubscribingController {
     private final FriendsService friendsService;
 
     @GetMapping
-    public String friends(Principal principal, Model model) {
-        List<String> friends = friendsService.getFriends(principal.getName());
-        model.addAttribute("friends", friends);
-        return "friends/friends";
+    public String subscribing(Principal principal, Model model) {
+        List<String> subscribing = friendsService.getSubscribing(principal.getName());
+        model.addAttribute("subscribing", subscribing);
+        return "friends/subscribing";
     }
 
     @PostMapping("/addFriend")

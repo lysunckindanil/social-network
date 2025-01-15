@@ -15,12 +15,16 @@ import java.util.List;
 public class FriendsService {
     private final FriendsServiceClient friendsServiceClient;
 
-    public List<String> getFriends(String username) {
-        return friendsServiceClient.getFriends(username);
+    public List<String> getSubscribing(String username) {
+        return friendsServiceClient.getSubscribing(username);
     }
 
-    public Boolean isMyFriend(String profile_username, String username) {
-        List<String> friends = getFriends(profile_username);
+    public List<String> getSubscribed(String username) {
+        return friendsServiceClient.getSubscribed(username);
+    }
+
+    public Boolean isISubscribedOn(String profile_username, String username) {
+        List<String> friends = friendsServiceClient.getSubscribing(profile_username);
         return friends.contains(username);
     }
 
@@ -46,8 +50,11 @@ public class FriendsService {
 
     @FeignClient(name = "friends-service", url = "http://192.168.0.100:8000", path = "friends-service")
     interface FriendsServiceClient {
-        @RequestMapping(method = RequestMethod.POST, value = "/getFriends")
-        List<String> getFriends(@RequestBody String username);
+        @RequestMapping(method = RequestMethod.POST, value = "/getSubscribed")
+        List<String> getSubscribed(@RequestBody String username);
+
+        @RequestMapping(method = RequestMethod.POST, value = "/getSubscribing")
+        List<String> getSubscribing(@RequestBody String username);
 
         @RequestMapping(method = RequestMethod.POST, value = "/addFriend")
         void addFriend(@RequestBody AddAndDeleteFriendDto dto);

@@ -18,10 +18,17 @@
 </form>
 <br>
 
-<div th:if="${!friends.isEmpty()}">
-    <h1>Friends</h1>
-    <div th:each="friend: ${friends}">
-        <a th:href="@{'/profile/'+ ${friend}}" th:text="${friend}"></a>
+<div th:if="${!subscribing.isEmpty()}">
+    <h1>Your friend subscribed on</h1>
+    <div th:each="sub: ${subscribing}">
+        <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
+    </div>
+</div>
+
+<div th:if="${!subscribed.isEmpty()}">
+    <h1>Your friend subscribed by</h1>
+    <div th:each="sub: ${subscribed}">
+        <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
     </div>
 </div>
 
