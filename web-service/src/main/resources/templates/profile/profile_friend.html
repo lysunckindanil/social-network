@@ -13,7 +13,7 @@
 <p>Username: <span th:text="${profile.getUsername()}"></span></p>
 <p>Email: <span th:text="${profile.getEmail()}"></span></p>
 <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
-<form method="post" th:action="@{/friends/deleteFriend}">
+<form method="post" th:action="@{/subscribing/deleteFriend}">
     <button type="submit" name="friend_username" th:value="${profile.getUsername()}">Delete friend</button>
 </form>
 <br>

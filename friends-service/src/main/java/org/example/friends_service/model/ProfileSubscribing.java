@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_friend")
+@Table(name = "profile_subscribing")
 public class ProfileSubscribing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

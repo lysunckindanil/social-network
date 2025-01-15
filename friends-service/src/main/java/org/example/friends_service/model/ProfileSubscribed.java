@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_friend")
+@Table(name = "profile_subscribed")
 public class ProfileSubscribed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class ProfileSubscribed {
     private List<Profile> friends = new ArrayList<>();
 
     public void addFriend(Profile friend) {
-        if(!friends.contains(friend)) {
+        if (!friends.contains(friend)) {
             friends.add(friend);
         }
     }

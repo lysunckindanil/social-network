@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("friends")
+@RequestMapping("subscribing")
 @RequiredArgsConstructor
 @Controller
 public class SubscribingController {
     private final FriendsService friendsService;
 
-    @GetMapping
+    @GetMapping()
     public String subscribing(Principal principal, Model model) {
         List<String> subscribing = friendsService.getSubscribing(principal.getName());
         model.addAttribute("subscribing", subscribing);

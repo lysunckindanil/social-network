@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.util.List;
 
-@RequestMapping("friends")
+@RequestMapping("subscribed")
 @RequiredArgsConstructor
 @Controller
 public class SubscribedController {
