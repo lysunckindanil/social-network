@@ -20,7 +20,7 @@ public class FriendPost {
     @OneToOne
     private Profile profile;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Post> posts = new ArrayList<>();
 
     public void addPost(Post post) {
