@@ -1,6 +1,7 @@
 package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.webservice.dto.AddAndDeletePostDto;
 import org.example.webservice.dto.PostDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,32 @@ public class PostsService {
         return postsServiceClient.getPosts(username);
     }
 
+    public void addPost(String username, PostDto post) {
+        AddAndDeletePostDto dto = AddAndDeletePostDto.builder()
+                .profile_username(username)
+                .post(post)
+                .build();
+        postsServiceClient.addPost(dto);
+    }
+
+
+    public void deletePost(String username, PostDto post) {
+        AddAndDeletePostDto dto = AddAndDeletePostDto.builder()
+                .profile_username(username)
+                .post(post)
+                .build();
+        postsServiceClient.deletePost(dto);
+    }
+
     @FeignClient(name = "posts-service", url = "http://192.168.0.100:8000", path = "posts-service")
     interface PostsServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getPosts")
         List<PostDto> getPosts(@RequestBody String username);
+
+        @RequestMapping(method = RequestMethod.POST, value = "/addPost")
+        void addPost(@RequestBody AddAndDeletePostDto post);
+
+        @RequestMapping(method = RequestMethod.POST, value = "/deletePost")
+        void deletePost(@RequestBody AddAndDeletePostDto post);
     }
 }

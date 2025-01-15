@@ -47,6 +47,18 @@ public class FriendsService {
             friends_new.addFriend(friend);
             friendsRepository.save(friends_new);
         }
+
+        // make friends vice versa
+        Optional<ProfileFriend> friends_versa_optional = friendsRepository.findProfileFriendByProfile(friend);
+        if (friends_versa_optional.isPresent()) {
+            friends_versa_optional.get().addFriend(profile);
+            friendsRepository.save(friends_versa_optional.get());
+        } else {
+            ProfileFriend friends_versa_new = new ProfileFriend();
+            friends_versa_new.setProfile(friend);
+            friends_versa_new.addFriend(profile);
+            friendsRepository.save(friends_versa_new);
+        }
     }
 
     public void deleteFriendsByUsernames(AddAndDeleteFriendDto dto) {
@@ -59,6 +71,13 @@ public class FriendsService {
         if (friends_optional.isPresent()) {
             friends_optional.get().deleteFriend(friend);
             friendsRepository.save(friends_optional.get());
+        }
+
+        // delete friends vice versa
+        Optional<ProfileFriend> friends_versa_optional = friendsRepository.findProfileFriendByProfile(friend);
+        if (friends_versa_optional.isPresent()) {
+            friends_versa_optional.get().deleteFriend(profile);
+            friendsRepository.save(friends_versa_optional.get());
         }
     }
 }

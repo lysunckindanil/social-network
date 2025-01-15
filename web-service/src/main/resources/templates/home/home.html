@@ -6,23 +6,25 @@
 </head>
 <body>
 
-<a th:href="@{'/profile/'+${username}}">Профиль</a>
+<a th:href="@{'/profile/'+${username}}">Profile</a>
 <br>
-<a th:href="@{/friends}">Друзья</a>
+<a th:href="@{/friends}">Friends</a>
 
 <form method="post" th:action="@{profile/logout}">
     <p>
-        <button type="submit"><img width="30px" src="https://webstockreview.net/images250_/clipart-umbrella-5.png" alt="Logout"
+        <button type="submit"><img width="30px" src="https://webstockreview.net/images250_/clipart-umbrella-5.png"
+                                   alt="Logout"
                                    style="vertical-align: middle"> Logout
         </button>
     </p>
 </form>
-
-<h1>Posts</h1>
-<div th:each="post: ${posts}">
-    <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-    <p>Content: <span th:text="${post.getContent()}"></span></p>
-    <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+<div th:if="${!posts.isEmpty()}">
+    <h1>Posts</h1>
+    <div th:each="post: ${posts}">
+        <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
+        <p>Content: <span th:text="${post.getContent()}"></span></p>
+        <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+    </div>
 </div>
 </body>
 </html>

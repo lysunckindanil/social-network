@@ -5,7 +5,7 @@
     <title th:text="${profile.getUsername()}"></title>
 </head>
 <body>
-<a th:href="@{/home}">Главная</a>
+<a th:href="@{/home}">Home</a>
 
 <br>
 
@@ -16,11 +16,29 @@
 
 <br>
 
-<h1>Posts</h1>
-<div th:each="post: ${posts}">
-    <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-    <p>Content: <span th:text="${post.getContent()}"></span></p>
-    <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+<form method="post" th:action="@{/posts/add}" th:object="${new_post}">
+    <h1>New post</h1>
+    <label>Label
+        <input th:field="*{label}" placeholder="Your post label">
+    </label>
+    <br>
+    <label>Content
+        <input th:field="*{content}" placeholder="Your post content">
+    </label>
+    <button type="submit">Create post</button>
+</form>
+<br>
+
+<div th:if="${!posts.isEmpty()}">
+    <h1>Posts</h1>
+    <div th:each="post: ${posts}">
+        <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
+        <p>Content: <span th:text="${post.getContent()}"></span></p>
+        <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+        <form method="post" th:action="@{/posts/delete}" th:object="${post}">
+            <button type="submit">Delete post</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>

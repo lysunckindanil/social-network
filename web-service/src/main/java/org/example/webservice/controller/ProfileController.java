@@ -36,6 +36,7 @@ public class ProfileController {
             model.addAttribute("profile", profileDto);
             model.addAttribute("posts", posts);
             if (principal.getName().equals(username)) {
+                model.addAttribute("new_post", PostDto.builder().build());
                 return "profile/my_profile";
             }
             List<String> friends = friendsService.getFriends(username);
