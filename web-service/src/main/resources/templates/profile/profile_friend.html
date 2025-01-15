@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${profile.getUsername()}"></title>
+</head>
+<body>
+<a th:href="@{/home}">Главная</a>
+
+<br>
+
+<h1>Profile</h1>
+<p>Username: <span th:text="${profile.getUsername()}"></span></p>
+<p>Email: <span th:text="${profile.getEmail()}"></span></p>
+<p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
+<form method="post" th:action="@{/friends/deleteFriend}">
+    <button type="submit" name="friend_username" th:value="${profile.getUsername()}">Delete friend</button>
+</form>
+<br>
+
+<div th:if="${!friends.isEmpty()}">
+    <h1>Friends</h1>
+    <div th:each="friend: ${friends}">
+        <a th:href="@{'/profile/'+ ${friend}}" th:text="${friend}"></a>
+    </div>
+</div>
+
+<h1>Posts</h1>
+<div th:each="post: ${posts}">
+    <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
+    <p>Content: <span th:text="${post.getContent()}"></span></p>
+    <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+</div>
+</body>
+</html>

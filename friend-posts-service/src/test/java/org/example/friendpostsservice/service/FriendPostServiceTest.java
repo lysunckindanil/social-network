@@ -36,7 +36,7 @@ class FriendPostServiceTest {
         posts.addPost(new Post());
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.of(new Profile()));
         Mockito.when(friendPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.of(posts));
-        Assertions.assertEquals(2, friendPostService.getFriendsPosts("user").getPosts().size());
+        Assertions.assertEquals(2, friendPostService.getFriendsPosts("user").size());
     }
 
     @Test
@@ -44,7 +44,7 @@ class FriendPostServiceTest {
         FriendPost posts = new FriendPost();
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.of(new Profile()));
         Mockito.when(friendPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.of(posts));
-        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").getPosts().size());
+        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").size());
     }
 
     @Test
@@ -52,13 +52,13 @@ class FriendPostServiceTest {
         FriendPost posts = new FriendPost();
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.empty());
         Mockito.when(friendPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.of(posts));
-        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").getPosts().size());
+        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").size());
     }
 
     @Test
     void getFriendsPosts_ProfileDoesntHavePosts_ReturnsZeroPosts() {
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.of(new Profile()));
         Mockito.when(friendPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.empty());
-        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").getPosts().size());
+        Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").size());
     }
 }

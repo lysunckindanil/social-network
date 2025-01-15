@@ -18,7 +18,7 @@ public class ProfileService {
 
     public ProfileDto getProfileByUsername(String username) {
         Optional<Profile> profile_optional = profileRepository.findByUsername(username);
-        if (profile_optional.isEmpty()) return ProfileDto.builder().build();
+        if (profile_optional.isEmpty()) return null;
         Profile profile = profile_optional.get();
         return ProfileDto.builder()
                 .username(profile.getUsername())

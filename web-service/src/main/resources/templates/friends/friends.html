@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Friends</title>
+</head>
+<body>
+
+<a th:href="@{/home}">Главная</a>
+
+<br>
+
+<h1>Friends</h1>
+<div th:each="friend: ${friends}">
+    <a th:href="@{'/profile/'+ ${friend}}" th:text="${friend}"></a>
+</div>
+</body>
+</html>
