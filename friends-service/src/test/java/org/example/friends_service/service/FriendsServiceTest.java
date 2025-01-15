@@ -62,25 +62,16 @@ class FriendsServiceTest {
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user5").friend_username("user1").build());
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user3").friend_username("user1").build());
 
-        Assertions.assertArrayEquals(new String[]{"user2", "user3"}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
+        Assertions.assertArrayEquals(new String[]{"user2", "user3","user5"}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
         Assertions.assertArrayEquals(new String[]{"user5", "user3"}, friendsService.getFriendsUsernamesByProfileUsername("user4").toArray());
-        Assertions.assertArrayEquals(new String[]{"user1"}, friendsService.getFriendsUsernamesByProfileUsername("user5").toArray());
-        Assertions.assertArrayEquals(new String[]{"user1"}, friendsService.getFriendsUsernamesByProfileUsername("user3").toArray());
+        Assertions.assertArrayEquals(new String[]{"user4","user1"}, friendsService.getFriendsUsernamesByProfileUsername("user5").toArray());
+        Assertions.assertArrayEquals(new String[]{"user1","user4"}, friendsService.getFriendsUsernamesByProfileUsername("user3").toArray());
     }
 
     @Test
-    void addFriendByUsernames_AddFriend_ResultViceVersaNotFriends() {
+    void addFriendByUsernames_AddFriend_ResultViceVersaFriends() {
         profileRepository.save(Profile.builder().username("user1").build());
         profileRepository.save(Profile.builder().username("user2").build());
-        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
-        Assertions.assertArrayEquals(new String[]{}, friendsService.getFriendsUsernamesByProfileUsername("user2").toArray());
-    }
-
-    @Test
-    void addFriendByUsernames_AddFriend_AndViceVersa_ResultViceVersaFriends() {
-        profileRepository.save(Profile.builder().username("user1").build());
-        profileRepository.save(Profile.builder().username("user2").build());
-        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user2").friend_username("user1").build());
 
         Assertions.assertArrayEquals(new String[]{"user1"}, friendsService.getFriendsUsernamesByProfileUsername("user2").toArray());
@@ -94,5 +85,15 @@ class FriendsServiceTest {
         friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
         friendsService.deleteFriendsByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
         Assertions.assertArrayEquals(new String[]{}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
+    }
+
+    @Test
+    void deleteFriendByUsernames_DeleteFriend_DeletesFriendViceVersa() {
+        profileRepository.save(Profile.builder().username("user1").build());
+        profileRepository.save(Profile.builder().username("user2").build());
+        friendsService.addFriendByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
+        friendsService.deleteFriendsByUsernames(AddAndDeleteFriendDto.builder().profile_username("user1").friend_username("user2").build());
+        Assertions.assertArrayEquals(new String[]{}, friendsService.getFriendsUsernamesByProfileUsername("user1").toArray());
+        Assertions.assertArrayEquals(new String[]{}, friendsService.getFriendsUsernamesByProfileUsername("user2").toArray());
     }
 }
