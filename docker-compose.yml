@@ -110,6 +110,8 @@ services:
       - HIBERNATE_DDL_AUTO
     depends_on:
       - discovery-service
+    ports:
+      - "8081:8080"
 
   gateway-service:
     image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
