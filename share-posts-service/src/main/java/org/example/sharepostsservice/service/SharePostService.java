@@ -29,7 +29,7 @@ public class SharePostService {
     @KafkaListener(topics = "share-subscribers", groupId = "share-posts-service")
     public void sharePostsToSubscribers(ShareFriendsDto dto) {
         // find profile whose friends to be shared
-        Optional<Profile> profileOptional = profileRepository.findById(dto.getPost_id());
+        Optional<Profile> profileOptional = profileRepository.findById(dto.getProfile_id());
         if (profileOptional.isEmpty()) return;
         Profile profile = profileOptional.get();
 

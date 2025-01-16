@@ -42,7 +42,7 @@ public class PostsService {
         Profile author = authorOptional.get();
         post.setAuthor(author);
         postRepository.save(post);
-        shareSubscribersClient.shareSubscribers(post.getId(), author.getId());
+        shareSubscribersClient.shareSubscribers(author.getId(), post.getId());
     }
 
     public void deletePostByUsername(AddAndDeletePostDto postDto) {
@@ -58,7 +58,7 @@ public class PostsService {
             Post postToDelete = postToDeleteOptional.get();
             postToDelete.setAuthor(null);
             postRepository.save(postToDelete);
-            shareSubscribersClient.deleteFromSubscribers(postToDelete.getId(), author.getId());
+            shareSubscribersClient.deleteFromSubscribers(author.getId(), postToDelete.getId());
         }
     }
 

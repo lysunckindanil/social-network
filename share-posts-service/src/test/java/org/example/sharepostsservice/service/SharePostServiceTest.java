@@ -38,8 +38,7 @@ class SharePostServiceTest {
         sharePostService = new SharePostService(postRepository, profileRepository, profileSubscriberRepository, profilePostSubscribedRepository);
     }
 
-//    passes if called but not if run along other tests
-//    @Test
+    @Test
     void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
         Profile profile = Profile.builder().username("user1").build();
         Profile subscriber = Profile.builder().username("user2").build();
