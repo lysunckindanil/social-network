@@ -61,13 +61,11 @@ public class PostsService {
         ProfilePost profilePost;
         if (optionalProfilePosts.isPresent()) {
             profilePost = optionalProfilePosts.get();
-        } else {
-            profilePost = new ProfilePost();
-            profilePost.setProfile(profile);
+            profilePost.deletePost(post);
+            profilePostRepository.save(profilePost);
+            shareFriendsClient.deleteFromFriends(profile.getId(), post.getId());
         }
-        profilePost.deletePost(post);
-        profilePostRepository.save(profilePost);
-        shareFriendsClient.deleteFromFriends(profile.getId(), post.getId());
+
     }
 
 

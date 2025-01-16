@@ -53,6 +53,7 @@ class SharePostServiceTest {
         profileSubscribedBy.addFriend(friend2);
         profileSubscribedByRepository.save(profileSubscribedBy);
 
+        Assertions.assertEquals(2, profileSubscribedByRepository.findSubscribedProfilesByProfile(profile).get().getProfiles().size());
         Post post = Post.builder().build();
         postRepository.save(post);
 
@@ -62,6 +63,15 @@ class SharePostServiceTest {
 
         Assertions.assertEquals(1, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend1).get().getPosts().size());
         Assertions.assertEquals(1, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend2).get().getPosts().size());
+
+        post = Post.builder().build();
+        postRepository.save(post);
+        dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+        sharePostService.sharePostsToFriends(dto);
+
+        Assertions.assertEquals(2, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend1).get().getPosts().size());
+        Assertions.assertEquals(2, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend2).get().getPosts().size());
+
     }
 
     @Test

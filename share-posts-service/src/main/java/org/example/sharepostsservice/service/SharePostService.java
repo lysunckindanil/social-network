@@ -1,6 +1,7 @@
 package org.example.sharepostsservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.sharepostsservice.dto.ShareFriendsDto;
 import org.example.sharepostsservice.model.ProfileSubscribedByPost;
 import org.example.sharepostsservice.model.Post;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SharePostService {
@@ -26,6 +28,9 @@ public class SharePostService {
 
     @KafkaListener(topics = "share-friends", groupId = "share-posts-service")
     public void sharePostsToFriends(ShareFriendsDto dto) {
+        log.info("sharePostsToFriends: {}", dto);
+        log.info("sharePostsToFriends: {}", dto.getProfile_id());
+        log.info("sharePostsToFriends: {}", dto.getPost_id());
         // find profile whose friends to be shared
         Profile profile = profileRepository.findById(dto.getProfile_id()).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -46,12 +51,11 @@ public class SharePostService {
             ProfileSubscribedByPost profileSubscribedByPost;
             if (friendPost_optional.isPresent()) {
                 profileSubscribedByPost = friendPost_optional.get();
-                profileSubscribedByPost.addPost(post);
             } else {
                 profileSubscribedByPost = new ProfileSubscribedByPost();
                 profileSubscribedByPost.setProfile(friend);
-                profileSubscribedByPost.addPost(post);
             }
+            profileSubscribedByPost.addPost(post);
             profileSubscribedByPostRepository.save(profileSubscribedByPost);
         });
     }
