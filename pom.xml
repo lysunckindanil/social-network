@@ -53,7 +53,7 @@
     <module>configuration-service</module>
     <module>gateway-service</module>
     <module>profile-service</module>
-    <module>friends-service</module>
+    <module>subscriber-service</module>
     <module>posts-service</module>
     <module>share-posts-service</module>
     <module>friend-posts-service</module>

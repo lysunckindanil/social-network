@@ -6,7 +6,7 @@ import org.example.webservice.config.ProfileValidator;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.dto.ProfileDto;
 import org.example.webservice.model.Profile;
-import org.example.webservice.service.FriendsService;
+import org.example.webservice.service.SubscriberService;
 import org.example.webservice.service.PostsService;
 import org.example.webservice.service.ProfileSecurityService;
 import org.example.webservice.service.ProfileService;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ProfileController {
     private final ProfileService profileService;
     private final ProfileSecurityService profileSecurityService;
-    private final FriendsService friendsService;
+    private final SubscriberService subscriberService;
     private final PostsService postsService;
     private final ProfileValidator profileValidator;
 
@@ -40,9 +40,9 @@ public class ProfileController {
                 model.addAttribute("new_post", PostDto.builder().build());
                 return "profile/my_profile";
             }
-            model.addAttribute("subscribed", friendsService.getSubscribed(username));
-            model.addAttribute("subscribing", friendsService.getSubscribing(username));
-            if (friendsService.isISubscribedOn(principal.getName(), username)) {
+            model.addAttribute("subscribed", subscriberService.getSubscribed(username));
+            model.addAttribute("subscribing", subscriberService.getSubscribing(username));
+            if (subscriberService.isISubscribedOn(principal.getName(), username)) {
                 return "profile/profile_friend";
             } else {
                 return "profile/profile_nofriend";

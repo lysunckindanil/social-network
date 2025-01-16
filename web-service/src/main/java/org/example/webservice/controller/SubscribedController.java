@@ -1,7 +1,7 @@
 package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.FriendsService;
+import org.example.webservice.service.SubscriberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class SubscribedController {
-    private final FriendsService friendsService;
+    private final SubscriberService subscriberService;
 
     @GetMapping
     public String subscribed(Principal principal, Model model) {
-        List<String> subscribed = friendsService.getSubscribed(principal.getName());
+        List<String> subscribed = subscriberService.getSubscribed(principal.getName());
         model.addAttribute("username", principal.getName());
         model.addAttribute("subscribed", subscribed);
         return "friends/subscribed";

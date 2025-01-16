@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class FriendsService {
+public class SubscriberService {
     private final FriendsServiceClient friendsServiceClient;
 
     public List<String> getSubscribing(String username) {
@@ -48,7 +48,7 @@ public class FriendsService {
         }
     }
 
-    @FeignClient(name = "friends-service", path = "friends-service")
+    @FeignClient(name = "subscriber-service", path = "subscriber-service")
     interface FriendsServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getSubscribed")
         List<String> getSubscribed(@RequestBody String username);
