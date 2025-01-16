@@ -91,8 +91,8 @@ services:
     depends_on:
       - discovery-service
 
-  friend-posts-service:
-    image: docker.io/library/friend-posts-service:0.0.1-SNAPSHOT
+  subscriber-post-service:
+    image: docker.io/library/subscriber-post-service:0.0.1-SNAPSHOT
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD

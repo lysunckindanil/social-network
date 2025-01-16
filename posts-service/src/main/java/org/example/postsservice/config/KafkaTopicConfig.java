@@ -10,11 +10,11 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic share_friends() {
-        return TopicBuilder.name("share-friends").build();
+        return TopicBuilder.name("share-subscribers").build();
     }
 
     @Bean
     public NewTopic delete_from_friends() {
-        return TopicBuilder.name("delete-from-friends").build();
+        return TopicBuilder.name("delete-from-subscribers").build();
     }
 }

@@ -1,4 +1,4 @@
-package org.example.postsservice.dto;
+package org.example.friendpostsservice.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class PostDto{
+public class PostDto {
     private Long id;
     private String label;
     private String content;

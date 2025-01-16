@@ -4,7 +4,6 @@ import org.example.postsservice.dto.AddAndDeletePostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
-import org.example.postsservice.repo.ProfilePostRepository;
 import org.example.postsservice.repo.ProfileRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,16 +29,15 @@ class PostsServiceTest {
     private PostRepository postRepository;
     @Autowired
     private ProfileRepository profileRepository;
-    @Autowired
-    private ProfilePostRepository profilePostRepository;
+    private ShareSubscribersClient shareSubscribersClient;
 
     private PostsService postsService;
 
     @BeforeEach
     void setUp() {
-        ShareFriendsClient shareFriendsClient = Mockito.mock(ShareFriendsClient.class);
-        Mockito.doNothing().when(shareFriendsClient).shareFriends(Mockito.any(), Mockito.any());
-        postsService = new PostsService(profileRepository, postRepository, profilePostRepository, shareFriendsClient);
+        shareSubscribersClient = Mockito.mock(ShareSubscribersClient.class);
+        Mockito.doNothing().when(shareSubscribersClient).shareSubscribers(Mockito.any(), Mockito.any());
+        postsService = new PostsService(profileRepository, postRepository, shareSubscribersClient);
     }
 
 
@@ -53,7 +51,20 @@ class PostsServiceTest {
         postsService.addPostByUsername(addAndDeletePostDto);
 
         Assertions.assertEquals(1, postRepository.findAll().size());
-        Assertions.assertEquals(1, profilePostRepository.findAll().getFirst().getPosts().size());
+        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+    }
+
+    @Test
+    void addPostByUsername_AddPosts_CallsSharePostsToSubscribers() {
+        Profile profile = Profile.builder().username("username").build();
+        profileRepository.save(profile);
+        Date date = new Date();
+        PostDto postDto = PostDto.builder().createdAt(date).build();
+        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addAndDeletePostDto);
+        Long post_id = postRepository.findAll().getFirst().getId();
+        Long profile_id = profile.getId();
+        Mockito.verify(shareSubscribersClient).shareSubscribers(profile_id, post_id);
     }
 
     @Test
@@ -70,7 +81,8 @@ class PostsServiceTest {
         postsService.addPostByUsername(addAndDeletePostDto2);
 
         Assertions.assertEquals(2, postRepository.findAll().size());
-        Assertions.assertEquals(2, profilePostRepository.findAll().size());
+        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile2).size());
     }
 
     @Test
@@ -85,20 +97,38 @@ class PostsServiceTest {
         postsService.addPostByUsername(addAndDeletePostDto2);
 
         Assertions.assertEquals(2, postRepository.findAll().size());
-        Assertions.assertEquals(2, profilePostRepository.findAll().getFirst().getPosts().size());
+        Assertions.assertEquals(2, postRepository.findAllByAuthor(profile).size());
     }
 
     @Test
-    void deletePostByUsername_DeletePost_DeletesPostFromRepository() {
+    void deletePostByUsername_DeletePost_DeletesFromAuthor() {
         Profile profile = Profile.builder().username("username").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().build();
         AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addAndDeletePostDto);
-        Long id = postRepository.findAll().getFirst().getId();
-        addAndDeletePostDto.getPost().setId(id);
+        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
+        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
         postsService.deletePostByUsername(addAndDeletePostDto);
 
-        Assertions.assertEquals(0, profilePostRepository.findAll().getFirst().getPosts().size());
+        Assertions.assertEquals(0, postRepository.findAllByAuthor(profile).size());
     }
+
+    @Test
+    void deletePostByUsername_DeletePost_CallsDeletesFromSubscribers() {
+        Profile profile = Profile.builder().username("username").build();
+        profileRepository.save(profile);
+        PostDto postDto = PostDto.builder().build();
+        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addAndDeletePostDto);
+        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
+        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
+        postsService.deletePostByUsername(addAndDeletePostDto);
+        Long post_id = postRepository.findAll().getFirst().getId();
+        Long profile_id = profile.getId();
+
+        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(profile_id, post_id);
+    }
+
+
 }

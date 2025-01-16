@@ -22,6 +22,9 @@ public class Post {
     private String content;
     private Date createdAt;
 
+    @ManyToOne
+    private Profile author;
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

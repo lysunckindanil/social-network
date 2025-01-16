@@ -1,9 +1,7 @@
-package org.example.postsservice.model;
+package org.example.sharepostsservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Date;
 
 @Builder
 @AllArgsConstructor
@@ -11,16 +9,16 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "profile_subscriber")
+public class ProfileSubscriber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    private String label;
-    private String content;
-    private Date createdAt;
 
     @ManyToOne
-    private Profile author;
+    private Profile profile;
+
+    @ManyToOne
+    private Profile subscriber;
 }
