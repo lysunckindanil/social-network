@@ -22,18 +22,18 @@
     <p>Email: <span th:text="${profile.getEmail()}"></span></p>
     <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
     <form method="post" th:action="@{/subscribing/deleteFriend}">
-        <button type="submit" name="friend_username" th:value="${profile.getUsername()}">Delete friend</button>
+        <button type="submit" name="friend_username" th:value="${profile.getUsername()}">Unsubscribe</button>
     </form>
 
     <div th:if="${!subscribing.isEmpty()}">
-        <h1>Your friend subscribed on</h1>
+        <h1>Subscribed on</h1>
         <div th:each="sub: ${subscribing}">
             <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
         </div>
     </div>
 
     <div th:if="${!subscribed.isEmpty()}">
-        <h1>Your friend subscribed by</h1>
+        <h1>Subscribed by</h1>
         <div th:each="sub: ${subscribed}">
             <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
         </div>
