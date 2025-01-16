@@ -101,6 +101,16 @@ services:
     depends_on:
       - discovery-service
 
+  web-service:
+    image: docker.io/library/web-service:0.0.1-SNAPSHOT
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - HIBERNATE_DDL_AUTO
+    depends_on:
+      - discovery-service
+
   gateway-service:
     image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
     depends_on:
