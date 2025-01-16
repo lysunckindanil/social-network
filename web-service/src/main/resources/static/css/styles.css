@@ -1,0 +1,22 @@
+nav a {
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px black solid;
+    width: 150px;
+    cursor: pointer;
+    color: black;
+    font-size: 1.3em;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+}
+
+body{
+    padding: 50px 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}

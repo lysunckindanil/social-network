@@ -28,7 +28,7 @@ public class FriendPostService {
         if (friendPost_optional.isEmpty()) return new ArrayList<>();
 
         ProfileSubscribedByPost profileSubscribedByPost = friendPost_optional.get();
-        return profileSubscribedByPost.getPosts().stream().map(FriendPostService::wrapPost).toList();
+        return profileSubscribedByPost.getPosts().stream().map(FriendPostService::wrapPost).sorted().toList();
     }
 
     private static PostDto wrapPost(Post post) {

@@ -29,6 +29,7 @@ public class Post {
         return Objects.equals(createdAt, post.createdAt);
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hashCode(createdAt);

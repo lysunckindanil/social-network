@@ -3,44 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${profile.getUsername()}"></title>
+    <link href="/css/styles.css" rel="stylesheet">
+    <script>
+        function logout() {
+            document.getElementById("logout_form").submit()
+        }
+    </script>
 </head>
 <body>
-<a th:href="@{/home}">Home</a>
 
-<br>
+<header>
+    <nav>
+        <a th:href="@{'/profile/'+${username}}">Profile</a>
+        <a th:href="@{/subscribing}">Subscribing</a>
+        <a th:href="@{/subscribed}">Subscribed</a>
+    </nav>
+</header>
 
-<h1>Profile</h1>
-<p>Username: <span th:text="${profile.getUsername()}"></span></p>
-<p>Email: <span th:text="${profile.getEmail()}"></span></p>
-<p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
+<article>
+    <h1>Profile</h1>
+    <p>Username: <span th:text="${profile.getUsername()}"></span></p>
+    <p>Email: <span th:text="${profile.getEmail()}"></span></p>
+    <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
+    <a onclick="logout()" style="text-decoration-line: underline;cursor: pointer;font-size: 1.2em">Logout</a>
+    <form method="post" id="logout_form" th:action="@{profile/logout}"></form>
 
-<br>
-
-<form method="post" th:action="@{/posts/add}" th:object="${new_post}">
-    <h1>New post</h1>
-    <label>Label
-        <input th:field="*{label}" placeholder="Your post label">
-    </label>
-    <br>
-    <label>Content
-        <input th:field="*{content}" placeholder="Your post content">
-    </label>
-    <br>
-    <button type="submit">Create post</button>
-</form>
-
-<br>
-
-<div th:if="${!posts.isEmpty()}">
-    <h1>Posts</h1>
-    <div th:each="post: ${posts}">
-        <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-        <p>Content: <span th:text="${post.getContent()}"></span></p>
-        <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
-        <form method="post" th:action="@{/posts/delete}">
-            <button type="submit" name="post_id" th:value="${post.getId()}">Delete post</button>
+    <div>
+        <form method="post" th:action="@{/posts/add}" th:object="${new_post}">
+            <h1>New post</h1>
+            <label>Label
+                <input th:field="*{label}" placeholder="Your post label">
+            </label>
+            <br>
+            <label>Content
+                <input th:field="*{content}" placeholder="Your post content">
+            </label>
+            <br>
+            <button type="submit">Create post</button>
         </form>
     </div>
-</div>
+
+    <div th:if="${!posts.isEmpty()}">
+        <h1>Posts</h1>
+        <div th:each="post: ${posts}">
+            <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
+            <p>Content: <span th:text="${post.getContent()}"></span></p>
+            <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+            <br>
+            <form method="post" th:action="@{/posts/delete}">
+                <button type="submit" name="post_id" th:value="${post.getId()}">Delete post</button>
+            </form>
+        </div>
+    </div>
+</article>
 </body>
 </html>

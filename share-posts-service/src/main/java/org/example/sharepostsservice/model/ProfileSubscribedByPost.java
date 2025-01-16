@@ -24,7 +24,7 @@ public class ProfileSubscribedByPost {
     private List<Post> posts = new ArrayList<>();
 
     public void addPost(Post post) {
-        posts.add(post);
+        posts.addFirst(post);
     }
 
     public void deletePost(Post post) {

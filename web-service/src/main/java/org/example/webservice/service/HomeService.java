@@ -20,7 +20,7 @@ public class HomeService {
     }
 
 
-    @FeignClient(name = "friend-posts-service", url = "http://192.168.0.100:8000", path = "friend-posts-service")
+    @FeignClient(name = "friend-posts-service", path = "friend-posts-service")
     interface FriendPostsServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getByUsername")
         List<PostDto> getPostsByUsername(@RequestBody String username);

@@ -19,6 +19,7 @@ public class SubscribingController {
     public String subscribing(Principal principal, Model model) {
         List<String> subscribing = friendsService.getSubscribing(principal.getName());
         model.addAttribute("subscribing", subscribing);
+        model.addAttribute("username", principal.getName());
         return "friends/subscribing";
     }
 

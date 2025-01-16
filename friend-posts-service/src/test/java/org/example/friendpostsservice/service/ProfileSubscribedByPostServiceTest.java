@@ -1,10 +1,10 @@
 package org.example.friendpostsservice.service;
 
-import org.example.friendpostsservice.model.ProfileSubscribedByPost;
 import org.example.friendpostsservice.model.Post;
 import org.example.friendpostsservice.model.Profile;
-import org.example.friendpostsservice.repo.ProfileSubscribedByPostRepository;
+import org.example.friendpostsservice.model.ProfileSubscribedByPost;
 import org.example.friendpostsservice.repo.ProfileRepository;
+import org.example.friendpostsservice.repo.ProfileSubscribedByPostRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

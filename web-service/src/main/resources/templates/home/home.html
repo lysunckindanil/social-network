@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
+<header>
+    <nav>
+        <a th:href="@{'/profile/'+${username}}">Profile</a>
+        <a th:href="@{/subscribing}">Subscribing</a>
+        <a th:href="@{/subscribed}">Subscribed</a>
+    </nav>
+</header>
 
-<a th:href="@{'/profile/'+${username}}">Profile</a>
-<br>
-<a th:href="@{/subscribing}">Subscribing</a>
-<br>
-<a th:href="@{/subscribed}">Subscribed</a>
 
-<form method="post" th:action="@{profile/logout}">
-    <p>
-        <button type="submit"><img width="30px" src="https://webstockreview.net/images250_/clipart-umbrella-5.png"
-                                   alt="Logout"
-                                   style="vertical-align: middle"> Logout
-        </button>
-    </p>
-</form>
-<div th:if="${!posts.isEmpty()}">
-    <h1>Posts</h1>
-    <div th:each="post: ${posts}">
-        <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-        <p>Content: <span th:text="${post.getContent()}"></span></p>
-        <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+<article>
+    <div th:if="${!posts.isEmpty()}">
+        <h1>Posts</h1>
+        <div th:each="post: ${posts}">
+            <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
+            <p>Content: <span th:text="${post.getContent()}"></span></p>
+            <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+        </div>
     </div>
-</div>
+</article>
+
+
 </body>
 </html>

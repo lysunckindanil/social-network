@@ -30,6 +30,7 @@ public class ProfileController {
 
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
+        model.addAttribute("username", principal.getName());
         ProfileDto profileDto = profileService.getProfileByUsername(username);
         List<PostDto> posts = postsService.getPosts(username);
         if (profileDto != null) {
@@ -47,6 +48,7 @@ public class ProfileController {
                 return "profile/profile_nofriend";
             }
         }
+
         return "redirect:/";
     }
 

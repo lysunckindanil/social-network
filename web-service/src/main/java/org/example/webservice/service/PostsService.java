@@ -37,7 +37,7 @@ public class PostsService {
         postsServiceClient.deletePost(dto);
     }
 
-    @FeignClient(name = "posts-service", url = "http://192.168.0.100:8000", path = "posts-service")
+    @FeignClient(name = "posts-service", path = "posts-service")
     interface PostsServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getPosts")
         List<PostDto> getPosts(@RequestBody String username);

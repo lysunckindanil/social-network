@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Friends</title>
+    <title>Subscribed</title>
+    <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
 
-<a th:href="@{/home}">Главная</a>
+<header>
+    <nav>
+        <a th:href="@{'/profile/'+${username}}">Profile</a>
+        <a th:href="@{/subscribing}">Subscribing</a>
+        <a th:href="@{/subscribed}">Subscribed</a>
+    </nav>
+</header>
 
-<br>
-
-<h1>Subscribed on you</h1>
-<div th:each="sub: ${subscribed}">
-    <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
-</div>
+<article>
+    <h1>Subscribed on you</h1>
+    <div th:each="sub: ${subscribed}">
+        <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
+    </div>
+</article>
 </body>
 </html>

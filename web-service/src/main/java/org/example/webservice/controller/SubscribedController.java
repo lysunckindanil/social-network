@@ -19,6 +19,7 @@ public class SubscribedController {
     @GetMapping
     public String subscribed(Principal principal, Model model) {
         List<String> subscribed = friendsService.getSubscribed(principal.getName());
+        model.addAttribute("username", principal.getName());
         model.addAttribute("subscribed", subscribed);
         return "friends/subscribed";
     }

@@ -48,7 +48,7 @@ public class FriendsService {
         }
     }
 
-    @FeignClient(name = "friends-service", url = "http://192.168.0.100:8000", path = "friends-service")
+    @FeignClient(name = "friends-service", path = "friends-service")
     interface FriendsServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getSubscribed")
         List<String> getSubscribed(@RequestBody String username);
