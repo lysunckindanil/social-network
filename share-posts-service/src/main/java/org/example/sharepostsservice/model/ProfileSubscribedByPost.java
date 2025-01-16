@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_friend")
-public class ProfileFriend {
+@Table(name = "profile_subscribing_post")
+public class ProfileSubscribedByPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -21,10 +21,13 @@ public class ProfileFriend {
     private Profile profile;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Profile> friends = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
-    public void addFriend(Profile friend) {
-        friends.add(friend);
+    public void addPost(Post post) {
+        posts.add(post);
     }
 
+    public void deletePost(Post post) {
+        posts.remove(post);
+    }
 }

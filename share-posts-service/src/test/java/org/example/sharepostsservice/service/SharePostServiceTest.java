@@ -3,10 +3,10 @@ package org.example.sharepostsservice.service;
 import org.example.sharepostsservice.dto.ShareFriendsDto;
 import org.example.sharepostsservice.model.Post;
 import org.example.sharepostsservice.model.Profile;
-import org.example.sharepostsservice.model.ProfileFriend;
-import org.example.sharepostsservice.repo.FriendPostRepository;
+import org.example.sharepostsservice.model.ProfileSubscribedBy;
+import org.example.sharepostsservice.repo.ProfileSubscribedByPostRepository;
 import org.example.sharepostsservice.repo.PostRepository;
-import org.example.sharepostsservice.repo.ProfileFriendRepository;
+import org.example.sharepostsservice.repo.ProfileSubscribedByRepository;
 import org.example.sharepostsservice.repo.ProfileRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,19 +23,19 @@ import org.springframework.test.context.ActiveProfiles;
 class SharePostServiceTest {
 
     @Autowired
-    private FriendPostRepository friendPostRepository;
+    private ProfileSubscribedByPostRepository profileSubscribedByPostRepository;
     @Autowired
     private PostRepository postRepository;
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired
-    private ProfileFriendRepository profileFriendRepository;
+    private ProfileSubscribedByRepository profileSubscribedByRepository;
 
     private SharePostService sharePostService;
 
     @BeforeEach
     void setUp() {
-        sharePostService = new SharePostService(postRepository, profileRepository, profileFriendRepository, friendPostRepository);
+        sharePostService = new SharePostService(postRepository, profileRepository, profileSubscribedByRepository, profileSubscribedByPostRepository);
     }
 
     @Test
@@ -47,11 +47,11 @@ class SharePostServiceTest {
         profileRepository.save(friend1);
         profileRepository.save(friend2);
 
-        ProfileFriend profileFriend = new ProfileFriend();
-        profileFriend.setProfile(profile);
-        profileFriend.addFriend(friend1);
-        profileFriend.addFriend(friend2);
-        profileFriendRepository.save(profileFriend);
+        ProfileSubscribedBy profileSubscribedBy = new ProfileSubscribedBy();
+        profileSubscribedBy.setProfile(profile);
+        profileSubscribedBy.addFriend(friend1);
+        profileSubscribedBy.addFriend(friend2);
+        profileSubscribedByRepository.save(profileSubscribedBy);
 
         Post post = Post.builder().build();
         postRepository.save(post);
@@ -60,8 +60,8 @@ class SharePostServiceTest {
 
         sharePostService.sharePostsToFriends(dto);
 
-        Assertions.assertEquals(1, friendPostRepository.findFriendPostByProfile(friend1).get().getPosts().size());
-        Assertions.assertEquals(1, friendPostRepository.findFriendPostByProfile(friend2).get().getPosts().size());
+        Assertions.assertEquals(1, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend1).get().getPosts().size());
+        Assertions.assertEquals(1, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend2).get().getPosts().size());
     }
 
     @Test
@@ -73,11 +73,11 @@ class SharePostServiceTest {
         profileRepository.save(friend1);
         profileRepository.save(friend2);
 
-        ProfileFriend profileFriend = new ProfileFriend();
-        profileFriend.setProfile(profile);
-        profileFriend.addFriend(friend1);
-        profileFriend.addFriend(friend2);
-        profileFriendRepository.save(profileFriend);
+        ProfileSubscribedBy profileSubscribedBy = new ProfileSubscribedBy();
+        profileSubscribedBy.setProfile(profile);
+        profileSubscribedBy.addFriend(friend1);
+        profileSubscribedBy.addFriend(friend2);
+        profileSubscribedByRepository.save(profileSubscribedBy);
 
         Post post = Post.builder().build();
         postRepository.save(post);
@@ -87,8 +87,8 @@ class SharePostServiceTest {
         sharePostService.sharePostsToFriends(dto);
         sharePostService.deletePostsFromFriends(dto);
 
-        Assertions.assertEquals(0, friendPostRepository.findFriendPostByProfile(friend1).get().getPosts().size());
-        Assertions.assertEquals(0, friendPostRepository.findFriendPostByProfile(friend2).get().getPosts().size());
+        Assertions.assertEquals(0, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend1).get().getPosts().size());
+        Assertions.assertEquals(0, profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend2).get().getPosts().size());
         Assertions.assertFalse(postRepository.findById(post.getId()).isPresent());
     }
 }

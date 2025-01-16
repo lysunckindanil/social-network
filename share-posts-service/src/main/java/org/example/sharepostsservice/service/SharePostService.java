@@ -2,13 +2,13 @@ package org.example.sharepostsservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.sharepostsservice.dto.ShareFriendsDto;
-import org.example.sharepostsservice.model.FriendPost;
+import org.example.sharepostsservice.model.ProfileSubscribedByPost;
 import org.example.sharepostsservice.model.Post;
 import org.example.sharepostsservice.model.Profile;
-import org.example.sharepostsservice.model.ProfileFriend;
-import org.example.sharepostsservice.repo.FriendPostRepository;
+import org.example.sharepostsservice.model.ProfileSubscribedBy;
+import org.example.sharepostsservice.repo.ProfileSubscribedByPostRepository;
 import org.example.sharepostsservice.repo.PostRepository;
-import org.example.sharepostsservice.repo.ProfileFriendRepository;
+import org.example.sharepostsservice.repo.ProfileSubscribedByRepository;
 import org.example.sharepostsservice.repo.ProfileRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,8 @@ import java.util.Optional;
 public class SharePostService {
     private final PostRepository postRepository;
     private final ProfileRepository profileRepository;
-    private final ProfileFriendRepository profileFriendRepository;
-    private final FriendPostRepository friendPostRepository;
+    private final ProfileSubscribedByRepository profileSubscribedByRepository;
+    private final ProfileSubscribedByPostRepository profileSubscribedByPostRepository;
 
     @KafkaListener(topics = "share-friends", groupId = "share-posts-service")
     public void sharePostsToFriends(ShareFriendsDto dto) {
@@ -30,9 +30,9 @@ public class SharePostService {
         Profile profile = profileRepository.findById(dto.getProfile_id()).orElseThrow(() -> new RuntimeException("User not found"));
 
         // find friends of the profile
-        Optional<ProfileFriend> friends_optional = profileFriendRepository.findProfileFriendByProfile(profile);
+        Optional<ProfileSubscribedBy> friends_optional = profileSubscribedByRepository.findSubscribedProfilesByProfile(profile);
         if (friends_optional.isEmpty()) return;
-        List<Profile> friends = friends_optional.get().getFriends();
+        List<Profile> friends = friends_optional.get().getProfiles();
         if (friends.isEmpty()) return;
 
         // find post
@@ -42,17 +42,17 @@ public class SharePostService {
 
         // add post to every friend
         friends.forEach((friend) -> {
-            Optional<FriendPost> friendPost_optional = friendPostRepository.findFriendPostByProfile(friend);
-            FriendPost friendPost;
+            Optional<ProfileSubscribedByPost> friendPost_optional = profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend);
+            ProfileSubscribedByPost profileSubscribedByPost;
             if (friendPost_optional.isPresent()) {
-                friendPost = friendPost_optional.get();
-                friendPost.addPost(post);
+                profileSubscribedByPost = friendPost_optional.get();
+                profileSubscribedByPost.addPost(post);
             } else {
-                friendPost = new FriendPost();
-                friendPost.setProfile(friend);
-                friendPost.addPost(post);
+                profileSubscribedByPost = new ProfileSubscribedByPost();
+                profileSubscribedByPost.setProfile(friend);
+                profileSubscribedByPost.addPost(post);
             }
-            friendPostRepository.save(friendPost);
+            profileSubscribedByPostRepository.save(profileSubscribedByPost);
         });
     }
 
@@ -64,9 +64,9 @@ public class SharePostService {
         Profile profile = profile_optional.get();
 
         // find friends of the profile
-        Optional<ProfileFriend> friends_optional = profileFriendRepository.findProfileFriendByProfile(profile);
+        Optional<ProfileSubscribedBy> friends_optional = profileSubscribedByRepository.findSubscribedProfilesByProfile(profile);
         if (friends_optional.isEmpty()) return;
-        List<Profile> friends = friends_optional.get().getFriends();
+        List<Profile> friends = friends_optional.get().getProfiles();
         if (friends.isEmpty()) return;
 
         // find post
@@ -76,12 +76,12 @@ public class SharePostService {
 
         // delete post from every friend
         friends.forEach((friend) -> {
-            Optional<FriendPost> friendPost_optional = friendPostRepository.findFriendPostByProfile(friend);
-            FriendPost friendPost;
+            Optional<ProfileSubscribedByPost> friendPost_optional = profileSubscribedByPostRepository.findProfileSubscribedByPosts(friend);
+            ProfileSubscribedByPost profileSubscribedByPost;
             if (friendPost_optional.isPresent()) {
-                friendPost = friendPost_optional.get();
-                friendPost.deletePost(post);
-                friendPostRepository.save(friendPost);
+                profileSubscribedByPost = friendPost_optional.get();
+                profileSubscribedByPost.deletePost(post);
+                profileSubscribedByPostRepository.save(profileSubscribedByPost);
             }
         });
 

@@ -9,8 +9,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_subscribed")
-public class ProfileSubscribed {
+@Table(name = "profile_subscribed_by")
+public class ProfileSubscribedBy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -20,15 +20,15 @@ public class ProfileSubscribed {
     private Profile profile;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Profile> friends = new ArrayList<>();
+    private List<Profile> profiles = new ArrayList<>();
 
-    public void addFriend(Profile friend) {
-        if (!friends.contains(friend)) {
-            friends.add(friend);
+    public void addProfile(Profile friend) {
+        if (!profiles.contains(friend)) {
+            profiles.add(friend);
         }
     }
 
-    public void deleteFriend(Profile friend) {
-        friends.remove(friend);
+    public void deleteProfile(Profile friend) {
+        profiles.remove(friend);
     }
 }

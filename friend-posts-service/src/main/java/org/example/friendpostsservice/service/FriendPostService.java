@@ -2,10 +2,10 @@ package org.example.friendpostsservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.friendpostsservice.dto.PostDto;
-import org.example.friendpostsservice.model.FriendPost;
+import org.example.friendpostsservice.model.ProfileSubscriberByPost;
 import org.example.friendpostsservice.model.Post;
 import org.example.friendpostsservice.model.Profile;
-import org.example.friendpostsservice.repo.FriendPostRepository;
+import org.example.friendpostsservice.repo.ProfileSubscribedByPostRepository;
 import org.example.friendpostsservice.repo.ProfileRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class FriendPostService {
-    private final FriendPostRepository friendPostRepository;
+    private final ProfileSubscribedByPostRepository profileSubscribedByPostRepository;
     private final ProfileRepository profileRepository;
 
     public List<PostDto> getFriendsPosts(String username) {
@@ -24,11 +24,11 @@ public class FriendPostService {
         if (profile_optional.isEmpty()) return new ArrayList<>();
 
         Profile profile = profile_optional.get();
-        Optional<FriendPost> friendPost_optional = friendPostRepository.findFriendPostByProfile(profile);
+        Optional<ProfileSubscriberByPost> friendPost_optional = profileSubscribedByPostRepository.findFriendPostByProfile(profile);
         if (friendPost_optional.isEmpty()) return new ArrayList<>();
 
-        FriendPost friendPost = friendPost_optional.get();
-        return friendPost.getPosts().stream().map(FriendPostService::wrapPost).toList();
+        ProfileSubscriberByPost profileSubscriberByPost = friendPost_optional.get();
+        return profileSubscriberByPost.getPosts().stream().map(FriendPostService::wrapPost).toList();
     }
 
     private static PostDto wrapPost(Post post) {
