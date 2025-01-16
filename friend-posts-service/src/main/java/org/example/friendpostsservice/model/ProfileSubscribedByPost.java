@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "profile_subscribing_post")
-public class ProfileSubscriberByPost {
+@Table(name = "profile_subscribed_by_post")
+public class ProfileSubscribedByPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

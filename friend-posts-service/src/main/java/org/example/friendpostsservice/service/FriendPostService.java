@@ -2,7 +2,7 @@ package org.example.friendpostsservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.friendpostsservice.dto.PostDto;
-import org.example.friendpostsservice.model.ProfileSubscriberByPost;
+import org.example.friendpostsservice.model.ProfileSubscribedByPost;
 import org.example.friendpostsservice.model.Post;
 import org.example.friendpostsservice.model.Profile;
 import org.example.friendpostsservice.repo.ProfileSubscribedByPostRepository;
@@ -24,11 +24,11 @@ public class FriendPostService {
         if (profile_optional.isEmpty()) return new ArrayList<>();
 
         Profile profile = profile_optional.get();
-        Optional<ProfileSubscriberByPost> friendPost_optional = profileSubscribedByPostRepository.findFriendPostByProfile(profile);
+        Optional<ProfileSubscribedByPost> friendPost_optional = profileSubscribedByPostRepository.findFriendPostByProfile(profile);
         if (friendPost_optional.isEmpty()) return new ArrayList<>();
 
-        ProfileSubscriberByPost profileSubscriberByPost = friendPost_optional.get();
-        return profileSubscriberByPost.getPosts().stream().map(FriendPostService::wrapPost).toList();
+        ProfileSubscribedByPost profileSubscribedByPost = friendPost_optional.get();
+        return profileSubscribedByPost.getPosts().stream().map(FriendPostService::wrapPost).toList();
     }
 
     private static PostDto wrapPost(Post post) {

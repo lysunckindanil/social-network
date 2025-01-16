@@ -1,6 +1,6 @@
 package org.example.friendpostsservice.service;
 
-import org.example.friendpostsservice.model.ProfileSubscriberByPost;
+import org.example.friendpostsservice.model.ProfileSubscribedByPost;
 import org.example.friendpostsservice.model.Post;
 import org.example.friendpostsservice.model.Profile;
 import org.example.friendpostsservice.repo.ProfileSubscribedByPostRepository;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
-class ProfileSubscriberByPostServiceTest {
+class ProfileSubscribedByPostServiceTest {
     private ProfileSubscribedByPostRepository profileSubscribedByPostRepository;
     private ProfileRepository profileRepository;
     private FriendPostService friendPostService;
@@ -31,7 +31,7 @@ class ProfileSubscriberByPostServiceTest {
 
     @Test
     void getFriendsPosts_AddedPosts_ReturnsQuantityOfPosts() {
-        ProfileSubscriberByPost posts = new ProfileSubscriberByPost();
+        ProfileSubscribedByPost posts = new ProfileSubscribedByPost();
         posts.addPost(new Post());
         posts.addPost(new Post());
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.of(new Profile()));
@@ -41,7 +41,7 @@ class ProfileSubscriberByPostServiceTest {
 
     @Test
     void getFriendsPosts_ZeroPosts_ReturnsZeroPosts() {
-        ProfileSubscriberByPost posts = new ProfileSubscriberByPost();
+        ProfileSubscribedByPost posts = new ProfileSubscribedByPost();
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.of(new Profile()));
         Mockito.when(profileSubscribedByPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.of(posts));
         Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").size());
@@ -49,7 +49,7 @@ class ProfileSubscriberByPostServiceTest {
 
     @Test
     void getFriendsPosts_ProfileNotExists_ReturnsZeroPosts() {
-        ProfileSubscriberByPost posts = new ProfileSubscriberByPost();
+        ProfileSubscribedByPost posts = new ProfileSubscribedByPost();
         Mockito.when(profileRepository.findByUsername(any())).thenReturn(Optional.empty());
         Mockito.when(profileSubscribedByPostRepository.findFriendPostByProfile(any())).thenReturn(Optional.of(posts));
         Assertions.assertEquals(0, friendPostService.getFriendsPosts("user").size());
