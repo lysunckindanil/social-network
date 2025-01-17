@@ -24,9 +24,9 @@ public class SubscriberService {
         return friendsServiceClient.findProfileSubscribedOn(username);
     }
 
-    public Boolean isISubscribedOn(String profile_username, String username) {
+    public Boolean isISubscribedOn(String subscriber_username, String profile_username) {
         List<String> friends = friendsServiceClient.findSubscribers(profile_username).stream().map(ProfileDto::getUsername).toList();
-        return friends.contains(username);
+        return friends.contains(subscriber_username);
     }
 
     public void subscribe(String profile_username, String subscriber_username) {

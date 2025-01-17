@@ -22,7 +22,7 @@
     <p>Email: <span th:text="${profile.getEmail()}"></span></p>
     <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
     <form method="post" th:action="@{/subscribing/subscribe}">
-        <button type="submit" name="friend_username" th:value="${profile.getUsername()}">Subscribe</button>
+        <button type="submit" name="to_be_subscribed" th:value="${profile.getUsername()}">Subscribe</button>
     </form>
     <br>
 

@@ -25,15 +25,15 @@ public class SubscribingController {
     }
 
     @PostMapping("/subscribe")
-    public String subscribe(Principal principal, @RequestParam("friend_username") String friend_username) {
-        subscriberService.subscribe(principal.getName(), friend_username);
-        return "redirect:/profile/" + friend_username;
+    public String subscribe(Principal principal, @RequestParam("to_be_subscribed") String to_be_subscribed) {
+        subscriberService.subscribe(to_be_subscribed, principal.getName());
+        return "redirect:/profile/" + to_be_subscribed;
     }
 
 
     @PostMapping("/unsubscribe")
-    public String unsubscribe(Principal principal, @RequestParam("friend_username") String friend_username) {
-        subscriberService.unsubscribe(principal.getName(), friend_username);
-        return "redirect:/profile/" + friend_username;
+    public String unsubscribe(Principal principal, @RequestParam("to_be_unsubscribed") String to_be_unsubscribed) {
+        subscriberService.unsubscribe(to_be_unsubscribed, principal.getName());
+        return "redirect:/profile/" + to_be_unsubscribed;
     }
 }
