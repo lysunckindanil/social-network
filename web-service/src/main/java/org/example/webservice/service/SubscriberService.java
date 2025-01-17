@@ -29,21 +29,21 @@ public class SubscriberService {
         return friends.contains(username);
     }
 
-    public void addFriend(String profile_username, String friend_username) {
-        if (!friend_username.equals(profile_username)) {
+    public void subscribe(String profile_username, String subscriber_username) {
+        if (!subscriber_username.equals(profile_username)) {
             AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
                     .profile_username(profile_username)
-                    .friend_username(friend_username)
+                    .subscriber_username(subscriber_username)
                     .build();
             friendsServiceClient.addSubscriber(dto);
         }
     }
 
-    public void deleteFriend(String profile_username, String friend_username) {
-        if (!friend_username.equals(profile_username)) {
+    public void unsubscribe(String profile_username, String subscriber_username) {
+        if (!subscriber_username.equals(profile_username)) {
             AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
                     .profile_username(profile_username)
-                    .friend_username(friend_username)
+                    .subscriber_username(subscriber_username)
                     .build();
             friendsServiceClient.deleteSubscriber(dto);
         }

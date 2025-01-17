@@ -24,16 +24,16 @@ public class SubscribingController {
         return "friends/subscribing";
     }
 
-    @PostMapping("/addFriend")
-    public String addFriend(Principal principal, @RequestParam("friend_username") String friend_username) {
-        subscriberService.addFriend(principal.getName(), friend_username);
+    @PostMapping("/subscribe")
+    public String subscribe(Principal principal, @RequestParam("friend_username") String friend_username) {
+        subscriberService.subscribe(principal.getName(), friend_username);
         return "redirect:/profile/" + friend_username;
     }
 
 
-    @PostMapping("/deleteFriend")
-    public String deleteFriend(Principal principal, @RequestParam("friend_username") String friend_username) {
-        subscriberService.deleteFriend(principal.getName(), friend_username);
+    @PostMapping("/unsubscribe")
+    public String unsubscribe(Principal principal, @RequestParam("friend_username") String friend_username) {
+        subscriberService.unsubscribe(principal.getName(), friend_username);
         return "redirect:/profile/" + friend_username;
     }
 }
