@@ -1,9 +1,9 @@
-package org.example.friends_service.service;
+package org.example.subscriberservice.service;
 
-import org.example.friends_service.dto.AddAndDeleteSubscriberDto;
-import org.example.friends_service.model.Profile;
-import org.example.friends_service.repo.ProfileRepository;
-import org.example.friends_service.repo.ProfileSubscriberRepository;
+import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.model.Profile;
+import org.example.subscriberservice.repo.ProfileRepository;
+import org.example.subscriberservice.repo.ProfileSubscriberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

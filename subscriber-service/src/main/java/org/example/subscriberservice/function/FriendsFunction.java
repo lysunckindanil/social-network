@@ -1,10 +1,10 @@
-package org.example.friends_service.function;
+package org.example.subscriberservice.function;
 
 import lombok.RequiredArgsConstructor;
-import org.example.friends_service.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
 
-import org.example.friends_service.dto.ProfileDto;
-import org.example.friends_service.service.SubscriberService;
+import org.example.subscriberservice.dto.ProfileDto;
+import org.example.subscriberservice.service.SubscriberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

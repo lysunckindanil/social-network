@@ -1,4 +1,4 @@
-package org.example.friends_service;
+package org.example.subscriberservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

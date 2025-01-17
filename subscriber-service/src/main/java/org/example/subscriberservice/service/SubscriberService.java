@@ -1,13 +1,13 @@
-package org.example.friends_service.service;
+package org.example.subscriberservice.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.friends_service.dto.AddAndDeleteSubscriberDto;
-import org.example.friends_service.dto.ProfileDto;
-import org.example.friends_service.model.Profile;
-import org.example.friends_service.model.ProfileSubscriber;
-import org.example.friends_service.repo.ProfileRepository;
-import org.example.friends_service.repo.ProfileSubscriberRepository;
+import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.ProfileDto;
+import org.example.subscriberservice.model.Profile;
+import org.example.subscriberservice.model.ProfileSubscriber;
+import org.example.subscriberservice.repo.ProfileRepository;
+import org.example.subscriberservice.repo.ProfileSubscriberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.example.friends_service.model;
+package org.example.subscriberservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;

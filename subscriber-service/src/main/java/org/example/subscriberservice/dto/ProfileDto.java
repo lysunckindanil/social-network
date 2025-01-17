@@ -1,4 +1,4 @@
-package org.example.friends_service.dto;
+package org.example.subscriberservice.dto;
 
 
 import lombok.Builder;
