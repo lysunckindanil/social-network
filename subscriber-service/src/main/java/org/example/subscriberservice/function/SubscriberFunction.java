@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Configuration
-public class FriendsFunction {
+public class SubscriberFunction {
     private final SubscriberService subscriberService;
 
     @Bean
