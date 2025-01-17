@@ -1,10 +1,12 @@
 package org.example.sharepostsservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Builder
 @AllArgsConstructor
@@ -18,22 +20,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    @NotEmpty
     private String label;
+    @NotEmpty
     private String content;
+    @NotNull
+    @PastOrPresent
     private Date createdAt;
-
     @ManyToOne
     private Profile author;
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(createdAt, post.createdAt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(createdAt);
-    }
 }

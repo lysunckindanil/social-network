@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Date;
+
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -41,14 +43,13 @@ class SharePostServiceTest {
 
     @Test
     void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
-        Profile profile = Profile.builder().username("user1").build();
-        Profile subscriber = Profile.builder().username("user2").build();
+        Profile profile = Profile.builder().username("user1").password("p").build();
+        Profile subscriber = Profile.builder().username("user2").password("p").build();
         Long profile_id = profileRepository.save(profile).getId();
         profileRepository.save(subscriber);
-
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
-        Post post = Post.builder().build();
+        Post post = Post.builder().label("l").content("c").createdAt(new Date()).build();
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
@@ -61,14 +62,13 @@ class SharePostServiceTest {
 
     @Test
     void deletePostsFromFriends_ProfileDeletes_PostsDeleted() {
-        Profile profile = Profile.builder().username("user1").build();
-        Profile subscriber = Profile.builder().username("user2").build();
+        Profile profile = Profile.builder().username("user1").password("p").build();
+        Profile subscriber = Profile.builder().username("user2").password("p").build();
         Long profile_id = profileRepository.save(profile).getId();
         profileRepository.save(subscriber);
-
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
-        Post post = Post.builder().build();
+        Post post = Post.builder().label("l").content("c").createdAt(new Date()).build();
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();

@@ -18,8 +18,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Date;
-
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -44,10 +42,9 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPosts_AddsPostToRepository() {
-        Profile profile = Profile.builder().username("username").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
-        Date date = new Date();
-        PostDto postDto = PostDto.builder().createdAt(date).build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
 
@@ -57,10 +54,9 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPosts_CallsSharePostsToSubscribers() {
-        Profile profile = Profile.builder().username("username").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
-        Date date = new Date();
-        PostDto postDto = PostDto.builder().createdAt(date).build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long post_id = postRepository.findAll().getFirst().getId();
@@ -70,12 +66,12 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPostsDiffUsers_AddsPostsToRepository() {
-        Profile profile = Profile.builder().username("username").build();
-        Profile profile2 = Profile.builder().username("username2").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile2 = Profile.builder().username("u1").password("p").build();
         profileRepository.save(profile);
         profileRepository.save(profile2);
-        PostDto postDto = PostDto.builder().build();
-        PostDto postDto2 = PostDto.builder().build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
+        PostDto postDto2 = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile2.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
@@ -88,10 +84,10 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddSomePosts_AddsSomePostToRepository() {
-        Profile profile = Profile.builder().username("username").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
-        PostDto postDto = PostDto.builder().build();
-        PostDto postDto2 = PostDto.builder().build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
+        PostDto postDto2 = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
@@ -103,9 +99,9 @@ class PostsServiceTest {
 
     @Test
     void deletePostByUsername_DeletePost_DeletesFromAuthor() {
-        Profile profile = Profile.builder().username("username").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
-        PostDto postDto = PostDto.builder().build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
@@ -116,9 +112,9 @@ class PostsServiceTest {
 
     @Test
     void deletePostByUsername_DeletePost_CallsDeletesFromSubscribers() {
-        Profile profile = Profile.builder().username("username").build();
+        Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
-        PostDto postDto = PostDto.builder().build();
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
