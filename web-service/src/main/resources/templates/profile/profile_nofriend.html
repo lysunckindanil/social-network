@@ -7,14 +7,7 @@
 </head>
 <body>
 
-<header>
-    <nav>
-        <a th:href="@{'/profile/'+${username}}">Profile</a>
-        <a th:href="@{/subscribing}">Subscribing</a>
-        <a th:href="@{/subscribed}">Subscribed</a>
-    </nav>
-</header>
-
+<header th:replace="~{fragments/nav::nav(${username})}"></header>
 
 <article>
     <h1>Profile</h1>
@@ -42,7 +35,7 @@
 
     <div th:if="${!posts.isEmpty()}">
         <h1>Posts</h1>
-        <div th:each="post: ${posts}">
+        <div class="post" th:each="post: ${posts}">
             <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
             <p>Content: <span th:text="${post.getContent()}"></span></p>
             <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>

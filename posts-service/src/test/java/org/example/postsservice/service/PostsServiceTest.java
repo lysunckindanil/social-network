@@ -1,6 +1,6 @@
 package org.example.postsservice.service;
 
-import org.example.postsservice.dto.AddAndDeletePostDto;
+import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
@@ -47,8 +47,8 @@ class PostsServiceTest {
         profileRepository.save(profile);
         Date date = new Date();
         PostDto postDto = PostDto.builder().createdAt(date).build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
 
         Assertions.assertEquals(1, postRepository.findAll().size());
         Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
@@ -60,8 +60,8 @@ class PostsServiceTest {
         profileRepository.save(profile);
         Date date = new Date();
         PostDto postDto = PostDto.builder().createdAt(date).build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
         Long post_id = postRepository.findAll().getFirst().getId();
         Long profile_id = profile.getId();
         Mockito.verify(shareSubscribersClient).shareSubscribers(profile_id, post_id);
@@ -75,10 +75,10 @@ class PostsServiceTest {
         profileRepository.save(profile2);
         PostDto postDto = PostDto.builder().build();
         PostDto postDto2 = PostDto.builder().build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        AddAndDeletePostDto addAndDeletePostDto2 = AddAndDeletePostDto.builder().profile_username(profile2.getUsername()).post(postDto2).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
-        postsService.addPostByUsername(addAndDeletePostDto2);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile2.getUsername()).post(postDto2).build();
+        postsService.addPostByUsername(addPostDto);
+        postsService.addPostByUsername(addPostDto2);
 
         Assertions.assertEquals(2, postRepository.findAll().size());
         Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
@@ -91,10 +91,10 @@ class PostsServiceTest {
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().build();
         PostDto postDto2 = PostDto.builder().build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        AddAndDeletePostDto addAndDeletePostDto2 = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto2).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
-        postsService.addPostByUsername(addAndDeletePostDto2);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto2).build();
+        postsService.addPostByUsername(addPostDto);
+        postsService.addPostByUsername(addPostDto2);
 
         Assertions.assertEquals(2, postRepository.findAll().size());
         Assertions.assertEquals(2, postRepository.findAllByAuthor(profile).size());
@@ -105,11 +105,11 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("username").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
-        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
-        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
-        postsService.deletePostByUsername(addAndDeletePostDto);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
+        Long id = postRepository.findAll().getFirst().getId();
+        addPostDto.getPost().setId(id);
+        postsService.deletePost(addPostDto.getPost());
 
         Assertions.assertEquals(0, postRepository.findAllByAuthor(profile).size());
     }
@@ -119,15 +119,14 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("username").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().build();
-        AddAndDeletePostDto addAndDeletePostDto = AddAndDeletePostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addAndDeletePostDto);
-        Date createdAt = postRepository.findAll().getFirst().getCreatedAt();
-        addAndDeletePostDto.getPost().setCreatedAt(createdAt);
-        postsService.deletePostByUsername(addAndDeletePostDto);
+        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
+        Long id = postRepository.findAll().getFirst().getId();
+        addPostDto.getPost().setId(id);
+        postsService.deletePost(addPostDto.getPost());
         Long post_id = postRepository.findAll().getFirst().getId();
-        Long profile_id = profile.getId();
 
-        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(profile_id, post_id);
+        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(post_id);
     }
 
 

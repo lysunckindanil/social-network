@@ -1,6 +1,7 @@
 package org.example.sharepostsservice.service;
 
-import org.example.sharepostsservice.dto.ShareFriendsDto;
+import org.example.sharepostsservice.dto.DeletePostDto;
+import org.example.sharepostsservice.dto.ShareSubscribersDto;
 import org.example.sharepostsservice.model.Post;
 import org.example.sharepostsservice.model.Profile;
 import org.example.sharepostsservice.model.ProfileSubscriber;
@@ -50,7 +51,7 @@ class SharePostServiceTest {
         Post post = Post.builder().build();
         postRepository.save(post);
 
-        ShareFriendsDto dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+        ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
         Assertions.assertEquals(post.getId(), postSubscriberRepository.findAll().getFirst().getPost().getId());
@@ -70,10 +71,10 @@ class SharePostServiceTest {
         Post post = Post.builder().build();
         postRepository.save(post);
 
-        ShareFriendsDto dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+        ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
-        sharePostService.deletePostsFromSubscribers(dto);
+        sharePostService.deletePostsFromSubscribers(DeletePostDto.builder().post_id(post.getId()).build());
 
 
         Assertions.assertEquals(0, postSubscriberRepository.findAll().size());

@@ -1,7 +1,7 @@
 package org.example.postsservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.postsservice.dto.AddAndDeletePostDto;
+import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
@@ -32,7 +32,7 @@ public class PostsService {
                 .toList();
     }
 
-    public void addPostByUsername(AddAndDeletePostDto postDto) {
+    public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
         post.setCreatedAt(new Date());
         Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfile_username());
@@ -45,20 +45,13 @@ public class PostsService {
         shareSubscribersClient.shareSubscribers(author.getId(), post.getId());
     }
 
-    public void deletePostByUsername(AddAndDeletePostDto postDto) {
-        Post post = unwrapPost(postDto.getPost());
-        Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfile_username());
-        if (authorOptional.isEmpty()) {
-            return;
-        }
-        Profile author = authorOptional.get();
-        List<Post> posts = postRepository.findAllByAuthor(author);
-        Optional<Post> postToDeleteOptional = posts.stream().filter(p -> p.getCreatedAt().equals(post.getCreatedAt())).findFirst();
+    public void deletePost(PostDto postDto) {
+        Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getId());
         if (postToDeleteOptional.isPresent()) {
             Post postToDelete = postToDeleteOptional.get();
             postToDelete.setAuthor(null);
             postRepository.save(postToDelete);
-            shareSubscribersClient.deleteFromSubscribers(author.getId(), postToDelete.getId());
+            shareSubscribersClient.deleteFromSubscribers(postToDelete.getId());
         }
     }
 

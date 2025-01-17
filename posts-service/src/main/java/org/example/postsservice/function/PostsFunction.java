@@ -1,7 +1,7 @@
 package org.example.postsservice.function;
 
 import lombok.RequiredArgsConstructor;
-import org.example.postsservice.dto.AddAndDeletePostDto;
+import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.service.PostsService;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +22,13 @@ public class PostsFunction {
     }
 
     @Bean
-    public Consumer<AddAndDeletePostDto> addPost() {
+    public Consumer<AddPostDto> addPost() {
         return postsService::addPostByUsername;
     }
 
 
     @Bean
-    public Consumer<AddAndDeletePostDto> deletePost() {
-        return postsService::deletePostByUsername;
+    public Consumer<PostDto> deletePost() {
+        return postsService::deletePost;
     }
 }

@@ -2,21 +2,36 @@ nav a {
     text-align: center;
     text-decoration: none;
     padding: 10px;
-    border: 1px black solid;
+    border-right: 1px black solid;
+    border-bottom: 1px black solid;
     width: 150px;
     cursor: pointer;
     color: black;
-    font-size: 1.3em;
+    font-size: 1.3rem;
 }
 
 nav {
     display: flex;
     flex-direction: column;
+    border-left: 1px black solid;
+    border-top: 1px black solid;
 }
 
-body{
+body {
     padding: 50px 50px;
     display: flex;
     flex-direction: row;
     gap: 50px;
+}
+
+.post {
+    border: black solid 1px;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+    width: 500px;
+}
+
+h1{
+    margin-top: 0;
 }

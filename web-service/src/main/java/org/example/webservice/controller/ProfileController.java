@@ -49,7 +49,7 @@ public class ProfileController {
             }
         }
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @GetMapping("/login")

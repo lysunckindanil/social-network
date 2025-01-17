@@ -2,7 +2,8 @@ package org.example.sharepostsservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.sharepostsservice.dto.ShareFriendsDto;
+import org.example.sharepostsservice.dto.DeletePostDto;
+import org.example.sharepostsservice.dto.ShareSubscribersDto;
 import org.example.sharepostsservice.model.Post;
 import org.example.sharepostsservice.model.PostSubscriber;
 import org.example.sharepostsservice.model.Profile;
@@ -27,7 +28,7 @@ public class SharePostService {
     private final PostSubscriberRepository postSubscriberRepository;
 
     @KafkaListener(topics = "share-subscribers", groupId = "share-posts-service")
-    public void sharePostsToSubscribers(ShareFriendsDto dto) {
+    public void sharePostsToSubscribers(ShareSubscribersDto dto) {
         // find profile whose friends to be shared
         Optional<Profile> profileOptional = profileRepository.findById(dto.getProfile_id());
         if (profileOptional.isEmpty()) return;
@@ -49,7 +50,7 @@ public class SharePostService {
     }
 
     @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service")
-    public void deletePostsFromSubscribers(ShareFriendsDto dto) {
+    public void deletePostsFromSubscribers(DeletePostDto dto) {
         // find post
         Optional<Post> post_optional = postRepository.findById(dto.getPost_id());
         if (post_optional.isEmpty()) return;

@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AddAndDeletePostDto {
-    private String profile_username;
-    private PostDto post;
+public class DeletePostDto {
+    private Long post_id;
 }

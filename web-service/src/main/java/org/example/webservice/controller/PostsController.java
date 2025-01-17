@@ -1,6 +1,7 @@
 package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.webservice.dto.DeletePostDto;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.service.PostsService;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class PostsController {
 
     @PostMapping("/delete")
     public String deletePost(@RequestParam("post_id") Long post_id, Principal principal) {
-        postsService.deletePost(principal.getName(), PostDto.builder().id(post_id).build());
+        postsService.deletePost(DeletePostDto.builder().post_id(post_id).build());
         return "redirect:/profile/" + principal.getName();
     }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShareFriendsDto {
+public class ShareSubscribersDto {
     private Long profile_id;
     private Long post_id;
 }
