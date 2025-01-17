@@ -5,7 +5,7 @@ import org.example.sharepostsservice.model.Post;
 import org.example.sharepostsservice.model.Profile;
 import org.example.sharepostsservice.model.ProfileSubscriber;
 import org.example.sharepostsservice.repo.PostRepository;
-import org.example.sharepostsservice.repo.ProfilePostSubscribedRepository;
+import org.example.sharepostsservice.repo.PostSubscriberRepository;
 import org.example.sharepostsservice.repo.ProfileRepository;
 import org.example.sharepostsservice.repo.ProfileSubscriberRepository;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 class SharePostServiceTest {
 
     @Autowired
-    private ProfilePostSubscribedRepository profilePostSubscribedRepository;
+    private PostSubscriberRepository postSubscriberRepository;
     @Autowired
     private PostRepository postRepository;
     @Autowired
@@ -35,7 +35,7 @@ class SharePostServiceTest {
 
     @BeforeEach
     void setUp() {
-        sharePostService = new SharePostService(postRepository, profileRepository, profileSubscriberRepository, profilePostSubscribedRepository);
+        sharePostService = new SharePostService(postRepository, profileRepository, profileSubscriberRepository, postSubscriberRepository);
     }
 
     @Test
@@ -53,7 +53,8 @@ class SharePostServiceTest {
         ShareFriendsDto dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
-        Assertions.assertEquals(1, profilePostSubscribedRepository.findAll().getFirst().getPosts().size());
+        Assertions.assertEquals(post.getId(), postSubscriberRepository.findAll().getFirst().getPost().getId());
+        Assertions.assertEquals(subscriber.getId(), postSubscriberRepository.findAll().getFirst().getSubscriber().getId());
     }
 
 
@@ -75,7 +76,7 @@ class SharePostServiceTest {
         sharePostService.deletePostsFromSubscribers(dto);
 
 
-        Assertions.assertEquals(0, profilePostSubscribedRepository.findAll().getFirst().getPosts().size());
+        Assertions.assertEquals(0, postSubscriberRepository.findAll().size());
         Assertions.assertEquals(0, postRepository.findAll().size());
     }
 }
