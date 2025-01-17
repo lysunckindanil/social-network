@@ -31,7 +31,6 @@ public class PostsService {
 
 
     public void deletePost(DeletePostDto post) {
-
         postsServiceClient.deletePost(post);
     }
 

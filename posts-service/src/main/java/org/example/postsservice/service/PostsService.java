@@ -2,6 +2,7 @@ package org.example.postsservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.postsservice.dto.AddPostDto;
+import org.example.postsservice.dto.DeletePostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
@@ -45,8 +46,8 @@ public class PostsService {
         shareSubscribersClient.shareSubscribers(author.getId(), post.getId());
     }
 
-    public void deletePost(PostDto postDto) {
-        Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getId());
+    public void deletePost(DeletePostDto postDto) {
+        Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPost_id());
         if (postToDeleteOptional.isPresent()) {
             Post postToDelete = postToDeleteOptional.get();
             postToDelete.setAuthor(null);

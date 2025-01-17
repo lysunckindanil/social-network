@@ -1,6 +1,7 @@
 package org.example.postsservice.service;
 
 import org.example.postsservice.dto.AddPostDto;
+import org.example.postsservice.dto.DeletePostDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
@@ -108,8 +109,7 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        addPostDto.getPost().setId(id);
-        postsService.deletePost(addPostDto.getPost());
+        postsService.deletePost(DeletePostDto.builder().post_id(id).build());
 
         Assertions.assertEquals(0, postRepository.findAllByAuthor(profile).size());
     }
@@ -122,11 +122,9 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        addPostDto.getPost().setId(id);
-        postsService.deletePost(addPostDto.getPost());
-        Long post_id = postRepository.findAll().getFirst().getId();
+        postsService.deletePost(DeletePostDto.builder().post_id(id).build());
 
-        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(post_id);
+        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(id);
     }
 
 
