@@ -1,6 +1,7 @@
 package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.webservice.dto.ProfileDto;
 import org.example.webservice.service.SubscriberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,7 @@ public class SubscribingController {
 
     @GetMapping()
     public String subscribing(Principal principal, Model model) {
-        List<String> subscribing = subscriberService.getSubscribing(principal.getName());
+        List<String> subscribing = subscriberService.findProfileSubscribedOn(principal.getName()).stream().map(ProfileDto::getUsername).toList();
         model.addAttribute("subscribing", subscribing);
         model.addAttribute("username", principal.getName());
         return "friends/subscribing";

@@ -1,7 +1,8 @@
 package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.AddAndDeleteFriendDto;
+import org.example.webservice.dto.AddAndDeleteSubscriberDto;
+import org.example.webservice.dto.ProfileDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,51 +16,51 @@ import java.util.List;
 public class SubscriberService {
     private final FriendsServiceClient friendsServiceClient;
 
-    public List<String> getSubscribing(String username) {
-        return friendsServiceClient.getSubscribing(username);
+    public List<ProfileDto> findSubscribers(String username) {
+        return friendsServiceClient.findSubscribers(username);
     }
 
-    public List<String> getSubscribed(String username) {
-        return friendsServiceClient.getSubscribed(username);
+    public List<ProfileDto> findProfileSubscribedOn(String username) {
+        return friendsServiceClient.findProfileSubscribedOn(username);
     }
 
     public Boolean isISubscribedOn(String profile_username, String username) {
-        List<String> friends = friendsServiceClient.getSubscribing(profile_username);
+        List<String> friends = friendsServiceClient.findSubscribers(profile_username).stream().map(ProfileDto::getUsername).toList();
         return friends.contains(username);
     }
 
     public void addFriend(String profile_username, String friend_username) {
         if (!friend_username.equals(profile_username)) {
-            AddAndDeleteFriendDto dto = AddAndDeleteFriendDto.builder()
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
                     .profile_username(profile_username)
                     .friend_username(friend_username)
                     .build();
-            friendsServiceClient.addFriend(dto);
+            friendsServiceClient.addSubscriber(dto);
         }
     }
 
     public void deleteFriend(String profile_username, String friend_username) {
         if (!friend_username.equals(profile_username)) {
-            AddAndDeleteFriendDto dto = AddAndDeleteFriendDto.builder()
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
                     .profile_username(profile_username)
                     .friend_username(friend_username)
                     .build();
-            friendsServiceClient.deleteFriend(dto);
+            friendsServiceClient.deleteSubscriber(dto);
         }
     }
 
     @FeignClient(name = "subscriber-service", path = "subscriber-service")
     interface FriendsServiceClient {
-        @RequestMapping(method = RequestMethod.POST, value = "/getSubscribed")
-        List<String> getSubscribed(@RequestBody String username);
+        @RequestMapping(method = RequestMethod.POST, value = "/findSubscribers")
+        List<ProfileDto> findSubscribers(@RequestBody String username);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/getSubscribing")
-        List<String> getSubscribing(@RequestBody String username);
+        @RequestMapping(method = RequestMethod.POST, value = "/findProfileSubscribedOn")
+        List<ProfileDto> findProfileSubscribedOn(@RequestBody String username);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/addFriend")
-        void addFriend(@RequestBody AddAndDeleteFriendDto dto);
+        @RequestMapping(method = RequestMethod.POST, value = "/addSubscriber")
+        void addSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/deleteFriend")
-        void deleteFriend(@RequestBody AddAndDeleteFriendDto dto);
+        @RequestMapping(method = RequestMethod.POST, value = "/deleteSubscriber")
+        void deleteSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
     }
 }

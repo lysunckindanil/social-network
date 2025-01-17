@@ -1,11 +1,11 @@
-package org.example.friendpostsservice.service;
+package org.example.subscriberpostsservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.friendpostsservice.dto.PostDto;
-import org.example.friendpostsservice.model.Post;
-import org.example.friendpostsservice.model.Profile;
-import org.example.friendpostsservice.repo.PostSubscriberRepository;
-import org.example.friendpostsservice.repo.ProfileRepository;
+import org.example.subscriberpostsservice.dto.PostDto;
+import org.example.subscriberpostsservice.model.Post;
+import org.example.subscriberpostsservice.model.Profile;
+import org.example.subscriberpostsservice.repo.PostSubscriberRepository;
+import org.example.subscriberpostsservice.repo.ProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

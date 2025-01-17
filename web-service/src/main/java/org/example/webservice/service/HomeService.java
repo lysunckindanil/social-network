@@ -13,15 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class HomeService {
-    private final FriendPostsServiceClient friendPostsServiceClient;
+    private final SubscriberPostServiceClient subscriberPostServiceClient;
 
     public List<PostDto> getFriendsPostsByUsername(String username) {
-        return friendPostsServiceClient.getPostsByUsername(username);
+        return subscriberPostServiceClient.getPostsByUsername(username);
     }
 
 
     @FeignClient(name = "subscriber-post-service", path = "subscriber-post-service")
-    interface FriendPostsServiceClient {
+    interface SubscriberPostServiceClient {
         @RequestMapping(method = RequestMethod.POST, value = "/getByUsername")
         List<PostDto> getPostsByUsername(@RequestBody String username);
     }

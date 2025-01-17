@@ -1,8 +1,8 @@
-package org.example.friendpostsservice.function;
+package org.example.subscriberpostsservice.function;
 
 import lombok.RequiredArgsConstructor;
-import org.example.friendpostsservice.dto.PostDto;
-import org.example.friendpostsservice.service.SubscribersPostService;
+import org.example.subscriberpostsservice.dto.PostDto;
+import org.example.subscriberpostsservice.service.SubscribersPostService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

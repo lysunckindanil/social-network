@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AddAndDeleteFriendDto {
+public class AddAndDeleteSubscriberDto {
     private String profile_username;
     private String friend_username;
 }

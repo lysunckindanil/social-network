@@ -19,6 +19,7 @@
     <div th:if="${!posts.isEmpty()}">
         <h1>Posts</h1>
         <div th:each="post: ${posts}">
+            <h3>Author: <span th:text="${post.getAuthor()}"></span></h3>
             <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
             <p>Content: <span th:text="${post.getContent()}"></span></p>
             <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>

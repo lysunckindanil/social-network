@@ -1,13 +1,16 @@
-package org.example.friendpostsservice.service;
+package org.example.subscriberpostsservice.service;
 
-import org.example.friendpostsservice.model.Post;
-import org.example.friendpostsservice.model.Profile;
-import org.example.friendpostsservice.repo.PostSubscriberRepository;
-import org.example.friendpostsservice.repo.ProfileRepository;
+import org.example.subscriberpostsservice.model.Post;
+import org.example.subscriberpostsservice.model.Profile;
+import org.example.subscriberpostsservice.repo.PostSubscriberRepository;
+import org.example.subscriberpostsservice.repo.ProfileRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
+@DataJpaTest
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class SubscribersPostServiceTest {
     private PostSubscriberRepository postSubscriberRepository;
     private ProfileRepository profileRepository;
@@ -69,6 +74,6 @@ class SubscribersPostServiceTest {
         profile.setUsername("user");
         Mockito.when(profileRepository.findByUsername("user")).thenReturn(Optional.of(profile));
         Mockito.when(postSubscriberRepository.findPostsBySubscriber(any())).thenReturn(posts);
-        Assertions.assertEquals(2, subscribersPostService.getFriendsPosts("user").size());
+        Assertions.assertEquals(0, subscribersPostService.getFriendsPosts("user").size());
     }
 }

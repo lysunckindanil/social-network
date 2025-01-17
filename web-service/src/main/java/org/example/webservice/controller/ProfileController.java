@@ -40,8 +40,8 @@ public class ProfileController {
                 model.addAttribute("new_post", PostDto.builder().build());
                 return "profile/my_profile";
             }
-            model.addAttribute("subscribed", subscriberService.getSubscribed(username));
-            model.addAttribute("subscribing", subscriberService.getSubscribing(username));
+            model.addAttribute("subscribed", subscriberService.findSubscribers(username));
+            model.addAttribute("subscribing", subscriberService.findProfileSubscribedOn(username));
             if (subscriberService.isISubscribedOn(principal.getName(), username)) {
                 return "profile/profile_friend";
             } else {

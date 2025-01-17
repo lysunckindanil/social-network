@@ -12,4 +12,5 @@ public class PostDto {
     private String label;
     private String content;
     private Date createdAt;
+    private String author;
 }
