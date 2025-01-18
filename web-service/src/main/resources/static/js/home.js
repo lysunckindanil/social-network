@@ -21,11 +21,11 @@ function generatePosts(posts) {
     posts.forEach(function (postEntity) {
         const post = document.getElementById("post").cloneNode(true)
         post.hidden = false
-        post.getElementsByClassName("post_label")[0].innerText = postEntity['label']
-        post.getElementsByClassName("post_content")[0].innerText = postEntity['content']
-        post.getElementsByClassName("post_created_at")[0].innerText = postEntity['createdAt']
-        post.getElementsByClassName("post_author")[0].href = '/profile/' + postEntity['author']
-        post.getElementsByClassName("post_author")[0].innerText = postEntity['author']
+        post.getElementsByClassName("postLabel")[0].innerText = postEntity['label']
+        post.getElementsByClassName("postContent")[0].innerText = postEntity['content']
+        post.getElementsByClassName("postCreatedAt")[0].innerText = postEntity['createdAt']
+        post.getElementsByClassName("postAuthor")[0].href = '/profile/' + postEntity['author']
+        post.getElementsByClassName("postAuthor")[0].innerText = postEntity['author']
         posts_section.insertAdjacentElement('beforeend', post)
     })
 

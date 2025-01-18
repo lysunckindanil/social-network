@@ -45,12 +45,12 @@
     <div id="posts">
         <h1>Posts</h1>
         <div class="post" id="post" hidden="hidden">
-            <h3>Label: <span class="post_label"></span></h3>
-            <p>Content: <span class="post_content"></span></p>
-            <p>CreatedAt: <span class="post_created_at"></span></p>
+            <h3>Label: <span class="postLabel"></span></h3>
+            <p>Content: <span class="postContent"></span></p>
+            <p>CreatedAt: <span class="postCreatedAt"></span></p>
             <br>
             <form method="post" th:action="@{/posts/delete}">
-                <button type="submit" name="post_id" class="delete_post_button">Delete post</button>
+                <button type="submit" name="postId" class="deletePostButton">Delete post</button>
             </form>
         </div>
     </div>
