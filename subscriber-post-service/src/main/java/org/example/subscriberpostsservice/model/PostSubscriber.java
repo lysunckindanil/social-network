@@ -3,12 +3,12 @@ package org.example.subscriberpostsservice.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.Immutable;
 
+@Immutable
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 @Entity
 @Table(name = "post_subscriber")
 public class PostSubscriber {

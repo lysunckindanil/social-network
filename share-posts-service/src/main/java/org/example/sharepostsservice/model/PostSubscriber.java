@@ -3,12 +3,12 @@ package org.example.sharepostsservice.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.Immutable;
 
+@Immutable
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 @Entity
 @Table(name = "post_subscriber")
 public class PostSubscriber {

@@ -3,6 +3,7 @@ package org.example.sharepostsservice.service;
 import org.example.sharepostsservice.dto.DeletePostDto;
 import org.example.sharepostsservice.dto.ShareSubscribersDto;
 import org.example.sharepostsservice.model.Post;
+import org.example.sharepostsservice.model.PostSubscriber;
 import org.example.sharepostsservice.model.Profile;
 import org.example.sharepostsservice.model.ProfileSubscriber;
 import org.example.sharepostsservice.repo.PostRepository;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @ActiveProfiles("test")
@@ -44,7 +46,7 @@ class SharePostServiceTest {
     }
 
     @Test
-    void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
+    void sharePostsToFriends_ProfilePosts_FriendsGetPosts() throws NoSuchFieldException, IllegalAccessException {
         Profile profile = Profile.builder().username("user1").password("p").build();
         Profile subscriber = Profile.builder().username("user2").password("p").build();
         Long profile_id = profileRepository.save(profile).getId();
@@ -57,8 +59,19 @@ class SharePostServiceTest {
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
-        Assertions.assertEquals(post.getId(), postSubscriberRepository.findAll().getFirst().getPost().getId());
-        Assertions.assertEquals(subscriber.getId(), postSubscriberRepository.findAll().getFirst().getSubscriber().getId());
+        PostSubscriber ps = postSubscriberRepository.findAll().getFirst();
+
+        Field subscriber_field = PostSubscriber.class.getDeclaredField("subscriber");
+        subscriber_field.setAccessible(true);
+        Long subscriber_id = ((Profile) subscriber_field.get(ps)).getId();
+
+        Field post_field = PostSubscriber.class.getDeclaredField("post");
+        post_field.setAccessible(true);
+        Long post_id = ((Post) post_field.get(ps)).getId();
+
+
+        Assertions.assertEquals(post.getId(), post_id);
+        Assertions.assertEquals(subscriber.getId(), subscriber_id);
     }
 
 
