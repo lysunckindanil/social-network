@@ -18,7 +18,7 @@ public class SubscribersPostService {
     private final PostSubscriberRepository postSubscriberRepository;
     private final ProfileRepository profileRepository;
 
-    public List<PostDto> getFriendsPosts(String username) {
+    public List<PostDto> getSubscribersPosts(String username) {
         Optional<Profile> profile_optional = profileRepository.findByUsername(username);
         if (profile_optional.isEmpty()) return new ArrayList<>();
         Profile profile = profile_optional.get();

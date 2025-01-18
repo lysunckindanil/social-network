@@ -16,6 +16,6 @@ public class SubscriberPostFunction {
 
     @Bean
     public Function<String, List<PostDto>> getByUsername() {
-        return subscribersPostService::getFriendsPosts;
+        return subscribersPostService::getSubscribersPosts;
     }
 }

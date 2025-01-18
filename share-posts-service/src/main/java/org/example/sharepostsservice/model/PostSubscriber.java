@@ -1,6 +1,7 @@
 package org.example.sharepostsservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Builder
@@ -16,9 +17,11 @@ public class PostSubscriber {
     @Column(nullable = false)
     private Long id;
 
+    @NotNull
     @ManyToOne
     private Post post;
 
+    @NotNull
     @ManyToOne
     private Profile subscriber;
 }

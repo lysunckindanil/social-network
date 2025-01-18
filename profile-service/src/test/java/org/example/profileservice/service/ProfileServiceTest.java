@@ -3,25 +3,27 @@ package org.example.profileservice.service;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.model.Profile;
 import org.example.profileservice.repo.ProfileRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
 @DataJpaTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class ProfileServiceTest {
     @Autowired
     private ProfileRepository profileRepository;
     private ProfileService profileService;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         profileService = new ProfileService(profileRepository);
     }

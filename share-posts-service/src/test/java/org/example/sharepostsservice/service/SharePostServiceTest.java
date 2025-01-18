@@ -10,8 +10,9 @@ import org.example.sharepostsservice.repo.PostSubscriberRepository;
 import org.example.sharepostsservice.repo.ProfileRepository;
 import org.example.sharepostsservice.repo.ProfileSubscriberRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,6 +23,7 @@ import java.util.Date;
 
 @ActiveProfiles("test")
 @DataJpaTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class SharePostServiceTest {
 
@@ -36,7 +38,7 @@ class SharePostServiceTest {
 
     private SharePostService sharePostService;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         sharePostService = new SharePostService(postRepository, profileRepository, profileSubscriberRepository, postSubscriberRepository);
     }

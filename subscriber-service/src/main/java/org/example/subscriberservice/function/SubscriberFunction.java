@@ -2,7 +2,6 @@ package org.example.subscriberservice.function;
 
 import lombok.RequiredArgsConstructor;
 import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
-
 import org.example.subscriberservice.dto.ProfileDto;
 import org.example.subscriberservice.service.SubscriberService;
 import org.springframework.context.annotation.Bean;
