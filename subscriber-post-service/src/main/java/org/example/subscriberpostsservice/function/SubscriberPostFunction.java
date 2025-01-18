@@ -1,6 +1,7 @@
 package org.example.subscriberpostsservice.function;
 
 import lombok.RequiredArgsConstructor;
+import org.example.subscriberpostsservice.dto.GetPostsPageableDto;
 import org.example.subscriberpostsservice.dto.PostDto;
 import org.example.subscriberpostsservice.service.SubscribersPostService;
 import org.springframework.context.annotation.Bean;
@@ -17,5 +18,10 @@ public class SubscriberPostFunction {
     @Bean
     public Function<String, List<PostDto>> getByUsername() {
         return subscribersPostService::getSubscribersPosts;
+    }
+
+    @Bean
+    public Function<GetPostsPageableDto, List<PostDto>> getByUsernamePageable() {
+        return subscribersPostService::getSubscribersPostsPageable;
     }
 }

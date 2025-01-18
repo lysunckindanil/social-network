@@ -3,6 +3,7 @@ package org.example.postsservice.function;
 import lombok.RequiredArgsConstructor;
 import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.DeletePostDto;
+import org.example.postsservice.dto.GetPostsPageableDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.service.PostsService;
 import org.springframework.context.annotation.Bean;
@@ -23,10 +24,14 @@ public class PostsFunction {
     }
 
     @Bean
+    public Function<GetPostsPageableDto, List<PostDto>> getPostsPageable() {
+        return postsService::getPostsByProfileUsernamePageable;
+    }
+
+    @Bean
     public Consumer<AddPostDto> addPost() {
         return postsService::addPostByUsername;
     }
-
 
     @Bean
     public Consumer<DeletePostDto> deletePost() {

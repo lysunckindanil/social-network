@@ -19,7 +19,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @ActiveProfiles("test")
 @DataJpaTest
@@ -51,7 +51,7 @@ class SharePostServiceTest {
         profileRepository.save(subscriber);
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
-        Post post = Post.builder().label("l").content("c").createdAt(new Date()).build();
+        Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).build();
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
@@ -70,7 +70,7 @@ class SharePostServiceTest {
         profileRepository.save(subscriber);
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
-        Post post = Post.builder().label("l").content("c").createdAt(new Date()).build();
+        Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).build();
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();

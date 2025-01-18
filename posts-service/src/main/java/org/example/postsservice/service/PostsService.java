@@ -3,15 +3,18 @@ package org.example.postsservice.service;
 import lombok.RequiredArgsConstructor;
 import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.DeletePostDto;
+import org.example.postsservice.dto.GetPostsPageableDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
 import org.example.postsservice.repo.ProfileRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +36,27 @@ public class PostsService {
                 .toList();
     }
 
+    public List<PostDto> getPostsByProfileUsernamePageable(GetPostsPageableDto dto) {
+        String username = dto.getProfile_username();
+        int page = dto.getPage();
+        int size = dto.getSize();
+        Optional<Profile> author = profileRepository.findByUsername(username);
+        if (author.isEmpty())
+            return new ArrayList<>();
+
+        Sort.TypedSort<Post> post = Sort.sort(Post.class);
+        Sort sort = post.by(Post::getCreatedAt).descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        return postRepository.findAllByAuthor(author.get(), pageRequest)
+                .stream()
+                .map(PostsService::wrapPost)
+                .toList();
+    }
+
     public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
-        post.setCreatedAt(new Date());
+        post.setCreatedAt(LocalDateTime.now());
         Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfile_username());
         if (authorOptional.isEmpty()) {
             return;

@@ -2,6 +2,7 @@ package org.example.postsservice.service;
 
 import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.DeletePostDto;
+import org.example.postsservice.dto.GetPostsPageableDto;
 import org.example.postsservice.dto.PostDto;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
@@ -18,6 +19,8 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -41,6 +44,34 @@ class PostsServiceTest {
         postsService = new PostsService(profileRepository, postRepository, shareSubscribersClient);
     }
 
+    @Test
+    void getPostsByProfileUsernamePageable_ReturnsPagesCorrectly() {
+        Profile profile = Profile.builder().username("u").password("p").build();
+        profileRepository.save(profile);
+        for (int i = 0; i < 10; i++) {
+            PostDto postDto = PostDto.builder().label(String.valueOf(i)).content("c").build();
+            AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+            postsService.addPostByUsername(addPostDto);
+        }
+
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().page(0).size(7).profile_username(profile.getUsername()).build();
+        List<PostDto> posts = postsService.getPostsByProfileUsernamePageable(dto);
+        int counter = 9;
+        for (PostDto postDto : posts) {
+            Assertions.assertEquals(String.valueOf(counter--), postDto.getLabel());
+        }
+
+        dto.setPage(1);
+        posts = postsService.getPostsByProfileUsernamePageable(dto);
+        for (PostDto postDto : posts) {
+            Assertions.assertEquals(String.valueOf(counter--), postDto.getLabel());
+        }
+
+        dto.setPage(2);
+        posts = postsService.getPostsByProfileUsernamePageable(dto);
+        Assertions.assertTrue(posts.isEmpty());
+
+    }
 
     @Test
     void addPostByUsername_AddPosts_AddsPostToRepository() {

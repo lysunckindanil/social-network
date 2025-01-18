@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class Post {
     private String content;
     @NotNull
     @PastOrPresent
-    private Date createdAt;
+    private LocalDateTime createdAt;
     @ManyToOne
     private Profile author;
 }

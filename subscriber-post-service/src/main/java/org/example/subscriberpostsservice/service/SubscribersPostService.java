@@ -1,11 +1,14 @@
 package org.example.subscriberpostsservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.subscriberpostsservice.dto.GetPostsPageableDto;
 import org.example.subscriberpostsservice.dto.PostDto;
 import org.example.subscriberpostsservice.model.Post;
 import org.example.subscriberpostsservice.model.Profile;
 import org.example.subscriberpostsservice.repo.PostSubscriberRepository;
 import org.example.subscriberpostsservice.repo.ProfileRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,8 +29,27 @@ public class SubscribersPostService {
         return postSubscriberRepository.findPostsBySubscriber(profile).stream().map(SubscribersPostService::wrapPost).toList();
     }
 
+    public List<PostDto> getSubscribersPostsPageable(GetPostsPageableDto dto) {
+        String username = dto.getProfile_username();
+        int page = dto.getPage();
+        int size = dto.getSize();
+        Optional<Profile> author = profileRepository.findByUsername(username);
+        if (author.isEmpty())
+            return new ArrayList<>();
+
+        Sort.TypedSort<Post> post = Sort.sort(Post.class);
+        Sort sort = post.by(Post::getCreatedAt).descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        return postSubscriberRepository.findPostsBySubscriberPageable(author.get(), pageRequest)
+                .stream()
+                .map(SubscribersPostService::wrapPost)
+                .toList();
+    }
+
     private static PostDto wrapPost(Post post) {
         return PostDto.builder()
+                .id(post.getId())
                 .label(post.getLabel())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())

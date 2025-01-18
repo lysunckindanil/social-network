@@ -3,7 +3,7 @@ package org.example.subscriberpostsservice.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,6 +11,6 @@ public class PostDto {
     private Long id;
     private String label;
     private String content;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private String author;
 }
