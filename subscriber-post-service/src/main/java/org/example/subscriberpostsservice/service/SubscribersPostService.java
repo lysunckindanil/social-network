@@ -25,7 +25,11 @@ public class SubscribersPostService {
         if (profile_optional.isEmpty()) return new ArrayList<>();
         Profile profile = profile_optional.get();
 
-        return postSubscriberRepository.findPostsBySubscriber(profile).stream().map(SubscribersPostService::wrapPost).toList();
+        return postSubscriberRepository.findPostsBySubscriber(profile)
+                .stream()
+                .filter(x->x.getAuthor()!=null)
+                .map(SubscribersPostService::wrapPost)
+                .toList();
     }
 
     public List<PostDto> getSubscribersPostsPageable(GetPostsPageableDto dto) {
@@ -39,6 +43,7 @@ public class SubscribersPostService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return postSubscriberRepository.findPostsBySubscriberPageableOrderByCreatedAtDesc(author.get(), pageRequest)
                 .stream()
+                .filter(x->x.getAuthor()!=null)
                 .map(SubscribersPostService::wrapPost)
                 .toList();
     }
