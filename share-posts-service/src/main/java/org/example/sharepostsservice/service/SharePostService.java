@@ -49,7 +49,7 @@ public class SharePostService {
                 map(sub -> PostSubscriber.builder().subscriber(sub).post(post).build()).toList());
     }
 
-    @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service")
+    @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service1")
     public void deletePostsFromSubscribers(DeletePostDto dto) {
         // find post
         Optional<Post> post_optional = postRepository.findById(dto.getPost_id());
