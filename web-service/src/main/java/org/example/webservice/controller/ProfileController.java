@@ -38,9 +38,9 @@ public class ProfileController {
             model.addAttribute("subscribed", subscriberService.findSubscribers(username));
             model.addAttribute("subscribing", subscriberService.findProfileSubscribedOn(username));
             if (subscriberService.isISubscribedOn(principal.getName(), username)) {
-                return "profile/profile_friend";
+                return "profile/profile_subscribed";
             } else {
-                return "profile/profile_nofriend";
+                return "profile/profile_not_subscribed";
             }
         }
 

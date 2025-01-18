@@ -30,8 +30,14 @@ public class PostsController {
 
     @ResponseBody
     @PostMapping("/getPosts")
-    public List<PostDto> getPostsPageable(@RequestParam("page") int page, Principal principal) {
-        return postsService.getPostsPageable(principal.getName(), page);
+    public List<PostDto> getPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
+        return postsService.getPostsPageable(username, page);
+    }
+
+    @ResponseBody
+    @PostMapping("/getSubscriberPosts")
+    public List<PostDto> getSubscriberPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
+        return postsService.getSubscriberPostsPageable(username, page);
     }
 
 

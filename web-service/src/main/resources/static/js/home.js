@@ -3,8 +3,9 @@ let page = 0;
 function getPosts() {
     const token = $("meta[name='_csrf']").attr("content");
     const username = document.getElementById("username").innerText
+    console.log(username);
     $.ajax({
-        url: '/posts/getPosts',
+        url: '/posts/getSubscriberPosts',
         headers: {"X-CSRF-TOKEN": token},
         method: 'post',
         dataType: 'json',
@@ -24,6 +25,7 @@ function generatePosts(posts) {
         post.getElementsByClassName("post_label")[0].innerText = postEntity['label']
         post.getElementsByClassName("post_content")[0].innerText = postEntity['content']
         post.getElementsByClassName("post_created_at")[0].innerText = postEntity['createdAt']
+        post.getElementsByClassName("post_author")[0].href = '/profile/' + postEntity['author']
         posts_section.insertAdjacentElement('beforeend', post)
     })
 

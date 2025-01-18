@@ -2,24 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
     <title>Home</title>
     <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/home.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous">
+    </script>
 </head>
-<body>
+<body onload="getPosts()">
 
 <header th:replace="~{fragments/nav::nav(${username})}"></header>
 
-
 <article>
-    <div th:if="${!posts.isEmpty()}">
+    <div id="posts">
+        <p th:text="${username}" id="username" hidden="hidden"></p>
         <h1>Posts</h1>
-        <div class="post" th:each="post: ${posts}">
-            <h3>Author: <span th:text="${post.getAuthor()}"></span></h3>
-            <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-            <p>Content: <span th:text="${post.getContent()}"></span></p>
-            <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+        <div class="post" id="post" hidden="hidden">
+            <h3>Label: <span class="post_label"></span></h3>
+            <p>Content: <span class="post_content"></span></p>
+            <p>CreatedAt: <span class="post_created_at"></span></p>
+            <p>Author: <a class="post_author"></a></p>
+            <br>
         </div>
     </div>
+    <br>
+    <button onclick="getPosts()">View more</button>
 </article>
 
 

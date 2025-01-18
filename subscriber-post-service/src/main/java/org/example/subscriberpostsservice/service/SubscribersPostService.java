@@ -8,7 +8,6 @@ import org.example.subscriberpostsservice.model.Profile;
 import org.example.subscriberpostsservice.repo.PostSubscriberRepository;
 import org.example.subscriberpostsservice.repo.ProfileRepository;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,11 +36,8 @@ public class SubscribersPostService {
         if (author.isEmpty())
             return new ArrayList<>();
 
-        Sort.TypedSort<Post> post = Sort.sort(Post.class);
-        Sort sort = post.by(Post::getCreatedAt).descending();
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-
-        return postSubscriberRepository.findPostsBySubscriberPageable(author.get(), pageRequest)
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postSubscriberRepository.findPostsBySubscriberPageableOrderByCreatedAtDesc(author.get(), pageRequest)
                 .stream()
                 .map(SubscribersPostService::wrapPost)
                 .toList();

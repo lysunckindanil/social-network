@@ -15,7 +15,7 @@ public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, 
     @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber")
     List<Post> findPostsBySubscriber(Profile subscriber);
 
-    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber")
-    List<Post> findPostsBySubscriberPageable(Profile subscriber, Pageable pageable);
+    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber order by p.post.createdAt desc")
+    List<Post> findPostsBySubscriberPageableOrderByCreatedAtDesc(Profile subscriber, Pageable pageable);
 
 }

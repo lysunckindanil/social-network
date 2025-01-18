@@ -2,21 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
     <title th:text="${profile.getUsername()}"></title>
     <link href="/css/styles.css" rel="stylesheet">
+    <script src="/js/profile.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.6.3.js"
+            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+            crossorigin="anonymous">
+    </script>
 </head>
-<body>
+<body onload="getPosts()">
 
 <header th:replace="~{fragments/nav::nav(${username})}"></header>
 
 <article>
     <h1>Profile</h1>
-    <p>Username: <span th:text="${profile.getUsername()}"></span></p>
+    <p>Username: <span th:text="${profile.getUsername()}" id="username"></span></p>
     <p>Email: <span th:text="${profile.getEmail()}"></span></p>
     <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
     <form method="post" th:action="@{/subscribing/subscribe}">
         <button type="submit" name="to_be_subscribed" th:value="${profile.getUsername()}">Subscribe</button>
     </form>
+
     <br>
 
     <div th:if="${!subscribing.isEmpty()}">
@@ -26,6 +34,8 @@
         </div>
     </div>
 
+    <br>
+
     <div th:if="${!subscribed.isEmpty()}">
         <h1>Subscribed by</h1>
         <div th:each="sub: ${subscribed}">
@@ -33,14 +43,18 @@
         </div>
     </div>
 
-    <div th:if="${!posts.isEmpty()}">
+    <br>
+
+    <div id="posts">
         <h1>Posts</h1>
-        <div class="post" th:each="post: ${posts}">
-            <h3>Label: <span th:text="${post.getLabel()}"></span></h3>
-            <p>Content: <span th:text="${post.getContent()}"></span></p>
-            <p>CreatedAt: <span th:text="${post.getCreatedAt()}"></span></p>
+        <div class="post" id="post" hidden="hidden">
+            <h3>Label: <span class="post_label"></span></h3>
+            <p>Content: <span class="post_content"></span></p>
+            <p>CreatedAt: <span class="post_created_at"></span></p>
         </div>
     </div>
+    <br>
+    <button onclick="getPosts()">View more</button>
 </article>
 </body>
 </html>

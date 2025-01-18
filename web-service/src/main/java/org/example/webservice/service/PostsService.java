@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class PostsService {
     private final PostsServiceClient postsServiceClient;
+    private final SubscriberPostServiceClient subscriberPostServiceClient;
     @Value("${posts.service.page_size}")
     private int PAGE_SIZE;
 
@@ -28,6 +29,11 @@ public class PostsService {
     public List<PostDto> getPostsPageable(String username, int page) {
         GetPostsPageableDto dto = GetPostsPageableDto.builder().profile_username(username).page(page).size(PAGE_SIZE).build();
         return postsServiceClient.getPosts(dto);
+    }
+
+    public List<PostDto> getSubscriberPostsPageable(String username, int page) {
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().profile_username(username).page(page).size(PAGE_SIZE).build();
+        return subscriberPostServiceClient.getPosts(dto);
     }
 
     public void addPost(String username, PostDto post) {
@@ -41,6 +47,13 @@ public class PostsService {
 
     public void deletePost(DeletePostDto post) {
         postsServiceClient.deletePost(post);
+    }
+
+
+    @FeignClient(name = "subscriber-post-service", path = "subscriber-post-service")
+    interface SubscriberPostServiceClient {
+        @RequestMapping(method = RequestMethod.POST, value = "/getByUsernamePageable")
+        List<PostDto> getPosts(@RequestBody GetPostsPageableDto dto);
     }
 
     @FeignClient(name = "posts-service", path = "posts-service")

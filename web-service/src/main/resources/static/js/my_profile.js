@@ -1,3 +1,7 @@
+function logout() {
+    document.getElementById("logout_form").submit()
+}
+
 let page = 0;
 
 function getPosts() {
@@ -21,6 +25,7 @@ function generatePosts(posts) {
     posts.forEach(function (postEntity) {
         const post = document.getElementById("post").cloneNode(true)
         post.hidden = false
+        post.getElementsByClassName("delete_post_button")[0].value = postEntity['id']
         post.getElementsByClassName("post_label")[0].innerText = postEntity['label']
         post.getElementsByClassName("post_content")[0].innerText = postEntity['content']
         post.getElementsByClassName("post_created_at")[0].innerText = postEntity['createdAt']
