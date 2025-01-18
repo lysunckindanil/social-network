@@ -6,7 +6,6 @@ import org.example.webservice.config.ProfileValidator;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.dto.ProfileDto;
 import org.example.webservice.model.Profile;
-import org.example.webservice.service.PostsService;
 import org.example.webservice.service.ProfileSecurityService;
 import org.example.webservice.service.ProfileService;
 import org.example.webservice.service.SubscriberService;
@@ -16,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RequestMapping("/profile")
 @RequiredArgsConstructor
@@ -25,17 +23,14 @@ public class ProfileController {
     private final ProfileService profileService;
     private final ProfileSecurityService profileSecurityService;
     private final SubscriberService subscriberService;
-    private final PostsService postsService;
     private final ProfileValidator profileValidator;
 
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
         ProfileDto profileDto = profileService.getProfileByUsername(username);
-        List<PostDto> posts = postsService.getPosts(username);
         if (profileDto != null) {
             model.addAttribute("profile", profileDto);
-            model.addAttribute("posts", posts);
             if (principal.getName().equals(username)) {
                 model.addAttribute("new_post", PostDto.builder().build());
                 return "profile/my_profile";

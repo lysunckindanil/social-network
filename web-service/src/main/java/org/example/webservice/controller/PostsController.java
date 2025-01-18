@@ -5,12 +5,10 @@ import org.example.webservice.dto.DeletePostDto;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.service.PostsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("posts")
 @RequiredArgsConstructor
@@ -29,4 +27,12 @@ public class PostsController {
         postsService.deletePost(DeletePostDto.builder().post_id(post_id).build());
         return "redirect:/profile/" + principal.getName();
     }
+
+    @ResponseBody
+    @PostMapping("/getPosts")
+    public List<PostDto> getPostsPageable(@RequestParam("page") int page, Principal principal) {
+        return postsService.getPostsPageable(principal.getName(), page);
+    }
+
+
 }
