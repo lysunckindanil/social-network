@@ -26,6 +26,7 @@ function generatePosts(posts) {
         post.getElementsByClassName("post_content")[0].innerText = postEntity['content']
         post.getElementsByClassName("post_created_at")[0].innerText = postEntity['createdAt']
         post.getElementsByClassName("post_author")[0].href = '/profile/' + postEntity['author']
+        post.getElementsByClassName("post_author")[0].innerText = postEntity['author']
         posts_section.insertAdjacentElement('beforeend', post)
     })
 
