@@ -5,9 +5,8 @@ import org.example.webservice.dto.AddAndDeleteSubscriberDto;
 import org.example.webservice.dto.ProfileDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
@@ -24,26 +23,26 @@ public class SubscriberService {
         return friendsServiceClient.findProfileSubscribedOn(username);
     }
 
-    public Boolean isISubscribedOn(String subscriber_username, String profile_username) {
-        List<String> friends = friendsServiceClient.findSubscribers(profile_username).stream().map(ProfileDto::getUsername).toList();
-        return friends.contains(subscriber_username);
+    public Boolean isISubscribedOn(String subscriberUsername, String profileUsername) {
+        List<String> friends = friendsServiceClient.findSubscribers(profileUsername).stream().map(ProfileDto::getUsername).toList();
+        return friends.contains(subscriberUsername);
     }
 
-    public void subscribe(String profile_username, String subscriber_username) {
-        if (!subscriber_username.equals(profile_username)) {
+    public void subscribe(String profileUsername, String subscriberUsername) {
+        if (!subscriberUsername.equals(profileUsername)) {
             AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
-                    .profile_username(profile_username)
-                    .subscriber_username(subscriber_username)
+                    .profileUsername(profileUsername)
+                    .subscriberUsername(subscriberUsername)
                     .build();
             friendsServiceClient.addSubscriber(dto);
         }
     }
 
-    public void unsubscribe(String profile_username, String subscriber_username) {
-        if (!subscriber_username.equals(profile_username)) {
+    public void unsubscribe(String profileUsername, String subscriberUsername) {
+        if (!subscriberUsername.equals(profileUsername)) {
             AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
-                    .profile_username(profile_username)
-                    .subscriber_username(subscriber_username)
+                    .profileUsername(profileUsername)
+                    .subscriberUsername(subscriberUsername)
                     .build();
             friendsServiceClient.deleteSubscriber(dto);
         }
@@ -51,16 +50,16 @@ public class SubscriberService {
 
     @FeignClient(name = "subscriber-service", path = "subscriber-service")
     interface FriendsServiceClient {
-        @RequestMapping(method = RequestMethod.POST, value = "/findSubscribers")
+        @PostMapping("/findSubscribers")
         List<ProfileDto> findSubscribers(@RequestBody String username);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/findProfileSubscribedOn")
+        @PostMapping("/findProfileSubscribedOn")
         List<ProfileDto> findProfileSubscribedOn(@RequestBody String username);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/addSubscriber")
+        @PostMapping("/addSubscriber")
         void addSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/deleteSubscriber")
+        @PostMapping("/deleteSubscriber")
         void deleteSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
     }
 }

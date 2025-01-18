@@ -37,8 +37,8 @@ class SubscriberServiceTest {
         profileRepository.save(Profile.builder().username("user1").password("p").build());
         profileRepository.save(Profile.builder().username("user2").password("p").build());
         profileRepository.save(Profile.builder().username("user3").password("p").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user1").subscriber_username("user2").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user1").subscriber_username("user3").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user3").build());
         Assertions.assertEquals(2, subscriberService.getSubscribers("user1").size());
     }
 
@@ -47,8 +47,8 @@ class SubscriberServiceTest {
         profileRepository.save(Profile.builder().username("user1").password("p").build());
         profileRepository.save(Profile.builder().username("user2").password("p").build());
         profileRepository.save(Profile.builder().username("user3").password("p").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user2").subscriber_username("user1").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user3").subscriber_username("user1").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user2").subscriberUsername("user1").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user3").subscriberUsername("user1").build());
         Assertions.assertEquals(2, subscriberService.getProfileSubscribedOn("user1").size());
     }
 
@@ -56,8 +56,8 @@ class SubscriberServiceTest {
     void getSubscribers_AddVerySubscriberMoreThanOne_AddsOnlyOne() {
         profileRepository.save(Profile.builder().username("user1").password("p").build());
         profileRepository.save(Profile.builder().username("user2").password("p").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user1").subscriber_username("user2").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profile_username("user1").subscriber_username("user2").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         Assertions.assertEquals(1, subscriberService.getSubscribers("user1").size());
     }
 
@@ -66,7 +66,7 @@ class SubscriberServiceTest {
     void deleteSubscriber_DeleteSubscriber_SubscriberDeleted() {
         profileRepository.save(Profile.builder().username("user1").password("p").build());
         profileRepository.save(Profile.builder().username("user2").password("p").build());
-        AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profile_username("user1").subscriber_username("user2").build();
+        AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build();
         subscriberService.addSubscriber(dto);
         subscriberService.deleteSubscriber(dto);
         Assertions.assertEquals(0, subscriberService.getSubscribers("user1").size());

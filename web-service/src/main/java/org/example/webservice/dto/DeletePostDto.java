@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class DeletePostDto {
-    private Long post_id;
+    private Long postId;
 }

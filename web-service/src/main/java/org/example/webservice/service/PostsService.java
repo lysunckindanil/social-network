@@ -8,9 +8,8 @@ import org.example.webservice.dto.PostDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
@@ -20,25 +19,21 @@ public class PostsService {
     private final PostsServiceClient postsServiceClient;
     private final SubscriberPostServiceClient subscriberPostServiceClient;
     @Value("${posts.service.page_size}")
-    private int PAGE_SIZE;
-
-    public List<PostDto> getPosts(String username) {
-        return postsServiceClient.getPosts(username);
-    }
+    private int pageSize;
 
     public List<PostDto> getPostsPageable(String username, int page) {
-        GetPostsPageableDto dto = GetPostsPageableDto.builder().profile_username(username).page(page).size(PAGE_SIZE).build();
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().profileUsername(username).page(page).size(pageSize).build();
         return postsServiceClient.getPosts(dto);
     }
 
     public List<PostDto> getSubscriberPostsPageable(String username, int page) {
-        GetPostsPageableDto dto = GetPostsPageableDto.builder().profile_username(username).page(page).size(PAGE_SIZE).build();
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().profileUsername(username).page(page).size(pageSize).build();
         return subscriberPostServiceClient.getPosts(dto);
     }
 
     public void addPost(String username, PostDto post) {
         AddPostDto dto = AddPostDto.builder()
-                .profile_username(username)
+                .profileUsername(username)
                 .post(post)
                 .build();
         postsServiceClient.addPost(dto);
@@ -52,22 +47,22 @@ public class PostsService {
 
     @FeignClient(name = "subscriber-post-service", path = "subscriber-post-service")
     interface SubscriberPostServiceClient {
-        @RequestMapping(method = RequestMethod.POST, value = "/getByUsernamePageable")
+        @PostMapping("/getByUsernamePageable")
         List<PostDto> getPosts(@RequestBody GetPostsPageableDto dto);
     }
 
     @FeignClient(name = "posts-service", path = "posts-service")
     interface PostsServiceClient {
-        @RequestMapping(method = RequestMethod.POST, value = "/getPosts")
+        @PostMapping("/getPosts")
         List<PostDto> getPosts(@RequestBody String username);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/getPostsPageable")
+        @PostMapping("/getPostsPageable")
         List<PostDto> getPosts(@RequestBody GetPostsPageableDto dto);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/addPost")
+        @PostMapping("/addPost")
         void addPost(@RequestBody AddPostDto post);
 
-        @RequestMapping(method = RequestMethod.POST, value = "/deletePost")
+        @PostMapping("/deletePost")
         void deletePost(@RequestBody DeletePostDto post);
     }
 }

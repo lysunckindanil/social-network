@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class AddAndDeleteSubscriberDto {
-    private String profile_username;
-    private String subscriber_username;
+    private String profileUsername;
+    private String subscriberUsername;
 }

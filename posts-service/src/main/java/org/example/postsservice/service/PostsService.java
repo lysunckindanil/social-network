@@ -37,7 +37,7 @@ public class PostsService {
     }
 
     public List<PostDto> getPostsByProfileUsernamePageable(GetPostsPageableDto dto) {
-        String username = dto.getProfile_username();
+        String username = dto.getProfileUsername();
         int page = dto.getPage();
         int size = dto.getSize();
         Optional<Profile> author = profileRepository.findByUsername(username);
@@ -57,7 +57,7 @@ public class PostsService {
     public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
         post.setCreatedAt(LocalDateTime.now());
-        Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfile_username());
+        Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfileUsername());
         if (authorOptional.isEmpty()) {
             return;
         }
@@ -68,7 +68,7 @@ public class PostsService {
     }
 
     public void deletePost(DeletePostDto postDto) {
-        Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPost_id());
+        Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPostId());
         if (postToDeleteOptional.isPresent()) {
             Post postToDelete = postToDeleteOptional.get();
             postToDelete.setAuthor(null);

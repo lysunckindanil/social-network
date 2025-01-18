@@ -49,29 +49,29 @@ class SharePostServiceTest {
     void sharePostsToFriends_ProfilePosts_FriendsGetPosts() throws NoSuchFieldException, IllegalAccessException {
         Profile profile = Profile.builder().username("user1").password("p").build();
         Profile subscriber = Profile.builder().username("user2").password("p").build();
-        Long profile_id = profileRepository.save(profile).getId();
+        Long profileId = profileRepository.save(profile).getId();
         profileRepository.save(subscriber);
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
         Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).build();
         postRepository.save(post);
 
-        ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+        ShareSubscribersDto dto = ShareSubscribersDto.builder().profileId(profileId).postId(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
         PostSubscriber ps = postSubscriberRepository.findAll().getFirst();
 
-        Field subscriber_field = PostSubscriber.class.getDeclaredField("subscriber");
-        subscriber_field.setAccessible(true);
-        Long subscriber_id = ((Profile) subscriber_field.get(ps)).getId();
+        Field subscriberField = PostSubscriber.class.getDeclaredField("subscriber");
+        subscriberField.setAccessible(true);
+        Long subscriberId = ((Profile) subscriberField.get(ps)).getId();
 
-        Field post_field = PostSubscriber.class.getDeclaredField("post");
-        post_field.setAccessible(true);
-        Long post_id = ((Post) post_field.get(ps)).getId();
+        Field postField = PostSubscriber.class.getDeclaredField("post");
+        postField.setAccessible(true);
+        Long postId = ((Post) postField.get(ps)).getId();
 
 
-        Assertions.assertEquals(post.getId(), post_id);
-        Assertions.assertEquals(subscriber.getId(), subscriber_id);
+        Assertions.assertEquals(post.getId(), postId);
+        Assertions.assertEquals(subscriber.getId(), subscriberId);
     }
 
 
@@ -79,19 +79,19 @@ class SharePostServiceTest {
     void deletePostsFromFriends_ProfileDeletes_PostsDeleted() {
         Profile profile = Profile.builder().username("user1").password("p").build();
         Profile subscriber = Profile.builder().username("user2").password("p").build();
-        Long profile_id = profileRepository.save(profile).getId();
+        Long profileId = profileRepository.save(profile).getId();
         profileRepository.save(subscriber);
         profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
         Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).build();
         postRepository.save(post);
 
-        ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
+        ShareSubscribersDto dto = ShareSubscribersDto.builder().profileId(profileId).postId(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
         Assertions.assertEquals(1, postSubscriberRepository.findAll().size());
         Assertions.assertEquals(1, postRepository.findAll().size());
-        sharePostService.deletePostsFromSubscribers(DeletePostDto.builder().post_id(post.getId()).build());
+        sharePostService.deletePostsFromSubscribers(DeletePostDto.builder().postId(post.getId()).build());
 
 
         Assertions.assertEquals(0, postSubscriberRepository.findAll().size());

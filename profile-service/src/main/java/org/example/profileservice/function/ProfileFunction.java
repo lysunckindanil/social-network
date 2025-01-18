@@ -1,6 +1,7 @@
 package org.example.profileservice.function;
 
 import lombok.RequiredArgsConstructor;
+import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.service.ProfileService;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 @Configuration
@@ -21,7 +21,7 @@ public class ProfileFunction {
     }
 
     @Bean
-    public Supplier<List<ProfileDto>> getAll() {
-        return profileService::getAllProfiles;
+    public Function<GetProfilesPageableDto, List<ProfileDto>> getAllPageable() {
+        return profileService::getAllProfilesPageable;
     }
 }

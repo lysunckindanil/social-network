@@ -63,7 +63,7 @@ class SubscribersPostServiceTest {
         postSubscriberRepository.save(PostSubscriber.builder().post(post).subscriber(profile).build());
         postSubscriberRepository.save(PostSubscriber.builder().post(post2).subscriber(profile).build());
 
-        GetPostsPageableDto dto = GetPostsPageableDto.builder().profile_username("user").page(0).size(5).build();
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().profileUsername("user").page(0).size(5).build();
         List<PostDto> posts = subscribersPostService.getSubscribersPostsPageable(dto);
         Assertions.assertEquals(2, posts.size());
     }

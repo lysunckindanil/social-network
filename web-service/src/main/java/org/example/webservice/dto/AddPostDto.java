@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class AddPostDto {
-    private String profile_username;
+    private String profileUsername;
     private PostDto post;
 }

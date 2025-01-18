@@ -12,13 +12,13 @@ public class ShareSubscribersClient {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void shareSubscribers(Long profile_id, Long post_id) {
-        ShareFriendsDto dto = ShareFriendsDto.builder().profile_id(profile_id).post_id(post_id).build();
+    public void shareSubscribers(Long profileId, Long postId) {
+        ShareFriendsDto dto = ShareFriendsDto.builder().profileId(profileId).postId(postId).build();
         kafkaTemplate.send("share-subscribers", dto);
     }
 
-    public void deleteFromSubscribers(Long post_id) {
-        DeletePostDto dto = DeletePostDto.builder().post_id(post_id).build();
+    public void deleteFromSubscribers(Long postId) {
+        DeletePostDto dto = DeletePostDto.builder().postId(postId).build();
         kafkaTemplate.send("delete-from-subscribers", dto);
     }
 }

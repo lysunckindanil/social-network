@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.DeletePostDto;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.service.PostsService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @RequestMapping("posts")
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class PostsController {
     private final PostsService postsService;
 
@@ -23,18 +22,16 @@ public class PostsController {
     }
 
     @PostMapping("/delete")
-    public String deletePost(@RequestParam("post_id") Long post_id, Principal principal) {
-        postsService.deletePost(DeletePostDto.builder().post_id(post_id).build());
+    public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
+        postsService.deletePost(DeletePostDto.builder().postId(postId).build());
         return "redirect:/profile/" + principal.getName();
     }
 
-    @ResponseBody
     @PostMapping("/getPosts")
     public List<PostDto> getPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
         return postsService.getPostsPageable(username, page);
     }
 
-    @ResponseBody
     @PostMapping("/getSubscriberPosts")
     public List<PostDto> getSubscriberPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
         return postsService.getSubscriberPostsPageable(username, page);

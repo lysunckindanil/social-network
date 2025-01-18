@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ShareFriendsDto {
-    private Long profile_id;
-    private Long post_id;
+    private Long profileId;
+    private Long postId;
 }

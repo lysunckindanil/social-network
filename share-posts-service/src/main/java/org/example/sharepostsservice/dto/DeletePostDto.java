@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DeletePostDto {
-    private Long post_id;
+    private Long postId;
 }

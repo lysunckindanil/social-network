@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShareSubscribersDto {
-    private Long profile_id;
-    private Long post_id;
+    private Long profileId;
+    private Long postId;
 }

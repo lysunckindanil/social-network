@@ -6,7 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class GetPostsPageableDto {
-    private String profile_username;
+    private String profileUsername;
     private int page;
     private int size;
 }

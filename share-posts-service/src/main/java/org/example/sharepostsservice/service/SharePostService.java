@@ -30,7 +30,7 @@ public class SharePostService {
     @KafkaListener(topics = "share-subscribers", groupId = "share-posts-service")
     public void sharePostsToSubscribers(ShareSubscribersDto dto) {
         // find profile whose friends to be shared
-        Optional<Profile> profileOptional = profileRepository.findById(dto.getProfile_id());
+        Optional<Profile> profileOptional = profileRepository.findById(dto.getProfileId());
         if (profileOptional.isEmpty()) return;
         Profile profile = profileOptional.get();
 
@@ -39,9 +39,9 @@ public class SharePostService {
                 .map(ProfileSubscriber::getSubscriber).toList();
 
         // find post
-        Optional<Post> post_optional = postRepository.findById(dto.getPost_id());
-        if (post_optional.isEmpty()) return;
-        Post post = post_optional.get();
+        Optional<Post> postOptional = postRepository.findById(dto.getPostId());
+        if (postOptional.isEmpty()) return;
+        Post post = postOptional.get();
 
 
         // add post to every friend
@@ -52,9 +52,9 @@ public class SharePostService {
     @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service")
     public void deletePostsFromSubscribers(DeletePostDto dto) {
         // find post
-        Optional<Post> post_optional = postRepository.findById(dto.getPost_id());
-        if (post_optional.isEmpty()) return;
-        Post post = post_optional.get();
+        Optional<Post> postOptional = postRepository.findById(dto.getPostId());
+        if (postOptional.isEmpty()) return;
+        Post post = postOptional.get();
 
         // delete posts from users
         postSubscriberRepository.deleteAllByPost(post);

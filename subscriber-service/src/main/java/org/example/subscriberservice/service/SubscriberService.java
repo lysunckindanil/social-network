@@ -40,8 +40,8 @@ public class SubscriberService {
     }
 
     public void addSubscriber(AddAndDeleteSubscriberDto dto) {
-        String profile = dto.getProfile_username();
-        String subscriber = dto.getSubscriber_username();
+        String profile = dto.getProfileUsername();
+        String subscriber = dto.getSubscriberUsername();
         Optional<Profile> profileOptional = profileRepository.findByUsername(profile);
         if (profileOptional.isEmpty()) return;
         Optional<Profile> subscriberOptional = profileRepository.findByUsername(subscriber);
@@ -56,8 +56,8 @@ public class SubscriberService {
     }
 
     public void deleteSubscriber(AddAndDeleteSubscriberDto dto) {
-        String profile = dto.getProfile_username();
-        String subscriber = dto.getSubscriber_username();
+        String profile = dto.getProfileUsername();
+        String subscriber = dto.getSubscriberUsername();
         Optional<Profile> profileOptional = profileRepository.findByUsername(profile);
         if (profileOptional.isEmpty()) return;
         Optional<Profile> subscriberOptional = profileRepository.findByUsername(subscriber);

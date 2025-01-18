@@ -50,11 +50,11 @@ class PostsServiceTest {
         profileRepository.save(profile);
         for (int i = 0; i < 10; i++) {
             PostDto postDto = PostDto.builder().label(String.valueOf(i)).content("c").build();
-            AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+            AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
             postsService.addPostByUsername(addPostDto);
         }
 
-        GetPostsPageableDto dto = GetPostsPageableDto.builder().page(0).size(7).profile_username(profile.getUsername()).build();
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().page(0).size(7).profileUsername(profile.getUsername()).build();
         List<PostDto> posts = postsService.getPostsByProfileUsernamePageable(dto);
         int counter = 9;
         for (PostDto postDto : posts) {
@@ -78,7 +78,7 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
 
         Assertions.assertEquals(1, postRepository.findAll().size());
@@ -90,11 +90,11 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
-        Long post_id = postRepository.findAll().getFirst().getId();
-        Long profile_id = profile.getId();
-        Mockito.verify(shareSubscribersClient).shareSubscribers(profile_id, post_id);
+        Long postId = postRepository.findAll().getFirst().getId();
+        Long profileId = profile.getId();
+        Mockito.verify(shareSubscribersClient).shareSubscribers(profileId, postId);
     }
 
     @Test
@@ -105,8 +105,8 @@ class PostsServiceTest {
         profileRepository.save(profile2);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         PostDto postDto2 = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile2.getUsername()).post(postDto2).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto2 = AddPostDto.builder().profileUsername(profile2.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
         postsService.addPostByUsername(addPostDto2);
 
@@ -121,8 +121,8 @@ class PostsServiceTest {
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         PostDto postDto2 = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
-        AddPostDto addPostDto2 = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto2).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto2 = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
         postsService.addPostByUsername(addPostDto2);
 
@@ -135,10 +135,10 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().post_id(id).build());
+        postsService.deletePost(DeletePostDto.builder().postId(id).build());
 
         Assertions.assertEquals(0, postRepository.findAllByAuthor(profile).size());
     }
@@ -148,10 +148,10 @@ class PostsServiceTest {
         Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profile_username(profile.getUsername()).post(postDto).build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().post_id(id).build());
+        postsService.deletePost(DeletePostDto.builder().postId(id).build());
 
         Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(id);
     }
