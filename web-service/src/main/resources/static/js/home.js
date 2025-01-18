@@ -3,7 +3,6 @@ let page = 0;
 function getPosts() {
     const token = $("meta[name='_csrf']").attr("content");
     const username = document.getElementById("username").innerText
-    console.log(username);
     $.ajax({
         url: '/posts/getSubscriberPosts',
         headers: {"X-CSRF-TOKEN": token},

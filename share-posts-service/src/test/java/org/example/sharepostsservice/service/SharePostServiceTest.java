@@ -76,6 +76,8 @@ class SharePostServiceTest {
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profile_id(profile_id).post_id(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
+        Assertions.assertEquals(1, postSubscriberRepository.findAll().size());
+        Assertions.assertEquals(1, postRepository.findAll().size());
         sharePostService.deletePostsFromSubscribers(DeletePostDto.builder().post_id(post.getId()).build());
 
 
