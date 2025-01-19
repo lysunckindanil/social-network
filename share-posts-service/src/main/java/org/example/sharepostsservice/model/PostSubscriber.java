@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Immutable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "post_subscriber")
 public class PostSubscriber {

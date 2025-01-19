@@ -48,9 +48,7 @@ public class SubscriberService {
         if (subscriberOptional.isEmpty()) return;
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
         if (profileSubscriberOptional.isEmpty()) {
-            ProfileSubscriber profileSubscriber = new ProfileSubscriber();
-            profileSubscriber.setProfile(profileOptional.get());
-            profileSubscriber.setSubscriber(subscriberOptional.get());
+            ProfileSubscriber profileSubscriber = ProfileSubscriber.builder().profile(profileOptional.get()).subscriber(subscriberOptional.get()).build();
             profileSubscriberRepository.save(profileSubscriber);
         }
     }

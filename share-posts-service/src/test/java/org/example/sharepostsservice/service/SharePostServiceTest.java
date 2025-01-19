@@ -20,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 @ActiveProfiles("test")
@@ -46,7 +45,7 @@ class SharePostServiceTest {
     }
 
     @Test
-    void sharePostsToFriends_ProfilePosts_FriendsGetPosts() throws NoSuchFieldException, IllegalAccessException {
+    void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
         Profile profile = Profile.builder().username("user1").password("p").build();
         Profile subscriber = Profile.builder().username("user2").password("p").build();
         Long profileId = profileRepository.save(profile).getId();
@@ -61,17 +60,8 @@ class SharePostServiceTest {
         sharePostService.sharePostsToSubscribers(dto);
         PostSubscriber ps = postSubscriberRepository.findAll().getFirst();
 
-        Field subscriberField = PostSubscriber.class.getDeclaredField("subscriber");
-        subscriberField.setAccessible(true);
-        Long subscriberId = ((Profile) subscriberField.get(ps)).getId();
-
-        Field postField = PostSubscriber.class.getDeclaredField("post");
-        postField.setAccessible(true);
-        Long postId = ((Post) postField.get(ps)).getId();
-
-
-        Assertions.assertEquals(post.getId(), postId);
-        Assertions.assertEquals(subscriber.getId(), subscriberId);
+        Assertions.assertEquals(post.getId(), ps.getPost().getId());
+        Assertions.assertEquals(subscriber.getId(), ps.getSubscriber().getId());
     }
 
 

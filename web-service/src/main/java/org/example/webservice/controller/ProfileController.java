@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("/profile")
 @RequiredArgsConstructor
@@ -56,6 +57,18 @@ public class ProfileController {
     public String registerProfileForm(Model model) {
         model.addAttribute("profile", new Profile());
         return "security/register";
+    }
+
+    @ResponseBody
+    @PostMapping
+    public List<ProfileDto> getProfilesPageable(@RequestParam("page") int page) {
+        return profileService.getAllProfiles(page);
+    }
+
+    @GetMapping
+    public String index(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        return "profile/index";
     }
 
     @PostMapping("/register")
