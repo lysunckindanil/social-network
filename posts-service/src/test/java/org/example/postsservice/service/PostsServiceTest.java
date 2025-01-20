@@ -4,6 +4,7 @@ import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.DeletePostDto;
 import org.example.postsservice.dto.GetPostsPageableDto;
 import org.example.postsservice.dto.PostDto;
+import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
 import org.example.postsservice.repo.ProfileRepository;
@@ -42,6 +43,16 @@ class PostsServiceTest {
         shareSubscribersClient = Mockito.mock(ShareSubscribersClient.class);
         Mockito.doNothing().when(shareSubscribersClient).shareSubscribers(Mockito.any(), Mockito.any());
         postsService = new PostsService(profileRepository, postRepository, shareSubscribersClient);
+    }
+
+    @Test
+    void createPost_CreatedAtIsNotNull() {
+        Post post = new Post();
+        post.setLabel("label");
+        post.setContent("content");
+        postRepository.save(post);
+        Assertions.assertNotNull(postRepository.findById(post.getId()).get().getCreatedAt());
+
     }
 
     @Test

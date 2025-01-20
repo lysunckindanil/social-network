@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +55,6 @@ public class PostsService {
 
     public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
-        post.setCreatedAt(LocalDateTime.now());
         Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfileUsername());
         if (authorOptional.isEmpty()) {
             return;

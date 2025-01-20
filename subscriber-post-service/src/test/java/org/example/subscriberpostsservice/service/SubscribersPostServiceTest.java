@@ -18,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @ActiveProfiles("test")
@@ -45,8 +44,8 @@ class SubscribersPostServiceTest {
     void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPosts() {
         Profile profile = Profile.builder().username("user").password("p").build();
         profileRepository.save(profile);
-        Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).author(profile).build();
-        Post post2 = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).author(profile).build();
+        Post post = Post.builder().label("l").content("c").author(profile).build();
+        Post post2 = Post.builder().label("l").content("c").author(profile).build();
         postRepository.saveAll(List.of(post, post2));
         postSubscriberRepository.save(PostSubscriber.builder().post(post).subscriber(profile).build());
         postSubscriberRepository.save(PostSubscriber.builder().post(post2).subscriber(profile).build());
@@ -57,8 +56,8 @@ class SubscribersPostServiceTest {
     void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPostsPageable() {
         Profile profile = Profile.builder().username("user").password("p").build();
         profileRepository.save(profile);
-        Post post = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).author(profile).build();
-        Post post2 = Post.builder().label("l").content("c").createdAt(LocalDateTime.now()).author(profile).build();
+        Post post = Post.builder().label("l").content("c").author(profile).build();
+        Post post2 = Post.builder().label("l").content("c").author(profile).build();
         postRepository.saveAll(List.of(post, post2));
         postSubscriberRepository.save(PostSubscriber.builder().post(post).subscriber(profile).build());
         postSubscriberRepository.save(PostSubscriber.builder().post(post2).subscriber(profile).build());
