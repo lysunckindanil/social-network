@@ -50,6 +50,8 @@ class PostsServiceTest {
         Post post = new Post();
         post.setLabel("label");
         post.setContent("content");
+        Profile profile = Profile.builder().username("u").password("p").build();
+        post.setAuthor(profileRepository.save(profile));
         postRepository.save(post);
         Assertions.assertNotNull(postRepository.findById(post.getId()).get().getCreatedAt());
 
@@ -145,6 +147,7 @@ class PostsServiceTest {
     void deletePostByUsername_DeletePost_DeletesFromAuthor() {
         Profile profile = Profile.builder().username("u").password("p").build();
         profileRepository.save(profile);
+
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);

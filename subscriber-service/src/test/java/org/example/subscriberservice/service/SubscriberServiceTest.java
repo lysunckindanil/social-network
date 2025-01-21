@@ -4,10 +4,7 @@ import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
 import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,21 +29,35 @@ class SubscriberServiceTest {
         subscriberService = new SubscriberService(profileSubscriberRepository, profileRepository);
     }
 
+    @BeforeEach
+    void beforeEach() {
+        Profile profile = new Profile();
+        profile.setUsername("user1");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+
+        profile = new Profile();
+        profile.setUsername("user2");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+
+        profile = new Profile();
+        profile.setUsername("user3");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+    }
+
     @Test
     void getSubscribers_AddSubscriber_ReturnsSubscribers() {
-        profileRepository.save(Profile.builder().username("user1").password("p").build());
-        profileRepository.save(Profile.builder().username("user2").password("p").build());
-        profileRepository.save(Profile.builder().username("user3").password("p").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user3").build());
+
+        Assertions.assertEquals(2, profileSubscriberRepository.findAll().size());
         Assertions.assertEquals(2, subscriberService.getSubscribers("user1").size());
     }
 
     @Test
     void getProfileSubscribedOn() {
-        profileRepository.save(Profile.builder().username("user1").password("p").build());
-        profileRepository.save(Profile.builder().username("user2").password("p").build());
-        profileRepository.save(Profile.builder().username("user3").password("p").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user2").subscriberUsername("user1").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user3").subscriberUsername("user1").build());
         Assertions.assertEquals(2, subscriberService.getProfileSubscribedOn("user1").size());
@@ -54,8 +65,6 @@ class SubscriberServiceTest {
 
     @Test
     void getSubscribers_AddVerySubscriberMoreThanOne_AddsOnlyOne() {
-        profileRepository.save(Profile.builder().username("user1").password("p").build());
-        profileRepository.save(Profile.builder().username("user2").password("p").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         Assertions.assertEquals(1, subscriberService.getSubscribers("user1").size());
@@ -64,11 +73,10 @@ class SubscriberServiceTest {
 
     @Test
     void deleteSubscriber_DeleteSubscriber_SubscriberDeleted() {
-        profileRepository.save(Profile.builder().username("user1").password("p").build());
-        profileRepository.save(Profile.builder().username("user2").password("p").build());
         AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build();
         subscriberService.addSubscriber(dto);
         subscriberService.deleteSubscriber(dto);
+        Assertions.assertEquals(0, profileSubscriberRepository.count());
         Assertions.assertEquals(0, subscriberService.getSubscribers("user1").size());
     }
 }

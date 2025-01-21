@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscriber, Long> {
+public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscriber, ProfileSubscriber.Id> {
 
-    List<ProfileSubscriber> findAllByProfile(Profile profile);
+    List<ProfileSubscriber> findByProfile(Profile profile);
 
-    List<ProfileSubscriber> findAllBySubscriber(Profile profile);
+    List<ProfileSubscriber> findBySubscriber(Profile profile);
 
     Optional<ProfileSubscriber> findByProfileAndSubscriber(Profile profile, Profile subscriber);
 

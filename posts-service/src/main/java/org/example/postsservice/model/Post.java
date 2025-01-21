@@ -27,6 +27,8 @@ public class Post {
     @PastOrPresent
     @CreationTimestamp
     private LocalDateTime createdAt;
-    @ManyToOne
+
+    @JoinColumn(name = "author_id")
+    @ManyToOne()
     private Profile author;
 }

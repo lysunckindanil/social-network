@@ -10,9 +10,7 @@ import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -23,20 +21,17 @@ public class SubscriberService {
     public List<ProfileDto> getSubscribers(String username) {
         Optional<Profile> profileOptional = profileRepository.findByUsername(username);
         if (profileOptional.isEmpty()) return new ArrayList<>();
-        return profileSubscriberRepository.findAllByProfile(profileOptional.get()).stream()
-                .map(ProfileSubscriber::getSubscriber)
-                .map(SubscriberService::wrapToDto)
-                .toList();
+
+        List<ProfileSubscriber> subscribers = profileSubscriberRepository.findByProfile(profileOptional.get());
+        return subscribers.stream().map(ProfileSubscriber::getSubscriber).map(SubscriberService::wrapToDto).toList();
     }
 
     public List<ProfileDto> getProfileSubscribedOn(String username) {
         Optional<Profile> profileOptional = profileRepository.findByUsername(username);
         if (profileOptional.isEmpty()) return new ArrayList<>();
 
-        return profileSubscriberRepository.findAllBySubscriber(profileOptional.get()).stream()
-                .map(ProfileSubscriber::getProfile)
-                .map(SubscriberService::wrapToDto)
-                .toList();
+        List<ProfileSubscriber> subscribers = profileSubscriberRepository.findBySubscriber(profileOptional.get());
+        return subscribers.stream().map(ProfileSubscriber::getProfile).map(SubscriberService::wrapToDto).toList();
     }
 
     public void addSubscriber(AddAndDeleteSubscriberDto dto) {
@@ -48,7 +43,7 @@ public class SubscriberService {
         if (subscriberOptional.isEmpty()) return;
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
         if (profileSubscriberOptional.isEmpty()) {
-            ProfileSubscriber profileSubscriber = ProfileSubscriber.builder().profile(profileOptional.get()).subscriber(subscriberOptional.get()).build();
+            ProfileSubscriber profileSubscriber = new ProfileSubscriber(profileOptional.get(), subscriberOptional.get());
             profileSubscriberRepository.save(profileSubscriber);
         }
     }
@@ -62,15 +57,10 @@ public class SubscriberService {
         if (subscriberOptional.isEmpty()) return;
 
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
-        if (profileSubscriberOptional.isPresent())
-            profileSubscriberRepository.delete(profileSubscriberOptional.get());
+        if (profileSubscriberOptional.isPresent()) profileSubscriberRepository.delete(profileSubscriberOptional.get());
     }
 
     private static ProfileDto wrapToDto(Profile profile) {
-        return ProfileDto.builder()
-                .username(profile.getUsername())
-                .email(profile.getEmail())
-                .photoUrl(profile.getPhotoUrl())
-                .build();
+        return ProfileDto.builder().username(profile.getUsername()).email(profile.getEmail()).photoUrl(profile.getPhotoUrl()).build();
     }
 }
