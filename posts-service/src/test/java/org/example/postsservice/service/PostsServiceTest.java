@@ -50,7 +50,9 @@ class PostsServiceTest {
         Post post = new Post();
         post.setLabel("label");
         post.setContent("content");
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         post.setAuthor(profileRepository.save(profile));
         postRepository.save(post);
         Assertions.assertNotNull(postRepository.findById(post.getId()).get().getCreatedAt());
@@ -59,7 +61,9 @@ class PostsServiceTest {
 
     @Test
     void getPostsByProfileUsernamePageable_ReturnsPagesCorrectly() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         for (int i = 0; i < 10; i++) {
             PostDto postDto = PostDto.builder().label(String.valueOf(i)).content("c").build();
@@ -88,7 +92,9 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPosts_AddsPostToRepository() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
@@ -100,7 +106,9 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPosts_CallsSharePostsToSubscribers() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
@@ -112,25 +120,32 @@ class PostsServiceTest {
 
     @Test
     void addPostByUsername_AddPostsDiffUsers_AddsPostsToRepository() {
-        Profile profile = Profile.builder().username("u").password("p").build();
-        Profile profile2 = Profile.builder().username("u1").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
-        profileRepository.save(profile2);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
-        PostDto postDto2 = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
-        AddPostDto addPostDto2 = AddPostDto.builder().profileUsername(profile2.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
-        postsService.addPostByUsername(addPostDto2);
+        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+
+        profile = new Profile();
+        profile.setUsername("u1");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+        PostDto postDto2 = PostDto.builder().label("l").content("c").build();
+        addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto2).build();
+        postsService.addPostByUsername(addPostDto);
+        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
 
         Assertions.assertEquals(2, postRepository.findAll().size());
-        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
-        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile2).size());
     }
 
     @Test
     void addPostByUsername_AddSomePosts_AddsSomePostToRepository() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         PostDto postDto2 = PostDto.builder().label("l").content("c").build();
@@ -145,7 +160,9 @@ class PostsServiceTest {
 
     @Test
     void deletePostByUsername_DeletePost_DeletesFromAuthor() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
 
         PostDto postDto = PostDto.builder().label("l").content("c").build();
@@ -159,7 +176,9 @@ class PostsServiceTest {
 
     @Test
     void deletePostByUsername_DeletePost_CallsDeletesFromSubscribers() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();

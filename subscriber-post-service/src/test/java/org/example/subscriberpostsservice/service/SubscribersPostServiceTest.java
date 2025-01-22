@@ -42,25 +42,49 @@ class SubscribersPostServiceTest {
 
     @Test
     void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPosts() {
-        Profile profile = Profile.builder().username("user").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("user");
+        profile.setPassword("p");
         profileRepository.save(profile);
-        Post post = Post.builder().label("l").content("c").author(profile).build();
-        Post post2 = Post.builder().label("l").content("c").author(profile).build();
-        postRepository.saveAll(List.of(post, post2));
-        postSubscriberRepository.save(PostSubscriber.builder().post(post).subscriber(profile).build());
-        postSubscriberRepository.save(PostSubscriber.builder().post(post2).subscriber(profile).build());
+
+        Post post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
+        post.setAuthor(profile);
+        postRepository.save(post);
+        postSubscriberRepository.save(new PostSubscriber(post, profile));
+
+        post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
+        post.setAuthor(profile);
+        postRepository.save(post);
+        postSubscriberRepository.save(new PostSubscriber(post, profile));
+
+
         Assertions.assertEquals(2, subscribersPostService.getSubscribersPosts("user").size());
     }
 
     @Test
     void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPostsPageable() {
-        Profile profile = Profile.builder().username("user").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("user");
+        profile.setPassword("p");
         profileRepository.save(profile);
-        Post post = Post.builder().label("l").content("c").author(profile).build();
-        Post post2 = Post.builder().label("l").content("c").author(profile).build();
-        postRepository.saveAll(List.of(post, post2));
-        postSubscriberRepository.save(PostSubscriber.builder().post(post).subscriber(profile).build());
-        postSubscriberRepository.save(PostSubscriber.builder().post(post2).subscriber(profile).build());
+
+        Post post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
+        post.setAuthor(profile);
+        postRepository.save(post);
+        postSubscriberRepository.save(new PostSubscriber(post, profile));
+
+        post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
+        post.setAuthor(profile);
+        postRepository.save(post);
+        postSubscriberRepository.save(new PostSubscriber(post, profile));
 
         GetPostsPageableDto dto = GetPostsPageableDto.builder().profileUsername("user").page(0).size(5).build();
         List<PostDto> posts = subscribersPostService.getSubscribersPostsPageable(dto);
@@ -69,7 +93,9 @@ class SubscribersPostServiceTest {
 
     @Test
     void getSubscribersPosts_ZeroPosts_ReturnsZeroPosts() {
-        Profile profile = Profile.builder().username("user").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("user");
+        profile.setPassword("p");
         profileRepository.save(profile);
         Assertions.assertEquals(0, subscribersPostService.getSubscribersPosts("user").size());
     }

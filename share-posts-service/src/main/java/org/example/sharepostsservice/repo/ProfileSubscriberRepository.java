@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscriber, Long> {
+public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscriber, ProfileSubscriber.Id> {
 
     List<ProfileSubscriber> findAllByProfile(Profile profile);
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, Long> {
+public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, PostSubscriber.Id> {
     @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber")
     List<Post> findPostsBySubscriber(Profile subscriber);
 

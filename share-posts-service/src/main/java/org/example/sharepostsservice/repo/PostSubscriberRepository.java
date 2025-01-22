@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, Long> {
+public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, PostSubscriber.Id> {
     @Transactional
     void deleteAllByPost(Post post);
 }

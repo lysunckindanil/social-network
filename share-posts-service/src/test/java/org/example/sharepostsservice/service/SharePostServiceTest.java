@@ -44,13 +44,22 @@ class SharePostServiceTest {
 
     @Test
     void sharePostsToFriends_ProfilePosts_FriendsGetPosts() {
-        Profile profile = Profile.builder().username("user1").password("p").build();
-        Profile subscriber = Profile.builder().username("user2").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+        Profile subscriber = new Profile();
+        subscriber.setUsername("u1");
+        subscriber.setPassword("p");
+        profileRepository.save(subscriber);
+
         Long profileId = profileRepository.save(profile).getId();
         profileRepository.save(subscriber);
-        profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
+        profileSubscriberRepository.save(new ProfileSubscriber(profile, subscriber));
 
-        Post post = Post.builder().label("l").content("c").build();
+        Post post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profileId(profileId).postId(post.getId()).build();
@@ -65,13 +74,21 @@ class SharePostServiceTest {
 
     @Test
     void deletePostsFromFriends_ProfileDeletes_PostsDeleted() {
-        Profile profile = Profile.builder().username("user1").password("p").build();
-        Profile subscriber = Profile.builder().username("user2").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         Long profileId = profileRepository.save(profile).getId();
-        profileRepository.save(subscriber);
-        profileSubscriberRepository.save(ProfileSubscriber.builder().profile(profile).subscriber(subscriber).build());
 
-        Post post = Post.builder().label("l").content("c").build();
+        Profile subscriber = new Profile();
+        subscriber.setUsername("u1");
+        subscriber.setPassword("p");
+        profileRepository.save(subscriber);
+        profileRepository.save(subscriber);
+        profileSubscriberRepository.save(new ProfileSubscriber(profile, subscriber));
+
+        Post post = new Post();
+        post.setLabel("l");
+        post.setContent("c");
         postRepository.save(post);
 
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profileId(profileId).postId(post.getId()).build();

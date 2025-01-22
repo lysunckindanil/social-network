@@ -2,15 +2,12 @@ package org.example.subscriberpostsservice.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PastOrPresent;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -24,9 +21,11 @@ public class Post {
     private String label;
     @NotEmpty
     private String content;
-    @PastOrPresent
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
-    @ManyToOne
+
+    @JoinColumn(name = "author_id")
+    @ManyToOne()
     private Profile author;
 }

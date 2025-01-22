@@ -31,7 +31,9 @@ class ProfileServiceTest {
 
     @Test
     void getProfileByUsername_ReturnsProfile() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
         ProfileDto profileDto = profileService.getProfileByUsername(profile.getUsername());
         assertEquals(profileDto.getUsername(), profile.getUsername());
@@ -39,9 +41,13 @@ class ProfileServiceTest {
 
     @Test
     void getAllProfiles_AddProfiles_ReturnsAllProfiles() {
-        Profile profile = Profile.builder().username("u").password("p").build();
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
         profileRepository.save(profile);
-        profile = Profile.builder().username("u1").password("p").build();
+        profile = new Profile();
+        profile.setUsername("u1");
+        profile.setPassword("p");
         profileRepository.save(profile);
         assertEquals(2, profileService.getAllProfiles().size());
         assertEquals("u", profileService.getAllProfiles().getFirst().getUsername());

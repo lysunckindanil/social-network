@@ -77,12 +77,12 @@ public class PostsService {
 
 
     private static Post unwrapPost(PostDto post) {
-        return Post.builder()
-                .id(post.getId())
-                .label(post.getLabel())
-                .content(post.getContent())
-                .createdAt(post.getCreatedAt())
-                .build();
+        Post postToUnwrap = new Post();
+        postToUnwrap.setId(post.getId());
+        postToUnwrap.setLabel(post.getLabel());
+        postToUnwrap.setContent(post.getContent());
+        postToUnwrap.setCreatedAt(post.getCreatedAt());
+        return postToUnwrap;
     }
 
     private static PostDto wrapPost(Post post) {

@@ -46,7 +46,7 @@ public class SharePostService {
 
         // add post to every friend
         postSubscriberRepository.saveAll(subscribers.stream().
-                map(sub -> PostSubscriber.builder().subscriber(sub).post(post).build()).toList());
+                map(sub -> new PostSubscriber(post, sub)).toList());
     }
 
     @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service")
