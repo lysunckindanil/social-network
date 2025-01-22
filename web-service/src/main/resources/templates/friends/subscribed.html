@@ -12,7 +12,7 @@
 
 <article>
     <h1>Subscribed on you</h1>
-    <div th:each="sub: ${subscribed}">
+    <div class="profile" th:each="sub: ${subscribed}">
         <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
     </div>
 </article>

@@ -16,7 +16,7 @@ function getProfiles() {
 }
 
 function generateProfiles(profiles) {
-    const posts_section = document.getElementById("profiles_section");
+    const posts_section = document.getElementById("profiles");
     profiles.forEach(function (profileEntity) {
         const profile = document.getElementById("profile").cloneNode(true)
         profile.hidden = false

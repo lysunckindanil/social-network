@@ -29,8 +29,9 @@
 
     <div th:if="${!subscribing.isEmpty()}">
         <h1>Subscribed on</h1>
-        <div th:each="sub: ${subscribing}">
-            <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
+        <div class="profile" th:each="sub: ${subscribing}">
+            <a th:href="@{'/profile/'+ ${sub.getUsername()}}" th:text="${sub.getUsername()}"></a>
+            <br>
         </div>
     </div>
 
@@ -38,8 +39,9 @@
 
     <div th:if="${!subscribed.isEmpty()}">
         <h1>Subscribed by</h1>
-        <div th:each="sub: ${subscribed}">
-            <a th:href="@{'/profile/'+ ${sub}}" th:text="${sub}"></a>
+        <div class="profile" th:each="sub: ${subscribed}">
+            <a th:href="@{'/profile/'+ ${sub.getUsername()}}" th:text="${sub.getUsername()}"></a>
+            <br>
         </div>
     </div>
 

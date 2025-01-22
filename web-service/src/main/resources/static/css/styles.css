@@ -24,7 +24,7 @@ body {
     gap: 50px;
 }
 
-.post {
+.post, .profile {
     border: black solid 1px;
     padding: 20px;
     margin: 15px 0;
