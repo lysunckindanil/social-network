@@ -101,7 +101,7 @@ class PostsServiceTest {
         postsService.addPostByUsername(addPostDto);
 
         Assertions.assertEquals(1, postRepository.findAll().size());
-        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(1, postRepository.findByAuthor(profile).size());
     }
 
     @Test
@@ -127,7 +127,7 @@ class PostsServiceTest {
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
-        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(1, postRepository.findByAuthor(profile).size());
 
         profile = new Profile();
         profile.setUsername("u1");
@@ -136,7 +136,7 @@ class PostsServiceTest {
         PostDto postDto2 = PostDto.builder().label("l").content("c").build();
         addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto2).build();
         postsService.addPostByUsername(addPostDto);
-        Assertions.assertEquals(1, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(1, postRepository.findByAuthor(profile).size());
 
         Assertions.assertEquals(2, postRepository.findAll().size());
     }
@@ -155,7 +155,7 @@ class PostsServiceTest {
         postsService.addPostByUsername(addPostDto2);
 
         Assertions.assertEquals(2, postRepository.findAll().size());
-        Assertions.assertEquals(2, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(2, postRepository.findByAuthor(profile).size());
     }
 
     @Test
@@ -171,7 +171,7 @@ class PostsServiceTest {
         Long id = postRepository.findAll().getFirst().getId();
         postsService.deletePost(DeletePostDto.builder().postId(id).build());
 
-        Assertions.assertEquals(0, postRepository.findAllByAuthor(profile).size());
+        Assertions.assertEquals(0, postRepository.findByAuthor(profile).size());
     }
 
     @Test

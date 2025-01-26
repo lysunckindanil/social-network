@@ -12,10 +12,10 @@ import java.util.List;
 
 @Repository
 public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, PostSubscriber.Id> {
-    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber")
+    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber and p.post.author!=null")
     List<Post> findPostsBySubscriber(Profile subscriber);
 
-    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber order by p.post.createdAt desc")
+    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber and p.post.author!=null order by p.post.createdAt desc")
     List<Post> findPostsBySubscriberPageableOrderByCreatedAtDesc(Profile subscriber, Pageable pageable);
 
 }

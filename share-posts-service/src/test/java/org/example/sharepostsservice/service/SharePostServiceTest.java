@@ -65,8 +65,8 @@ class SharePostServiceTest {
         ShareSubscribersDto dto = ShareSubscribersDto.builder().profileId(profileId).postId(post.getId()).build();
 
         sharePostService.sharePostsToSubscribers(dto);
-        PostSubscriber ps = postSubscriberRepository.findAll().getFirst();
 
+        PostSubscriber ps = postSubscriberRepository.findAll().getFirst();
         Assertions.assertEquals(post.getId(), ps.getPost().getId());
         Assertions.assertEquals(subscriber.getId(), ps.getSubscriber().getId());
     }

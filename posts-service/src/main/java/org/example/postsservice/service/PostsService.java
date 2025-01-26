@@ -29,7 +29,7 @@ public class PostsService {
         if (author.isEmpty())
             return new ArrayList<>();
 
-        return postRepository.findAllByAuthor(author.get())
+        return postRepository.findByAuthor(author.get())
                 .stream()
                 .map(PostsService::wrapPost)
                 .toList();
@@ -47,7 +47,7 @@ public class PostsService {
         Sort sort = post.by(Post::getCreatedAt).descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        return postRepository.findAllByAuthor(author.get(), pageRequest)
+        return postRepository.findByAuthor(author.get(), pageRequest)
                 .stream()
                 .map(PostsService::wrapPost)
                 .toList();

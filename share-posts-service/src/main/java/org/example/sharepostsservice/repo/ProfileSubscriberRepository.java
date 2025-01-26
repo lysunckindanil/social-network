@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscriber, ProfileSubscriber.Id> {
 
-    List<ProfileSubscriber> findAllByProfile(Profile profile);
+    List<ProfileSubscriber> findByProfile(Profile profile);
 
 }

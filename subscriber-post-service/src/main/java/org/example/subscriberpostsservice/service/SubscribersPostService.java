@@ -27,7 +27,6 @@ public class SubscribersPostService {
 
         return postSubscriberRepository.findPostsBySubscriber(profile)
                 .stream()
-                .filter(x->x.getAuthor()!=null)
                 .map(SubscribersPostService::wrapPost)
                 .toList();
     }
@@ -43,7 +42,6 @@ public class SubscribersPostService {
         PageRequest pageRequest = PageRequest.of(page, size);
         return postSubscriberRepository.findPostsBySubscriberPageableOrderByCreatedAtDesc(author.get(), pageRequest)
                 .stream()
-                .filter(x->x.getAuthor()!=null)
                 .map(SubscribersPostService::wrapPost)
                 .toList();
     }

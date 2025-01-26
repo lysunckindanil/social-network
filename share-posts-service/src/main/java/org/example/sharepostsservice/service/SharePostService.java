@@ -35,14 +35,13 @@ public class SharePostService {
         Profile profile = profileOptional.get();
 
         // find subscribers of the profile
-        List<Profile> subscribers = profileSubscriberRepository.findAllByProfile(profile).stream()
+        List<Profile> subscribers = profileSubscriberRepository.findByProfile(profile).stream()
                 .map(ProfileSubscriber::getSubscriber).toList();
 
         // find post
         Optional<Post> postOptional = postRepository.findById(dto.getPostId());
         if (postOptional.isEmpty()) return;
         Post post = postOptional.get();
-
 
         // add post to every friend
         postSubscriberRepository.saveAll(subscribers.stream().
@@ -57,7 +56,7 @@ public class SharePostService {
         Post post = postOptional.get();
 
         // delete posts from users
-        postSubscriberRepository.deleteAllByPost(post);
+        postSubscriberRepository.deleteByPost(post);
         // delete post itself
         postRepository.delete(post);
     }

@@ -9,5 +9,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, PostSubscriber.Id> {
     @Transactional
-    void deleteAllByPost(Post post);
+    void deleteByPost(Post post);
 }

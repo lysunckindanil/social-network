@@ -41,6 +41,8 @@ public class SubscriberService {
         if (profileOptional.isEmpty()) return;
         Optional<Profile> subscriberOptional = profileRepository.findByUsername(subscriber);
         if (subscriberOptional.isEmpty()) return;
+        if (profileOptional.equals(subscriberOptional)) return;
+
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
         if (profileSubscriberOptional.isEmpty()) {
             ProfileSubscriber profileSubscriber = new ProfileSubscriber(profileOptional.get(), subscriberOptional.get());
@@ -61,6 +63,10 @@ public class SubscriberService {
     }
 
     private static ProfileDto wrapToDto(Profile profile) {
-        return ProfileDto.builder().username(profile.getUsername()).email(profile.getEmail()).photoUrl(profile.getPhotoUrl()).build();
+        return ProfileDto.builder()
+                .username(profile.getUsername())
+                .email(profile.getEmail())
+                .photoUrl(profile.getPhotoUrl())
+                .build();
     }
 }
