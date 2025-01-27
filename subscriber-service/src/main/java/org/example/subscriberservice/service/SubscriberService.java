@@ -9,6 +9,7 @@ import org.example.subscriberservice.model.ProfileSubscriber;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +21,23 @@ public class SubscriberService {
     private final ProfileSubscriberRepository profileSubscriberRepository;
     private final ProfileRepository profileRepository;
 
+    @Transactional(readOnly = true)
     public List<ProfileDto> getSubscribers(String username) {
         Optional<Profile> profileOptional = profileRepository.findByUsername(username);
         if (profileOptional.isEmpty()) return new ArrayList<>();
 
-        List<ProfileSubscriber> subscribers = profileSubscriberRepository.findByProfile(profileOptional.get());
-        return subscribers.stream().map(ProfileSubscriber::getSubscriber).map(SubscriberService::wrapToDto).toList();
+        return profileOptional.get().getSubscribers().stream().map(ProfileSubscriber::getSubscriber).map(SubscriberService::wrapToDto).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ProfileDto> getProfileSubscribedOn(String username) {
         Optional<Profile> profileOptional = profileRepository.findByUsername(username);
         if (profileOptional.isEmpty()) return new ArrayList<>();
 
-        List<ProfileSubscriber> subscribers = profileSubscriberRepository.findBySubscriber(profileOptional.get());
-        return subscribers.stream().map(ProfileSubscriber::getProfile).map(SubscriberService::wrapToDto).toList();
+        return profileOptional.get().getSubscribing().stream().map(ProfileSubscriber::getProfile).map(SubscriberService::wrapToDto).toList();
     }
 
+    @Transactional
     public void addSubscriber(AddAndDeleteSubscriberDto dto) {
         String profile = dto.getProfileUsername();
         String subscriber = dto.getSubscriberUsername();
@@ -44,7 +46,6 @@ public class SubscriberService {
         Optional<Profile> subscriberOptional = profileRepository.findByUsername(subscriber);
         if (subscriberOptional.isEmpty()) return;
         if (profileOptional.equals(subscriberOptional)) return;
-
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
         if (profileSubscriberOptional.isEmpty()) {
             ProfileSubscriber profileSubscriber = new ProfileSubscriber(profileOptional.get(), subscriberOptional.get());
@@ -52,6 +53,7 @@ public class SubscriberService {
         }
     }
 
+    @Transactional
     public void deleteSubscriber(AddAndDeleteSubscriberDto dto) {
         String profile = dto.getProfileUsername();
         String subscriber = dto.getSubscriberUsername();

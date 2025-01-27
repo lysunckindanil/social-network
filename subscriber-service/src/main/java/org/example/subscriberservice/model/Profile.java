@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -21,4 +24,11 @@ public class Profile {
     private String password;
     private String email;
     private String photoUrl;
+
+    // just for test, generally retrieved from join table
+    @OneToMany(mappedBy = "profile")
+    private List<ProfileSubscriber> subscribers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subscriber")
+    private List<ProfileSubscriber> subscribing = new ArrayList<>();
 }

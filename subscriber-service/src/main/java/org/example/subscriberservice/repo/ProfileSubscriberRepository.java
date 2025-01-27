@@ -14,5 +14,4 @@ public interface ProfileSubscriberRepository extends JpaRepository<ProfileSubscr
     List<ProfileSubscriber> findBySubscriber(Profile profile);
 
     Optional<ProfileSubscriber> findByProfileAndSubscriber(Profile profile, Profile subscriber);
-
 }

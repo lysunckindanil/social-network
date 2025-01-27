@@ -4,15 +4,18 @@ import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
 import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
-@DataJpaTest
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 class SubscriberServiceTest {
@@ -21,16 +24,14 @@ class SubscriberServiceTest {
     private ProfileSubscriberRepository profileSubscriberRepository;
     @Autowired
     private ProfileRepository profileRepository;
-
+    @Autowired
     private SubscriberService subscriberService;
 
-    @BeforeAll
-    void setUp() {
-        subscriberService = new SubscriberService(profileSubscriberRepository, profileRepository);
-    }
 
     @BeforeEach
     void beforeEach() {
+        profileSubscriberRepository.deleteAll();
+        profileRepository.deleteAll();
         Profile profile = new Profile();
         profile.setUsername("user1");
         profile.setPassword("p");
