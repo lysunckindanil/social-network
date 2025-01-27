@@ -6,16 +6,14 @@ import org.example.subscriberpostsservice.model.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface PostSubscriberRepository extends JpaRepository<PostSubscriber, PostSubscriber.Id> {
-    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber and p.post.author!=null")
+    @Query("select p.post from PostSubscriber p join fetch p.post.author where p.subscriber=:subscriber")
     List<Post> findPostsBySubscriber(Profile subscriber);
 
-    @Query("select p.post from PostSubscriber p where p.subscriber=:subscriber and p.post.author!=null order by p.post.createdAt desc")
+    @Query("select p.post from PostSubscriber p join fetch p.post.author where p.subscriber=:subscriber order by p.post.createdAt desc")
     List<Post> findPostsBySubscriberPageableOrderByCreatedAtDesc(Profile subscriber, Pageable pageable);
 
 }
