@@ -12,6 +12,7 @@ import org.example.postsservice.repo.ProfileRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class PostsService {
                 .toList();
     }
 
+    @Transactional
     public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
         Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfileUsername());
@@ -65,6 +67,7 @@ public class PostsService {
         shareSubscribersClient.shareSubscribers(author.getId(), post.getId());
     }
 
+    @Transactional
     public void deletePost(DeletePostDto postDto) {
         Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPostId());
         if (postToDeleteOptional.isPresent()) {

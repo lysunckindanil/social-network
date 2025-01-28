@@ -14,6 +14,7 @@ import org.example.sharepostsservice.repo.ProfileRepository;
 import org.example.sharepostsservice.repo.ProfileSubscriberRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ public class SharePostService {
     private final ProfileSubscriberRepository profileSubscriberRepository;
     private final PostSubscriberRepository postSubscriberRepository;
 
+    @Transactional
     @KafkaListener(topics = "share-subscribers", groupId = "share-posts-service")
     public void sharePostsToSubscribers(ShareSubscribersDto dto) {
         // find profile whose friends to be shared
@@ -48,6 +50,7 @@ public class SharePostService {
                 map(sub -> new PostSubscriber(post, sub)).toList());
     }
 
+    @Transactional
     @KafkaListener(topics = "delete-from-subscribers", groupId = "share-posts-service")
     public void deletePostsFromSubscribers(DeletePostDto dto) {
         // find post
