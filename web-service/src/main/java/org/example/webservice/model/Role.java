@@ -21,4 +21,7 @@ public class Role {
         return name;
     }
 
+    public Role(String name) {
+        this.name = name;
+    }
 }
