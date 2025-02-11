@@ -2,10 +2,10 @@ pipeline {
   agent any
 
   environment {
-      POSTGRES_USER = "${params.POSTGRES_USER}"
-      POSTGRES_PASSWORD = "${params.POSTGRES_PASSWORD}"
-      POSTGRES_DB = "${params.POSTGRES_DB}"
-      HIBERNATE_DDL_AUTO = "${params.HIBERNATE_DDL_AUTO}"
+      POSTGRES_USER = "${POSTGRES_USER}"
+      POSTGRES_PASSWORD = "${POSTGRES_PASSWORD}"
+      POSTGRES_DB = "${POSTGRES_DB}"
+      HIBERNATE_DDL_AUTO = "${HIBERNATE_DDL_AUTO}"
       API_AUTH_KEY = "${API_AUTH_KEY}"
   }
 
@@ -16,7 +16,7 @@ pipeline {
       }
     }
 
-    stage('Build Images') {
+    stage('Build Docker Images') {
       steps {
         sh 'mvn clean spring-boot:build-image -Pprod'
       }
