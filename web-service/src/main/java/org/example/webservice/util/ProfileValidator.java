@@ -1,4 +1,4 @@
-package org.example.webservice.config;
+package org.example.webservice.util;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.model.Profile;
@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class ProfileValidator implements Validator {
 
-    private final ProfileRepository profileValidator;
+    private final ProfileRepository profileRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -23,7 +23,7 @@ public class ProfileValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Profile profile = (Profile) target;
         String username = profile.getUsername();
-        if (profileValidator.findByUsername(username).isPresent())
+        if (profileRepository.findByUsername(username).isPresent())
             errors.rejectValue("username", "", "Profile with this username already exists");
     }
 }

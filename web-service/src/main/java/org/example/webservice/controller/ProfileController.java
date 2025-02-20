@@ -1,14 +1,18 @@
 package org.example.webservice.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.config.ProfileValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.dto.ProfileDto;
 import org.example.webservice.model.Profile;
-import org.example.webservice.service.ProfileSecurityService;
 import org.example.webservice.service.ProfileService;
 import org.example.webservice.service.SubscriberService;
+import org.example.webservice.service.security.CookieService;
+import org.example.webservice.service.security.ProfileSecurityService;
+import org.example.webservice.util.ProfileValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+@Slf4j
 @RequestMapping("/profile")
 @RequiredArgsConstructor
 @Controller
@@ -25,6 +30,7 @@ public class ProfileController {
     private final ProfileSecurityService profileSecurityService;
     private final SubscriberService subscriberService;
     private final ProfileValidator profileValidator;
+    private final CookieService cookieService;
 
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
@@ -72,12 +78,18 @@ public class ProfileController {
     }
 
     @PostMapping("/register")
-    public String createUserPost(@ModelAttribute @Valid Profile profile, BindingResult bindingResult) {
+    public String createUserPost(@ModelAttribute @Valid Profile profile, BindingResult bindingResult, HttpServletResponse response) {
         profileValidator.validate(profile, bindingResult);
         if (bindingResult.hasErrors()) {
             return "security/register";
         }
-        profileSecurityService.createProfile(profile);
+        try {
+            profileSecurityService.createProfile(profile);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Cookie cookie = cookieService.buildCookie(profile.getUsername());
+        response.addCookie(cookie);
         return "redirect:/";
     }
 }

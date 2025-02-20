@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.security;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,7 @@ public class ProfileSecurityService implements UserDetailsService {
         }
     }
 
+    @Transactional
     public void createProfile(Profile profile) {
         profile.setPassword(passwordEncoder.encode(profile.getPassword()));
         profile.setRoles(List.of(roleRepository.findByName("ROLE_USER")));
