@@ -1,6 +1,7 @@
 package org.example.webservice.controller;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/profile")
@@ -91,5 +93,14 @@ public class ProfileController {
         Cookie cookie = cookieService.buildCookie(profile.getUsername());
         response.addCookie(cookie);
         return "redirect:/";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Optional<String> token = cookieService.extractToken(request.getCookies());
+        if (token.isPresent()) {
+            response.addCookie(cookieService.buildLogoutCookie(token.get()));
+        }
+        return "redirect:/profile/login";
     }
 }

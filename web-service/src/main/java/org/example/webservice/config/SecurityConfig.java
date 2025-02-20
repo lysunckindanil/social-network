@@ -1,10 +1,7 @@
 package org.example.webservice.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.security.CookieAuthenticationProvider;
-import org.example.webservice.service.security.CookieService;
-import org.example.webservice.service.security.TokenCookieAuthenticationFilter;
-import org.example.webservice.service.security.TokenCookieLoginSuccessHandler;
+import org.example.webservice.service.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -27,7 +25,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
     private final TokenCookieAuthenticationFilter tokenCookieAuthenticationFilter;
     private final TokenCookieLoginSuccessHandler tokenCookieLoginSuccessHandler;
-    private final CookieService cookieService;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -47,11 +44,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling((exception)
-                        -> exception.accessDeniedPage("/profile/login"))
+                        -> exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/profile/login")))
                 .csrf(csrf -> csrf
+                        //todo consider csrf token
+//                        .csrfTokenRepository(new CookieCsrfTokenRepository())
+//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
                         .sessionAuthenticationStrategy(
                                 ((authentication, request, response) -> {
-                })))
+                                })))
+                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RequestCacheAwareFilter.class)
                 .addFilterBefore(tokenCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
@@ -60,13 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
                 .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated())
-                .logout(form ->
-                        form
-                                .logoutUrl("/profile/logout")
-                                .logoutSuccessUrl("/profile/login")
-                                .deleteCookies(cookieService.getDEFAULT_COOKIE_NAME())
-                                .clearAuthentication(true));
+                        authorize.anyRequest().authenticated());
         return http.build();
     }
 

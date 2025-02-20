@@ -31,6 +31,14 @@ public class CookieService {
                 .map(Cookie::getValue).findFirst();
     }
 
+    public Cookie buildLogoutCookie(final String token) {
+        final Cookie cookie = new Cookie(DEFAULT_COOKIE_NAME, token);
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
+    }
+
     public Cookie buildCookie(String username) {
         String token = jwtService.generateToken(username, null);
         Cookie cookie = new Cookie(DEFAULT_COOKIE_NAME, token);
