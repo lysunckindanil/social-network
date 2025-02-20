@@ -1,8 +1,8 @@
 package org.example.webservice.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.security.CookieService;
 import org.example.webservice.service.security.CookieAuthenticationProvider;
+import org.example.webservice.service.security.CookieService;
 import org.example.webservice.service.security.TokenCookieAuthenticationFilter;
 import org.example.webservice.service.security.TokenCookieLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/profile/logout"))
+                .exceptionHandling((exception)
+                        -> exception.accessDeniedPage("/profile/login"))
+                .csrf(csrf -> csrf
+                        .sessionAuthenticationStrategy(
+                                ((authentication, request, response) -> {
+                })))
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RequestCacheAwareFilter.class)
                 .addFilterBefore(tokenCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
