@@ -27,6 +27,10 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if(Set.of("/js/", "/css/").stream().anyMatch(s -> request.getServletPath().startsWith(s))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         Optional<String> token = cookieService.extractToken(request.getCookies());
         if (token.isEmpty()) {
             if (request.getMethod().equals("GET") && !Set.of("/profile/login", "/profile/register").contains(request.getServletPath())) {
@@ -36,6 +40,7 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
         PreAuthenticatedAuthenticationToken preAuthenticated = new PreAuthenticatedAuthenticationToken(token.get(), null);
 
         try {

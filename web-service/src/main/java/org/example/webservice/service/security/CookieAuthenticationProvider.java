@@ -35,7 +35,6 @@ public class CookieAuthenticationProvider implements AuthenticationProvider {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if (userDetails == null) throw new BadCredentialsException("User doesn't exist");
         return UsernamePasswordAuthenticationToken
                 .authenticated(userDetails.getUsername(), null, userDetails.getAuthorities());
     }

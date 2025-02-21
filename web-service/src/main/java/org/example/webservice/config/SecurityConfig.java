@@ -3,7 +3,7 @@ package org.example.webservice.config;
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.service.security.CookieAuthenticationProvider;
 import org.example.webservice.service.security.filter.CookieAuthenticationFilter;
-import org.example.webservice.service.security.filter.GetCsrfTokenFilter;
+import org.example.webservice.service.security.filter.CsrfLoggerFilter;
 import org.example.webservice.service.security.handler.CookieAuthenticationEntryPoint;
 import org.example.webservice.service.security.handler.CustomAccessDeniedHandler;
 import org.example.webservice.service.security.handler.TokenCookieLoginSuccessHandler;
@@ -19,8 +19,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -50,8 +50,8 @@ public class SecurityConfig {
                         .sessionAuthenticationStrategy(
                                 ((authentication, request, response) -> {
                                 }))
-                        .ignoringRequestMatchers("/profile/login"))
-                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
+                        .ignoringRequestMatchers("/profile/login", "/css/**", "/js/**"))
+                .addFilterAfter(new CsrfLoggerFilter(), CsrfFilter.class)
                 .addFilterBefore(usernamePasswordAuthenticationFilter(), RequestCacheAwareFilter.class)
                 .addFilterBefore(cookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
@@ -59,6 +59,8 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers("/css/**", "/js/**").permitAll())
                 .authorizeHttpRequests(authorize ->
                         authorize.anyRequest().hasRole("USER"));
         return http.build();
