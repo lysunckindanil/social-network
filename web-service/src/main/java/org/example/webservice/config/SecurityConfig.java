@@ -1,7 +1,12 @@
 package org.example.webservice.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.security.*;
+import org.example.webservice.service.security.CookieAuthenticationProvider;
+import org.example.webservice.service.security.filter.CookieAuthenticationFilter;
+import org.example.webservice.service.security.filter.GetCsrfTokenFilter;
+import org.example.webservice.service.security.handler.CookieAuthenticationEntryPoint;
+import org.example.webservice.service.security.handler.CustomAccessDeniedHandler;
+import org.example.webservice.service.security.handler.TokenCookieLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +28,41 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final TokenCookieAuthenticationFilter tokenCookieAuthenticationFilter;
+    private final CookieAuthenticationFilter cookieAuthenticationFilter;
     private final TokenCookieLoginSuccessHandler tokenCookieLoginSuccessHandler;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final CookieAuthenticationProvider cookieAuthenticationProvider;
+    private final CookieAuthenticationEntryPoint cookieAuthenticationEntryPoint;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .exceptionHandling((exception)
+                        -> exception
+                        .authenticationEntryPoint(cookieAuthenticationEntryPoint)
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                .csrf(csrf -> csrf
+                        //todo consider proper csrf token
+//                        .csrfTokenRepository(new CookieCsrfTokenRepository())
+//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                        .sessionAuthenticationStrategy(
+                                ((authentication, request, response) -> {
+                                }))
+                        .ignoringRequestMatchers("/profile/login"))
+                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
+                .addFilterBefore(usernamePasswordAuthenticationFilter(), RequestCacheAwareFilter.class)
+                .addFilterBefore(cookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session ->
+                        session
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize ->
+                        authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
+                .authorizeHttpRequests(authorize ->
+                        authorize.anyRequest().hasRole("USER"));
+        return http.build();
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
@@ -41,34 +75,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .exceptionHandling((exception)
-                        -> exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/profile/login")))
-                .csrf(csrf -> csrf
-                        //todo consider csrf token
-//                        .csrfTokenRepository(new CookieCsrfTokenRepository())
-//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                        .sessionAuthenticationStrategy(
-                                ((authentication, request, response) -> {
-                                })))
-                .addFilterAfter(new GetCsrfTokenFilter(), ExceptionTranslationFilter.class)
-                .addFilterBefore(usernamePasswordAuthenticationFilter(), RequestCacheAwareFilter.class)
-                .addFilterBefore(tokenCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .sessionManagement(session ->
-                        session
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated());
-        return http.build();
-    }
-
-    @Bean
     public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
-        UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new UsernamePasswordAuthenticationFilter(authenticationConfiguration.getAuthenticationManager());
+        UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter =
+                new UsernamePasswordAuthenticationFilter(authenticationConfiguration.getAuthenticationManager());
         usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(tokenCookieLoginSuccessHandler);
+        usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(
+                (request, response, e)
+                        -> response.sendRedirect("/profile/login?error=true"));
         usernamePasswordAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/profile/login", "POST"));
         return usernamePasswordAuthenticationFilter;
     }

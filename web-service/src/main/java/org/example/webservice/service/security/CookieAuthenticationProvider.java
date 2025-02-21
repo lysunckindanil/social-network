@@ -1,7 +1,9 @@
 package org.example.webservice.service.security;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -22,13 +24,20 @@ public class CookieAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String token = authentication.getPrincipal().toString();
-        Optional<String> usernameOptional = cookieService.extractUsername(token);
-        if (usernameOptional.isPresent()) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(usernameOptional.get());
-            return UsernamePasswordAuthenticationToken
-                    .authenticated(userDetails.getUsername(), null, userDetails.getAuthorities());
+        String username;
+        try {
+            Optional<String> usernameOptional = cookieService.extractUsername(token);
+            if (usernameOptional.isPresent()) {
+                username = usernameOptional.get();
+            } else throw new BadCredentialsException("Bad credentials");
+        } catch (JwtException e) {
+            throw new BadCredentialsException(e.getMessage());
         }
-        return null;
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (userDetails == null) throw new BadCredentialsException("User doesn't exist");
+        return UsernamePasswordAuthenticationToken
+                .authenticated(userDetails.getUsername(), null, userDetails.getAuthorities());
     }
 
     @Override

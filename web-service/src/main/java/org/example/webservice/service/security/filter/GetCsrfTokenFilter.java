@@ -1,4 +1,4 @@
-package org.example.webservice.service.security;
+package org.example.webservice.service.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
