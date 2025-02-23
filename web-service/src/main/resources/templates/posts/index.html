@@ -205,9 +205,8 @@
                     <p class="card-text postContent">
                         Content
                     </p>
-                    <a href="#" class="card-link">Edit post</a>
-                    <form method="post" th:action="@{/posts/delete}">
-                        <button type="submit" name="postId" class="deletePostButton card-link">Delete post</button>
+                    <form id="deletePostForm" method="post" th:action="@{/posts/delete}">
+                        <button name="postId" class="deletePostButton btn btn-sm btn-danger">Delete post</button>
                     </form>
                 </div>
             </div>

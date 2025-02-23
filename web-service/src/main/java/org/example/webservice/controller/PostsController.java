@@ -39,7 +39,7 @@ public class PostsController {
     @PostMapping("/delete")
     public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
         postsService.deletePost(DeletePostDto.builder().postId(postId).build());
-        return "redirect:/profile/" + principal.getName();
+        return "redirect:/posts";
     }
 
     @ResponseBody
