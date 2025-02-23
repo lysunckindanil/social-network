@@ -192,12 +192,12 @@
     <div class="b-example-divider b-example-vr"></div>
 
     <section class="ps-5 pt-3 pe-5">
+        <p th:text="${username}" id="username" hidden="hidden"></p>
+        <h1 class="pb-4">Subscribers</h1>
         <div id="profiles">
-            <p th:text="${username}" id="username" hidden="hidden"></p>
-            <h1>People</h1>
-            <div class="profile" id="profile" hidden="hidden">
-                <h3>User: <a class="profileUsername"></a></h3>
-                <p>Email: <span class="profileEmail"></span></p>
+            <div class="card mb-2 profile p-3" id="profile" hidden="hidden">
+                <h5><a class="card-title profileUsername"></a></h5>
+                <h6 class="card-text profileEmail"></h6>
             </div>
         </div>
         <br>

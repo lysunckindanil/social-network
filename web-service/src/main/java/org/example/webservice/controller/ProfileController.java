@@ -32,6 +32,14 @@ public class ProfileController {
     private final ProfileValidator profileValidator;
     private final CookieService cookieService;
 
+    @GetMapping
+    public String index(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        return "profile/index";
+    }
+
+
+    //todo add posts, friends and subscribers all pageable to not my profile
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
 
@@ -67,12 +75,6 @@ public class ProfileController {
     @PostMapping
     public List<ProfileDto> getProfilesPageable(@RequestParam("page") int page) {
         return profileService.getAllProfiles(page);
-    }
-
-    @GetMapping
-    public String index(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
-        return "profile/index";
     }
 
     @PostMapping("/register")
