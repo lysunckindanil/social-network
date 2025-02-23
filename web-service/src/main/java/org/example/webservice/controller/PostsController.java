@@ -33,7 +33,7 @@ public class PostsController {
     @PostMapping("/add")
     public String addPost(@ModelAttribute PostDto post, Principal principal) {
         postsService.addPost(principal.getName(), post);
-        return "redirect:/profile/" + principal.getName();
+        return "redirect:/posts";
     }
 
     @PostMapping("/delete")
