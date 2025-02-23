@@ -2,6 +2,7 @@ package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.AddAndDeleteSubscriberDto;
+import org.example.webservice.dto.IsSubscriberDto;
 import org.example.webservice.dto.ProfileDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -24,26 +25,20 @@ public class SubscriberService {
     }
 
     public Boolean isISubscribedOn(String subscriberUsername, String profileUsername) {
-        List<String> friends = friendsServiceClient.findSubscribers(profileUsername).stream().map(ProfileDto::getUsername).toList();
-        return friends.contains(subscriberUsername);
+        return friendsServiceClient.isSubscribedOn(IsSubscriberDto.builder()
+                .profileUsername(profileUsername).subscriberUsername(subscriberUsername).build());
     }
 
     public void subscribe(String profileUsername, String subscriberUsername) {
         if (!subscriberUsername.equals(profileUsername)) {
-            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
-                    .profileUsername(profileUsername)
-                    .subscriberUsername(subscriberUsername)
-                    .build();
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername(profileUsername).subscriberUsername(subscriberUsername).build();
             friendsServiceClient.addSubscriber(dto);
         }
     }
 
     public void unsubscribe(String profileUsername, String subscriberUsername) {
         if (!subscriberUsername.equals(profileUsername)) {
-            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
-                    .profileUsername(profileUsername)
-                    .subscriberUsername(subscriberUsername)
-                    .build();
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername(profileUsername).subscriberUsername(subscriberUsername).build();
             friendsServiceClient.deleteSubscriber(dto);
         }
     }
@@ -61,5 +56,8 @@ public class SubscriberService {
 
         @PostMapping("/deleteSubscriber")
         void deleteSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
+
+        @PostMapping("/isSubscribedOn")
+        Boolean isSubscribedOn(@RequestBody IsSubscriberDto dto);
     }
 }

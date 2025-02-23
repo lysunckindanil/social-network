@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.webservice.dto.PostDto;
 import org.example.webservice.dto.ProfileDto;
 import org.example.webservice.model.Profile;
 import org.example.webservice.service.ProfileService;
@@ -30,26 +29,23 @@ import java.util.Optional;
 public class ProfileController {
     private final ProfileService profileService;
     private final ProfileSecurityService profileSecurityService;
-    private final SubscriberService subscriberService;
     private final ProfileValidator profileValidator;
     private final CookieService cookieService;
 
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
-        ProfileDto profileDto = profileService.getProfileByUsername(username);
-        if (profileDto != null) {
-            model.addAttribute("profile", profileDto);
+
+        Optional<Profile> profileOptional = profileSecurityService.getProfileByUsername(username);
+        if (profileOptional.isPresent()) {
+            Profile profile = profileOptional.get();
+            model.addAttribute("username", principal.getName());
+            model.addAttribute("profile", profile);
             if (principal.getName().equals(username)) {
-                model.addAttribute("new_post", PostDto.builder().build());
+                model.addAttribute("roles", profile.getRoles());
                 return "profile/my_profile";
-            }
-            model.addAttribute("subscribed", subscriberService.findSubscribers(username));
-            model.addAttribute("subscribing", subscriberService.findProfileSubscribedOn(username));
-            if (subscriberService.isISubscribedOn(principal.getName(), username)) {
-                return "profile/profile_subscribed";
             } else {
-                return "profile/profile_not_subscribed";
+                model.addAttribute("username_cur", username);
+                return "profile/profile";
             }
         }
 

@@ -1,7 +1,3 @@
-function logout() {
-    document.getElementById("logout_form").submit()
-}
-
 let page = 0;
 
 function getPosts() {

@@ -2,6 +2,7 @@ package org.example.subscriberservice.function;
 
 import lombok.RequiredArgsConstructor;
 import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.IsSubscriberDto;
 import org.example.subscriberservice.dto.ProfileDto;
 import org.example.subscriberservice.service.SubscriberService;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,11 @@ public class SubscriberFunction {
     @Bean
     public Function<String, List<ProfileDto>> findProfileSubscribedOn() {
         return subscriberService::getProfileSubscribedOn;
+    }
+
+    @Bean
+    public Function<IsSubscriberDto, Boolean> isSubscribedOn() {
+        return subscriberService::isProfileSubscribedOn;
     }
 
     @Bean

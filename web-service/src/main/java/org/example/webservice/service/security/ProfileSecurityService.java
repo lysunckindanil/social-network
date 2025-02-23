@@ -34,6 +34,10 @@ public class ProfileSecurityService implements UserDetailsService {
         }
     }
 
+    public Optional<Profile> getProfileByUsername(String username) {
+        return profileRepository.findByUsername(username);
+    }
+
     @Transactional
     public void createProfile(Profile profile) {
         profile.setPassword(passwordEncoder.encode(profile.getPassword()));

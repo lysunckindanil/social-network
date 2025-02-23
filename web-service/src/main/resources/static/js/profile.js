@@ -1,30 +1,75 @@
-let page = 0;
+let isSubscribed = false
+let token
 
-function getPosts() {
-    const token = $("meta[name='_csrf']").attr("content");
-    const username = document.getElementById("username").innerText
+function generateData() {
+    token = $("meta[name='_csrf']").attr("content")
+    isSubscribedOn()
+}
+
+
+function isSubscribedOn() {
+    const profileUsername = document.getElementById("profileUsername").innerText
     $.ajax({
-        url: '/posts/getPosts',
+        url: '/subscribing/isSubscribedOn',
         headers: {"X-CSRF-TOKEN": token},
         method: 'post',
         dataType: 'json',
-        data: {page: page, username: username},
+        data: {"profileUsername": profileUsername},
         success: function (data) {
-            generatePosts(data)
+            let response = JSON.parse(data);
+            if (response === true) {
+                showUnsubscribeButton()
+            } else {
+                showSubscribeButton()
+            }
         }
     });
-    page += 1
 }
 
-function generatePosts(posts) {
-    const posts_section = document.getElementById("posts")
-    posts.forEach(function (postEntity) {
-        const post = document.getElementById("post").cloneNode(true)
-        post.hidden = false
-        post.getElementsByClassName("postLabel")[0].innerText = postEntity['label']
-        post.getElementsByClassName("postContent")[0].innerText = postEntity['content']
-        post.getElementsByClassName("postCreatedAt")[0].innerText = postEntity['createdAt']
-        posts_section.insertAdjacentElement('beforeend', post)
-    })
+function showSubscribeButton() {
+    const button = document.getElementById("subscribeButton");
+    button.innerText = "Subscribe"
+    isSubscribed = false
+}
 
+function showUnsubscribeButton() {
+    const button = document.getElementById("subscribeButton");
+    button.innerText = "Unsubscribe"
+    isSubscribed = true
+}
+
+function onSubscribeButtonClick() {
+    if (isSubscribed) {
+        submitUnsubscribe()
+    } else {
+        submitSubscribe()
+    }
+}
+
+
+function submitSubscribe() {
+    const profileUsername = document.getElementById("profileUsername").innerText
+    $.ajax({
+        url: '/subscribing/subscribe',
+        headers: {"X-CSRF-TOKEN": token},
+        method: 'post',
+        dataType: 'json',
+        async: false,
+        data: {"profileUsername": profileUsername}
+    });
+    isSubscribedOn()
+}
+
+
+function submitUnsubscribe() {
+    const profileUsername = document.getElementById("profileUsername").innerText
+    $.ajax({
+        url: '/subscribing/unsubscribe',
+        headers: {"X-CSRF-TOKEN": token},
+        method: 'post',
+        dataType: 'json',
+        async: false,
+        data: {"profileUsername": profileUsername}
+    });
+    isSubscribedOn()
 }

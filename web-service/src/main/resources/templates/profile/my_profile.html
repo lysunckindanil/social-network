@@ -1,61 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
-    <title th:text="${profile.getUsername()}"></title>
-    <link href="/css/styles.css" rel="stylesheet">
-    <script src="/js/my_profile.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-3.6.3.js"
-            integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-            crossorigin="anonymous">
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My profile</title>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+    />
+
+    <meta name="theme-color" content="#712cf9"/>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: solid rgba(0, 0, 0, 0.15);
+            border-width: 1px 0;
+            box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+            inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -0.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #712cf9;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+    </style>
+    <link href="/css/sidebars.css" rel="stylesheet"/>
+    <link href="/css/section.css" rel="stylesheet">
+    <script src="/js/signout.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
-<body onload="getPosts()">
+<body>
 
-<header th:replace="~{fragments/nav::nav(${username})}"></header>
 
-<article>
-    <h1>Profile</h1>
-    <p>Username: <span th:text="${profile.getUsername()}" id="username"></span></p>
-    <p>Email: <span th:text="${profile.getEmail()}"></span></p>
-    <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
-    <a onclick="logout()" style="text-decoration-line: underline;cursor: pointer;font-size: 1.2em">Logout</a>
-    <form method="post" id="logout_form" th:action="@{/profile/logout}"></form>
-
-    <br>
-
-    <div>
-        <form method="post" th:action="@{/posts/add}" th:object="${new_post}">
-            <h1>New post</h1>
-            <label>Label
-                <input th:field="*{label}" placeholder="Your post label">
-            </label>
-            <br>
-            <label>Content
-                <input th:field="*{content}" placeholder="Your post content">
-            </label>
-            <br>
-            <button type="submit">Create post</button>
-        </form>
-    </div>
-
-    <br>
-    <div id="posts">
-        <h1>Posts</h1>
-        <div class="post" id="post" hidden="hidden">
-            <h3>Label: <span class="postLabel"></span></h3>
-            <p>Content: <span class="postContent"></span></p>
-            <p>CreatedAt: <span class="postCreatedAt"></span></p>
-            <br>
-            <form method="post" th:action="@{/posts/delete}">
-                <button type="submit" name="postId" class="deletePostButton">Delete post</button>
-            </form>
+<main class="d-flex flex-nowrap">
+    <div
+            class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+            style="width: 280px"
+    >
+        <a
+                href="/"
+                class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+            <svg class="bi pe-none me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="fs-4">Sidebar</span>
+        </a>
+        <hr/>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a th:href="@{/home}" class="nav-link text-white" aria-current="page">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#home"></use>
+                    </svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/profile}" class="nav-link active">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"></use>
+                    </svg>
+                    People
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/posts}" class="nav-link text-white">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#table"></use>
+                    </svg>
+                    My posts
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/subscribing/on}" class="nav-link text-white">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#grid"></use>
+                    </svg>
+                    Friends
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/subscribing/by}" class="nav-link text-white">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#people-circle"></use>
+                    </svg>
+                    Subscribers
+                </a>
+            </li>
+        </ul>
+        <hr/>
+        <div class="dropdown">
+            <a
+                    href="#"
+                    class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+            >
+                <img
+                        src="https://github.com/mdo.png"
+                        alt=""
+                        width="32"
+                        height="32"
+                        class="rounded-circle me-2"
+                />
+                <strong th:text="${username}">mdo</strong>
+            </a>
+            <ul
+                    class="dropdown-menu dropdown-menu-dark text-small shadow"
+                    style=""
+            >
+                <li><a class="dropdown-item" th:href="@{/posts/create}">New post</a></li>
+                <li><a class="dropdown-item" th:href="@{'/profile/' + ${username}}">Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider"/>
+                </li>
+                <li><a class="dropdown-item" onclick="logout()" href="#">Sign out</a></li>
+            </ul>
+            <form method="post" id="logout_form" th:action="@{/profile/logout}"></form>
         </div>
     </div>
-    <br>
-    <button onclick="getPosts()">View more</button>
-</article>
+
+    <div class="b-example-divider b-example-vr"></div>
+
+    <section class="ps-5 pt-3 pe-5">
+        <h1>Profile</h1>
+        <p>Username: <span th:text="${profile.getUsername()}" id="username"></span></p>
+        <p>Email: <span th:text="${profile.getEmail()}"></span></p>
+        <p>PhotoUrl: <span th:text="${profile.getPhotoUrl()}"></span></p>
+    </section>
+</main>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"
+></script>
 </body>
 </html>

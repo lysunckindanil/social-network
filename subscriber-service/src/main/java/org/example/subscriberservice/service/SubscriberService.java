@@ -3,6 +3,7 @@ package org.example.subscriberservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.IsSubscriberDto;
 import org.example.subscriberservice.dto.ProfileDto;
 import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.model.ProfileSubscriber;
@@ -64,6 +65,18 @@ public class SubscriberService {
 
         Optional<ProfileSubscriber> profileSubscriberOptional = profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get());
         if (profileSubscriberOptional.isPresent()) profileSubscriberRepository.delete(profileSubscriberOptional.get());
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isProfileSubscribedOn(IsSubscriberDto dto) {
+        String profile = dto.getProfileUsername();
+        String subscriber = dto.getSubscriberUsername();
+        Optional<Profile> profileOptional = profileRepository.findByUsername(profile);
+        if (profileOptional.isEmpty()) return false;
+        Optional<Profile> subscriberOptional = profileRepository.findByUsername(subscriber);
+        if (subscriberOptional.isEmpty()) return false;
+
+        return profileSubscriberRepository.findByProfileAndSubscriber(profileOptional.get(), subscriberOptional.get()).isPresent();
     }
 
     private static ProfileDto wrapToDto(Profile profile) {

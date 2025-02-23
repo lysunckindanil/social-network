@@ -5,6 +5,7 @@ import org.example.webservice.dto.DeletePostDto;
 import org.example.webservice.dto.PostDto;
 import org.example.webservice.service.PostsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -15,6 +16,19 @@ import java.util.List;
 @Controller
 public class PostsController {
     private final PostsService postsService;
+
+    @GetMapping
+    public String index(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        return "posts/index";
+    }
+
+    @GetMapping("/create")
+    public String create(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("new_post", PostDto.builder().build());
+        return "posts/create";
+    }
 
     @PostMapping("/add")
     public String addPost(@ModelAttribute PostDto post, Principal principal) {
