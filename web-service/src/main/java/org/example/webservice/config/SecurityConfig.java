@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -54,7 +55,7 @@ public class SecurityConfig {
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
                 .csrf(csrf -> csrf
                         //todo consider proper csrf token
-//                        .csrfTokenRepository(new CookieCsrfTokenRepository())
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
                         .sessionAuthenticationStrategy(
                                 ((authentication, request, response) -> {
