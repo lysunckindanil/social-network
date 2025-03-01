@@ -31,11 +31,6 @@ public class SecurityConfig {
                 .exceptionHandling((exception)
                         -> exception
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
-//                .csrf(csrf -> csrf
-                //todo consider proper csrf token
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-//                        .addFilterAfter(new CsrfLoggerFilter(), CsrfFilter.class)
                 .authorizeHttpRequests(authorize ->
                         authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
                 .authorizeHttpRequests(authorize ->
