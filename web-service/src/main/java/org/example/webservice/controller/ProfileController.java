@@ -33,7 +33,6 @@ public class ProfileController {
     }
 
 
-    //todo add posts, friends and subscribers all pageable to not my profile
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
 
