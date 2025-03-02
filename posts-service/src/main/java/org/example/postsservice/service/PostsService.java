@@ -69,15 +69,17 @@ public class PostsService {
 
     @Transactional
     public void deletePost(DeletePostDto postDto) {
+        Optional<Profile> author = profileRepository.findByUsername(postDto.getUsername());
+        if (author.isEmpty()) return;
         Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPostId());
         if (postToDeleteOptional.isPresent()) {
             Post postToDelete = postToDeleteOptional.get();
+            if (!postToDelete.getAuthor().getId().equals(author.get().getId())) return;
             postToDelete.setAuthor(null);
             postRepository.save(postToDelete);
             shareSubscribersClient.deleteFromSubscribers(postToDelete.getId());
         }
     }
-
 
     private static Post unwrapPost(PostDto post) {
         Post postToUnwrap = new Post();

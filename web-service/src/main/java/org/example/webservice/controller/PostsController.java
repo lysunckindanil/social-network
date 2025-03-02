@@ -1,8 +1,7 @@
 package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.DeletePostDto;
-import org.example.webservice.dto.PostDto;
+import org.example.webservice.dto.posts.PostDto;
 import org.example.webservice.service.PostsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,7 @@ public class PostsController {
     }
 
     @GetMapping("/create")
-    public String create(Model model, Principal principal) {
+    public String createPostPage(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
         model.addAttribute("new_post", PostDto.builder().build());
         return "posts/create";
@@ -38,7 +37,7 @@ public class PostsController {
 
     @PostMapping("/delete")
     public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
-        postsService.deletePost(DeletePostDto.builder().postId(postId).build());
+        postsService.deletePost(postId, principal.getName());
         return "redirect:/posts";
     }
 

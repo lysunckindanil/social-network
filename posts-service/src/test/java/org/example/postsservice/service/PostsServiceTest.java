@@ -169,13 +169,29 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).build());
+        postsService.deletePost(DeletePostDto.builder().postId(id).username("u").build());
 
         Assertions.assertEquals(0, postRepository.findByAuthor(profile).size());
     }
 
     @Test
-    void deletePostByUsername_DeletePost_CallsDeletesFromSubscribers() {
+    void deletePostByUsername_DeletePost_WrongUsername_NoDeletesFromAuthor() {
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
+        Long id = postRepository.findAll().getFirst().getId();
+        postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build());
+
+        Assertions.assertEquals(1, postRepository.findByAuthor(profile).size());
+    }
+
+    @Test
+    void deletePostByUsername_DeletePost_CallsDeleteFromSubscribers() {
         Profile profile = new Profile();
         profile.setUsername("u");
         profile.setPassword("p");
@@ -184,9 +200,24 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).build());
+        postsService.deletePost(DeletePostDto.builder().postId(id).username("u").build());
 
         Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(id);
+    }
+
+    @Test
+    void deletePostByUsername_DeletePost_WrongUsername_NoCallsDeleteFromSubscribers() {
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
+        postsService.addPostByUsername(addPostDto);
+        Long id = postRepository.findAll().getFirst().getId();
+        postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build());
+
+        Mockito.verify(shareSubscribersClient, Mockito.times(0)).deleteFromSubscribers(id);
     }
 
 

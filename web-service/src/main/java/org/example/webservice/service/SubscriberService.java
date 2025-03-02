@@ -1,10 +1,10 @@
 package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.AddAndDeleteSubscriberDto;
-import org.example.webservice.dto.GetSubscribersPageableDto;
-import org.example.webservice.dto.IsSubscriberDto;
-import org.example.webservice.dto.ProfileDto;
+import org.example.webservice.dto.subscribers.AddAndDeleteSubscriberDto;
+import org.example.webservice.dto.subscribers.GetSubscribersPageableDto;
+import org.example.webservice.dto.subscribers.IsSubscriberDto;
+import org.example.webservice.dto.profiles.ProfileDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -44,14 +44,20 @@ public class SubscriberService {
 
     public void subscribe(String profileUsername, String subscriberUsername) {
         if (!subscriberUsername.equals(profileUsername)) {
-            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername(profileUsername).subscriberUsername(subscriberUsername).build();
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
+                    .profileUsername(profileUsername)
+                    .subscriberUsername(subscriberUsername)
+                    .build();
             friendsServiceClient.addSubscriber(dto);
         }
     }
 
     public void unsubscribe(String profileUsername, String subscriberUsername) {
         if (!subscriberUsername.equals(profileUsername)) {
-            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername(profileUsername).subscriberUsername(subscriberUsername).build();
+            AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
+                    .profileUsername(profileUsername)
+                    .subscriberUsername(subscriberUsername)
+                    .build();
             friendsServiceClient.deleteSubscriber(dto);
         }
     }

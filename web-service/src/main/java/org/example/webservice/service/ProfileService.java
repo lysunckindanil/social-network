@@ -1,8 +1,8 @@
 package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.GetProfilesPageableDto;
-import org.example.webservice.dto.ProfileDto;
+import org.example.webservice.dto.profiles.GetProfilesPageableDto;
+import org.example.webservice.dto.profiles.ProfileDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,6 @@ public class ProfileService {
     private int pageSize;
 
     private final ProfileServiceClient profileServiceClient;
-
-    public ProfileDto getProfileByUsername(String username) {
-        return profileServiceClient.getByUsername(username);
-    }
 
     public List<ProfileDto> getAllProfiles(int page) {
         GetProfilesPageableDto dto = GetProfilesPageableDto.builder().page(page).size(pageSize).build();

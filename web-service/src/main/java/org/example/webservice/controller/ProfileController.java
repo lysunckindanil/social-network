@@ -3,7 +3,7 @@ package org.example.webservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.webservice.dto.ProfileDto;
+import org.example.webservice.dto.profiles.ProfileDto;
 import org.example.webservice.model.Profile;
 import org.example.webservice.service.ProfileService;
 import org.example.webservice.service.security.ProfileSecurityService;

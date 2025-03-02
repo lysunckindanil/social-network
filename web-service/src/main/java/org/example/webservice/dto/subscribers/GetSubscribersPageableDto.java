@@ -1,4 +1,4 @@
-package org.example.webservice.dto;
+package org.example.webservice.dto.subscribers;
 
 import lombok.Builder;
 import lombok.Data;

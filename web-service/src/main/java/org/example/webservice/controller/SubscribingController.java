@@ -1,7 +1,7 @@
 package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.ProfileDto;
+import org.example.webservice.dto.profiles.ProfileDto;
 import org.example.webservice.service.SubscriberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

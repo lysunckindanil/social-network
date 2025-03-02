@@ -1,10 +1,10 @@
 package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.dto.AddPostDto;
-import org.example.webservice.dto.DeletePostDto;
-import org.example.webservice.dto.GetPostsPageableDto;
-import org.example.webservice.dto.PostDto;
+import org.example.webservice.dto.posts.AddPostDto;
+import org.example.webservice.dto.posts.DeletePostDto;
+import org.example.webservice.dto.posts.GetPostsPageableDto;
+import org.example.webservice.dto.posts.PostDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -39,9 +39,11 @@ public class PostsService {
         postsServiceClient.addPost(dto);
     }
 
-
-    public void deletePost(DeletePostDto post) {
-        postsServiceClient.deletePost(post);
+    public void deletePost(long postId, String username) {
+        postsServiceClient.deletePost(DeletePostDto.builder()
+                .postId(postId)
+                .username(username)
+                .build());
     }
 
 
