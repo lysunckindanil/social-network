@@ -3,6 +3,7 @@ package org.example.webservice.config;
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.service.security.handler.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -17,6 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Value("${security.remember-me.secret-key}")
+    private String REMEMBER_ME_SECRET_KEY;
+    @Value("${security.remember-me.expiration-time}")
+    private int REMEMBER_ME_SECRET_KEY_EXPIRE;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
 
@@ -44,6 +49,10 @@ public class SecurityConfig {
                         .failureUrl("/profile/login?error")
                 )
                 .httpBasic(Customizer.withDefaults())
+                .rememberMe(remember -> remember
+                        .key(REMEMBER_ME_SECRET_KEY)
+                        .tokenValiditySeconds(REMEMBER_ME_SECRET_KEY_EXPIRE)
+                        .rememberMeParameter("remember-me"))
                 .logout(logout -> logout
                         .logoutUrl("/profile/logout")
                         .logoutSuccessUrl("/profile/login"));
