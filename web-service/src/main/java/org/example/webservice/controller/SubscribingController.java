@@ -29,15 +29,15 @@ public class SubscribingController {
     }
 
     @ResponseBody
-    @PostMapping("/on")
-    public List<ProfileDto> subscribing(Principal principal) {
-        return subscriberService.findProfileSubscribedOn(principal.getName());
+    @PostMapping("/onPageable")
+    public List<ProfileDto> subscribing(Principal principal, @RequestParam int page) {
+        return subscriberService.findProfileSubscribedOn(principal.getName(), page);
     }
 
     @ResponseBody
-    @PostMapping("/by")
-    public List<ProfileDto> subscribed(Principal principal) {
-        return subscriberService.findSubscribers(principal.getName());
+    @PostMapping("/byPageable")
+    public List<ProfileDto> subscribed(Principal principal, @RequestParam int page) {
+        return subscriberService.findProfileSubscribedBy(principal.getName(), page);
     }
 
     @ResponseBody

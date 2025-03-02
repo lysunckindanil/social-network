@@ -49,12 +49,12 @@ class SubscriberServiceTest {
     }
 
     @Test
-    void getSubscribers_AddSubscriber_ReturnsSubscribers() {
+    void findProfileSubscribedBy() {
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user3").build());
 
         Assertions.assertEquals(2, profileSubscriberRepository.findAll().size());
-        Assertions.assertEquals(2, subscriberService.getSubscribers("user1").size());
+        Assertions.assertEquals(2, subscriberService.findProfileSubscribedBy("user1").size());
     }
 
     @Test
@@ -65,10 +65,10 @@ class SubscriberServiceTest {
     }
 
     @Test
-    void getSubscribers_AddVerySubscriberMoreThanOne_AddsOnlyOne() {
+    void findProfileSubscribedBy_AddVerySubscriberMoreThanOne_AddsOnlyOne() {
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
         subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
-        Assertions.assertEquals(1, subscriberService.getSubscribers("user1").size());
+        Assertions.assertEquals(1, subscriberService.findProfileSubscribedBy("user1").size());
     }
 
 
@@ -78,6 +78,6 @@ class SubscriberServiceTest {
         subscriberService.addSubscriber(dto);
         subscriberService.deleteSubscriber(dto);
         Assertions.assertEquals(0, profileSubscriberRepository.count());
-        Assertions.assertEquals(0, subscriberService.getSubscribers("user1").size());
+        Assertions.assertEquals(0, subscriberService.findProfileSubscribedBy("user1").size());
     }
 }

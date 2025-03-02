@@ -2,6 +2,7 @@ package org.example.subscriberservice.function;
 
 import lombok.RequiredArgsConstructor;
 import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.GetSubscribersPageableDto;
 import org.example.subscriberservice.dto.IsSubscriberDto;
 import org.example.subscriberservice.dto.ProfileDto;
 import org.example.subscriberservice.service.SubscriberService;
@@ -18,8 +19,8 @@ public class SubscriberFunction {
     private final SubscriberService subscriberService;
 
     @Bean
-    public Function<String, List<ProfileDto>> findSubscribers() {
-        return subscriberService::getSubscribers;
+    public Function<String, List<ProfileDto>> findProfileSubscribedBy() {
+        return subscriberService::findProfileSubscribedBy;
     }
 
     @Bean
@@ -30,6 +31,16 @@ public class SubscriberFunction {
     @Bean
     public Function<IsSubscriberDto, Boolean> isSubscribedOn() {
         return subscriberService::isProfileSubscribedOn;
+    }
+
+    @Bean
+    public Function<GetSubscribersPageableDto, List<ProfileDto>> findProfileSubscribedByPageable() {
+        return subscriberService::findProfileSubscribedByPageable;
+    }
+
+    @Bean
+    public Function<GetSubscribersPageableDto, List<ProfileDto>> findProfileSubscribedOnPageable() {
+        return subscriberService::getProfileSubscribedOnPageable;
     }
 
     @Bean

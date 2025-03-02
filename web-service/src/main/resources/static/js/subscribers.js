@@ -3,7 +3,7 @@ let page = 0;
 function getProfiles() {
     const token = $("meta[name='_csrf']").attr("content");
     $.ajax({
-        url: '/subscribing/by',
+        url: '/subscribing/byPageable',
         headers: {"X-CSRF-TOKEN": token},
         method: 'post',
         dataType: 'json',

@@ -2,8 +2,10 @@ package org.example.webservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.AddAndDeleteSubscriberDto;
+import org.example.webservice.dto.GetSubscribersPageableDto;
 import org.example.webservice.dto.IsSubscriberDto;
 import org.example.webservice.dto.ProfileDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +18,23 @@ import java.util.List;
 public class SubscriberService {
     private final FriendsServiceClient friendsServiceClient;
 
-    public List<ProfileDto> findSubscribers(String username) {
-        return friendsServiceClient.findSubscribers(username);
+    @Value("${profile.service.page_size}")
+    private int pageSize;
+
+    public List<ProfileDto> findProfileSubscribedBy(String username, int page) {
+        return friendsServiceClient.findProfileSubscribedByPageable(GetSubscribersPageableDto.builder()
+                .profileUsername(username)
+                .page(page)
+                .size(pageSize)
+                .build());
     }
 
-    public List<ProfileDto> findProfileSubscribedOn(String username) {
-        return friendsServiceClient.findProfileSubscribedOn(username);
+    public List<ProfileDto> findProfileSubscribedOn(String username, int page) {
+        return friendsServiceClient.findProfileSubscribedOnPageable(GetSubscribersPageableDto.builder()
+                .profileUsername(username)
+                .page(page)
+                .size(pageSize)
+                .build());
     }
 
     public Boolean isISubscribedOn(String subscriberUsername, String profileUsername) {
@@ -45,11 +58,11 @@ public class SubscriberService {
 
     @FeignClient(name = "subscriber-service", path = "subscriber-service")
     interface FriendsServiceClient {
-        @PostMapping("/findSubscribers")
-        List<ProfileDto> findSubscribers(@RequestBody String username);
+        @PostMapping("/findProfileSubscribedByPageable")
+        List<ProfileDto> findProfileSubscribedByPageable(@RequestBody GetSubscribersPageableDto dto);
 
-        @PostMapping("/findProfileSubscribedOn")
-        List<ProfileDto> findProfileSubscribedOn(@RequestBody String username);
+        @PostMapping("/findProfileSubscribedOnPageable")
+        List<ProfileDto> findProfileSubscribedOnPageable(@RequestBody GetSubscribersPageableDto dto);
 
         @PostMapping("/addSubscriber")
         void addSubscriber(@RequestBody AddAndDeleteSubscriberDto dto);
