@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,18 +36,16 @@ public class SecurityConfig {
                         -> exception
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/profile/register", "/profile/login").permitAll())
-                .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/css/**", "/js/**").permitAll())
-                .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated())
+                        authorize
+                                .requestMatchers("/profile/register", "/profile/login").anonymous()
+                                .requestMatchers("/css/**", "/js/**").permitAll()
+                                .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/profile/login")
                         .loginProcessingUrl("/profile/login")
                         .defaultSuccessUrl("/home")
                         .failureUrl("/profile/login?error")
                 )
-                .httpBasic(Customizer.withDefaults())
                 .rememberMe(remember -> remember
                         .key(REMEMBER_ME_SECRET_KEY)
                         .tokenValiditySeconds(REMEMBER_ME_SECRET_KEY_EXPIRE)
