@@ -111,6 +111,7 @@ services:
       - POSTGRES_DB
       - HIBERNATE_DDL_AUTO
       - API_AUTH_KEY
+      - REDIS_PASSWORD
     depends_on:
       - discovery-service
     ports:
@@ -120,6 +121,9 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASSWORD
+    command: [ "redis-server", "--requirepass", "$REDIS_PASSWORD" ]
 
   gateway-service:
     image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
