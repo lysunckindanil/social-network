@@ -1,7 +1,6 @@
 package org.example.webservice.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.webservice.service.security.handler.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -38,17 +37,17 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .exceptionHandling((exception)
                         -> exception
-                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                        .accessDeniedHandler((req, resp, accessDeniedException) -> resp.sendRedirect("/home")))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/profile/register", "/profile/login").anonymous()
+                                .requestMatchers("/register", "/login").anonymous()
                                 .requestMatchers("/css/**", "/js/**").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(login -> login
-                        .loginPage("/profile/login")
-                        .loginProcessingUrl("/profile/login")
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home")
-                        .failureUrl("/profile/login?error")
+                        .failureUrl("/login?error")
                 )
                 .sessionManagement(
                         session -> session
@@ -60,8 +59,8 @@ public class SecurityConfig {
                         .tokenValiditySeconds(REMEMBER_ME_SECRET_KEY_EXPIRE)
                         .rememberMeParameter("remember-me"))
                 .logout(logout -> logout
-                        .logoutUrl("/profile/logout")
-                        .logoutSuccessUrl("/profile/login"));
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login"));
         return http.build();
     }
 }

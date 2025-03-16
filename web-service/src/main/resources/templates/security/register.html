@@ -18,7 +18,7 @@
         <form
                 class="p-1"
                 th:method="post"
-                th:action="@{/profile/register}"
+                th:action="@{/register}"
                 th:object="${profile}"
         >
             <p
@@ -76,7 +76,7 @@
         <div class="text-center">
             <small
             >Already have an account?
-                <a th:href="@{/users/login}">Sign in</a></small
+                <a th:href="@{/login}">Sign in</a></small
             >
         </div>
     </div>

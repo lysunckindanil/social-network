@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +24,11 @@ public class ProfileServiceImpl implements ProfileService {
     public List<ProfileDto> getProfilesPageable(int page) {
         GetProfilesPageableDto dto = GetProfilesPageableDto.builder().page(page).size(pageSize).build();
         return profileServiceClient.getAllPageable(dto);
+    }
+
+    @Override
+    public Optional<ProfileDto> getProfileByUsername(String username) {
+        return Optional.ofNullable(profileServiceClient.getByUsername(username));
     }
 
     @FeignClient(name = "profile-service", path = "profile-service")

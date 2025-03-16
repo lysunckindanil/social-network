@@ -15,7 +15,7 @@
 <section class="row justify-content-center my-5">
     <div class="col-12 col-md-6 col-lg-3 border rounded p-4 p-lg-5">
         <h2>Sign in</h2>
-        <form th:method="post" th:action="@{/profile/login}">
+        <form th:method="post" th:action="@{/login}">
             <p class="error" th:if="${param.error}">Invalid login or password</p>
             <label for="inputLogin" class="form-label">Username</label>
             <input
@@ -53,7 +53,7 @@
         </div>
 
         <div class="d-grid my-3">
-            <a class="btn btn-outline-dark" th:href="@{/profile/register}"
+            <a class="btn btn-outline-dark" th:href="@{/register}"
             >Create your account</a
             >
         </div>

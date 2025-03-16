@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class ProfileSecurityService implements UserDetailsService {
+public class AuthenticationServiceImpl implements AuthenticationService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileRepository profileRepository;
     private final RoleRepository roleRepository;
@@ -34,11 +34,8 @@ public class ProfileSecurityService implements UserDetailsService {
         }
     }
 
-    public Optional<Profile> getProfileByUsername(String username) {
-        return profileRepository.findByUsername(username);
-    }
-
     @Transactional
+    @Override
     public void createProfile(Profile profile) {
         profile.setPassword(passwordEncoder.encode(profile.getPassword()));
         profile.setRoles(List.of(roleRepository.findByName("ROLE_USER")));
