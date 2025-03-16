@@ -1,19 +1,20 @@
 services:
   zipkin-service:
     image: openzipkin/zipkin
+    restart: on-failure
     ports:
       - "9411:9411"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
-    restart: always
+    restart: on-failure
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
     image: confluentinc/cp-kafka:7.4.4
-    restart: always
+    restart: on-failure
     depends_on:
       - zookeeper
     environment:
@@ -26,13 +27,14 @@ services:
 
   configuration-service:
     image: docker.io/library/configuration-service:0.0.1-SNAPSHOT
+    restart: on-failure
     depends_on:
       - kafka
       - zipkin-service
 
   discovery-service:
     image: docker.io/library/discovery-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     depends_on:
       - configuration-service
     ports:
@@ -40,6 +42,7 @@ services:
 
   postgres:
     image: postgres:latest
+    restart: on-failure
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -51,7 +54,7 @@ services:
 
   subscriber-service:
     image: docker.io/library/subscriber-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -62,7 +65,7 @@ services:
 
   profile-service:
     image: docker.io/library/profile-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -73,7 +76,7 @@ services:
 
   posts-service:
     image: docker.io/library/posts-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -84,7 +87,7 @@ services:
 
   share-posts-service:
     image: docker.io/library/share-posts-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -95,7 +98,7 @@ services:
 
   subscriber-post-service:
     image: docker.io/library/subscriber-post-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -106,7 +109,7 @@ services:
 
   web-service:
     image: docker.io/library/web-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -120,11 +123,12 @@ services:
       - "80:8080"
 
   redis:
+    restart: on-failure
     image: redis:alpine
 
   gateway-service:
     image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
-    restart: always
+    restart: on-failure
     environment:
       - API_AUTH_KEY
     depends_on:
