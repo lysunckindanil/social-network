@@ -26,7 +26,6 @@ services:
 
   configuration-service:
     image: docker.io/library/configuration-service:0.0.1-SNAPSHOT
-    restart: always
     depends_on:
       - kafka
       - zipkin-service
