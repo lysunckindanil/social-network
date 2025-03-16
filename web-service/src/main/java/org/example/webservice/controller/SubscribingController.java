@@ -46,7 +46,6 @@ public class SubscribingController {
         return subscriberService.isISubscribedOn(principal.getName(), profileUsername);
     }
 
-    //todo make pageable
     @ResponseBody
     @PostMapping("/subscribe")
     public String subscribe(Principal principal, @RequestParam("profileUsername") String to_be_subscribed) {
@@ -54,7 +53,6 @@ public class SubscribingController {
         return "subscribed";
     }
 
-    //todo make pageable
     @ResponseBody
     @PostMapping("/unsubscribe")
     public String unsubscribe(Principal principal, @RequestParam("profileUsername") String to_be_unsubscribed) {

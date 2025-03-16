@@ -56,7 +56,6 @@ class PostsServiceTest {
         post.setAuthor(profileRepository.save(profile));
         postRepository.save(post);
         Assertions.assertNotNull(postRepository.findById(post.getId()).get().getCreatedAt());
-
     }
 
     @Test
