@@ -1,27 +1,31 @@
 package org.example.webservice.controller;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
+@RequestMapping("subscribing")
 @RequiredArgsConstructor
 @Controller
-public class HomeController {
+public class SubscribersController {
+
     @ModelAttribute("username")
     public String getUsername(Principal principal) {
         return principal.getName();
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home/home";
+    @GetMapping("/on")
+    public String subscribing() {
+        return "friends/subscribing";
     }
 
-    @GetMapping()
-    public String redirect() {
-        return "redirect:/home";
+    @GetMapping("/by")
+    public String subscribed() {
+        return "friends/subscribed";
     }
 }

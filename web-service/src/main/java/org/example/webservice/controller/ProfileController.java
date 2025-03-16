@@ -19,16 +19,14 @@ import java.util.Optional;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @GetMapping
-    public String index(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
-        return "profile/index";
+    @ModelAttribute("username")
+    public String getUsername(Principal principal) {
+        return principal.getName();
     }
 
-    @ResponseBody
-    @PostMapping
-    public List<ProfileDto> getProfilesPageable(@RequestParam("page") int page) {
-        return profileService.getProfilesPageable(page);
+    @GetMapping
+    public String index() {
+        return "profile/index";
     }
 
     @GetMapping("/{username}")
@@ -36,7 +34,6 @@ public class ProfileController {
         Optional<ProfileDto> profileOptional = profileService.getProfileByUsername(username);
         if (profileOptional.isPresent()) {
             ProfileDto profile = profileOptional.get();
-            model.addAttribute("username", principal.getName());
             model.addAttribute("profile", profile);
             if (principal.getName().equals(username)) {
                 return "profile/my_profile";
@@ -46,5 +43,11 @@ public class ProfileController {
             }
         }
         return "redirect:/home";
+    }
+
+    @ResponseBody
+    @PostMapping
+    public List<ProfileDto> getProfilesPageable(@RequestParam("page") int page) {
+        return profileService.getProfilesPageable(page);
     }
 }
