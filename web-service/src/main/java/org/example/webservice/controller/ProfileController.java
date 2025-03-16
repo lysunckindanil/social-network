@@ -35,21 +35,18 @@ public class ProfileController {
 
     @GetMapping("/{username}")
     public String profile(@PathVariable String username, Principal principal, Model model) {
-
         Optional<Profile> profileOptional = profileSecurityService.getProfileByUsername(username);
         if (profileOptional.isPresent()) {
             Profile profile = profileOptional.get();
             model.addAttribute("username", principal.getName());
             model.addAttribute("profile", profile);
             if (principal.getName().equals(username)) {
-                model.addAttribute("roles", profile.getRoles());
                 return "profile/my_profile";
             } else {
                 model.addAttribute("username_cur", username);
                 return "profile/profile";
             }
         }
-
         return "redirect:/home";
     }
 
@@ -67,7 +64,7 @@ public class ProfileController {
     @ResponseBody
     @PostMapping
     public List<ProfileDto> getProfilesPageable(@RequestParam("page") int page) {
-        return profileService.getAllProfiles(page);
+        return profileService.getProfilesPageable(page);
     }
 
     @PostMapping("/register")

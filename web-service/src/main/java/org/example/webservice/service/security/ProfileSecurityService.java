@@ -45,7 +45,6 @@ public class ProfileSecurityService implements UserDetailsService {
         profileRepository.save(profile);
     }
 
-    // related to spring security
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

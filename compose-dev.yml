@@ -3,7 +3,6 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
-    command: [ "redis-server", "--requirepass", "secret" ]
 
   zipkin:
     image: openzipkin/zipkin
