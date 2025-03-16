@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.profiles;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.profiles.GetProfilesPageableDto;

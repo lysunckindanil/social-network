@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.subscribers;
 
 import org.example.webservice.dto.profiles.ProfileDto;
 

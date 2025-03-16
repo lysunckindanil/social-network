@@ -2,7 +2,7 @@ package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.posts.PostDto;
-import org.example.webservice.service.PostsService;
+import org.example.webservice.service.posts.PostsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +16,29 @@ import java.util.List;
 public class PostsController {
     private final PostsService postsService;
 
+    @ModelAttribute("username")
+    public String getUsername(Principal principal) {
+        return principal.getName();
+    }
+
     @GetMapping
-    public String index(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
+    public String index() {
         return "posts/index";
     }
 
     @GetMapping("/create")
-    public String createPostPage(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
+    public String createPostPage(Model model) {
         model.addAttribute("new_post", PostDto.builder().build());
         return "posts/create";
     }
 
     @PostMapping("/add")
-    public String addPost(@ModelAttribute PostDto post, Principal principal) {
+    public String addPost(@ModelAttribute PostDto post, Principal principal, Model model) {
+        if (post.getLabel() == null || post.getLabel().isEmpty() || post.getContent() == null || post.getContent().isEmpty()) {
+            model.addAttribute("new_post", post);
+            model.addAttribute("error", "Label and content should not be empty");
+            return "posts/create";
+        }
         postsService.addPost(principal.getName(), post);
         return "redirect:/posts";
     }

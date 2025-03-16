@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.posts;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.posts.AddPostDto;

@@ -141,6 +141,7 @@
     <section class="ps-5 pt-3 pe-5">
         <form method="post" th:action="@{/posts/add}" th:object="${new_post}">
             <h1>New post</h1>
+            <p class="error" style="color: red" th:if="${error}" th:text="${error}"></p>
             <div class="mb-3">
                 <label for="formControlInput" class="form-label">Label</label>
                 <input th:field="*{label}" type="text" class="form-control" id="formControlInput"

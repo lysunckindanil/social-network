@@ -2,7 +2,7 @@ package org.example.webservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.profiles.ProfileDto;
-import org.example.webservice.service.SubscriberService;
+import org.example.webservice.service.subscribers.SubscriberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;

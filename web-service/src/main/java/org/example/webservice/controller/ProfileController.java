@@ -3,7 +3,7 @@ package org.example.webservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.webservice.dto.profiles.ProfileDto;
-import org.example.webservice.service.ProfileService;
+import org.example.webservice.service.profiles.ProfileService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

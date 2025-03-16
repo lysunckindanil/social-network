@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.posts;
 
 import org.example.webservice.dto.posts.PostDto;
 

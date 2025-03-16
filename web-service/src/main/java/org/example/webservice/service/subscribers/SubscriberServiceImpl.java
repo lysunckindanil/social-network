@@ -1,4 +1,4 @@
-package org.example.webservice.service;
+package org.example.webservice.service.subscribers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.subscribers.AddAndDeleteSubscriberDto;
