@@ -43,7 +43,6 @@ public class PostsServiceImpl implements PostsService {
                 .build());
     }
 
-
     @FeignClient(name = "posts-service", path = "posts-service")
     interface PostsServiceClient {
         @PostMapping("/getPostsPageable")
