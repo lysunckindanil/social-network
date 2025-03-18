@@ -1,4 +1,4 @@
-package org.example.webservice.controller;
+package org.example.webservice.controller.posts;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.posts.PostDto;
@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RequestMapping("posts")
 @RequiredArgsConstructor
@@ -26,38 +25,21 @@ public class PostsController {
         return "posts/index";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/post")
     public String createPostPage(Model model) {
         model.addAttribute("new_post", PostDto.builder().build());
         return "posts/create";
     }
 
-    @PostMapping("/add")
-    public String addPost(@ModelAttribute PostDto post, Principal principal, Model model) {
-        if (post.getLabel() == null || post.getLabel().isEmpty() || post.getContent() == null || post.getContent().isEmpty()) {
-            model.addAttribute("new_post", post);
-            model.addAttribute("error", "Label and content should not be empty");
-            return "posts/create";
-        }
+    @PostMapping("/post")
+    public String addPost(@ModelAttribute PostDto post, Principal principal) {
         postsService.addPost(principal.getName(), post);
         return "redirect:/posts";
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/post")
     public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
         postsService.deletePost(postId, principal.getName());
         return "redirect:/posts";
-    }
-
-    @ResponseBody
-    @PostMapping("/getPosts")
-    public List<PostDto> getPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
-        return postsService.getPostsPageable(username, page);
-    }
-
-    @ResponseBody
-    @PostMapping("/getSubscriberPosts")
-    public List<PostDto> getSubscriberPostsPageable(@RequestParam("page") int page, @RequestParam("username") String username) {
-        return postsService.getSubscriberPostsPageable(username, page);
     }
 }
