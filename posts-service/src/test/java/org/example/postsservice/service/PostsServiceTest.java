@@ -86,7 +86,19 @@ class PostsServiceTest {
         dto.setPage(2);
         posts = postsService.getPostsByProfileUsernamePageable(dto);
         Assertions.assertTrue(posts.isEmpty());
+    }
 
+    @Test
+    void getPostsByProfileUsernamePageable_UserDoesntExist_Throws() {
+        GetPostsPageableDto dto = GetPostsPageableDto.builder().page(0).size(7).profileUsername("u").build();
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.getPostsByProfileUsernamePageable(dto));
+    }
+
+    @Test
+    void addPostByUsername__UserDoesntExist_Throws() {
+        PostDto postDto = PostDto.builder().label("l").content("c").build();
+        AddPostDto addPostDto = AddPostDto.builder().profileUsername("u").post(postDto).build();
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.addPostByUsername(addPostDto));
     }
 
     @Test
@@ -158,23 +170,22 @@ class PostsServiceTest {
     }
 
     @Test
-    void deletePostByUsername_DeletePost_DeletesFromAuthor() {
-        Profile profile = new Profile();
-        profile.setUsername("u");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-
-        PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addPostDto);
-        Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).username("u").build());
-
-        Assertions.assertEquals(0, postRepository.findByAuthor(profile).size());
+    void deletePostByUsername_UserDoesntExist_Throws() {
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.deletePost(DeletePostDto.builder().postId(1L).username("u").build()));
     }
 
     @Test
-    void deletePostByUsername_DeletePost_WrongUsername_NoDeletesFromAuthor() {
+    void deletePostByUsername_PostDoesntExist_Throws() {
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
+        profileRepository.save(profile);
+
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.deletePost(DeletePostDto.builder().postId(1L).username("u").build()));
+    }
+
+    @Test
+    void deletePostByUsername_DeletePost_WrongUsername_ThrowsAndNoDeletesFromAuthor() {
         Profile profile = new Profile();
         profile.setUsername("u");
         profile.setPassword("p");
@@ -184,7 +195,7 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build());
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build()));
 
         Assertions.assertEquals(1, postRepository.findByAuthor(profile).size());
     }
@@ -205,7 +216,7 @@ class PostsServiceTest {
     }
 
     @Test
-    void deletePostByUsername_DeletePost_WrongUsername_NoCallsDeleteFromSubscribers() {
+    void deletePostByUsername_DeletePost_WrongUsername_ThrowsAndNoCallsDeleteFromSubscribers() {
         Profile profile = new Profile();
         profile.setUsername("u");
         profile.setPassword("p");
@@ -214,7 +225,7 @@ class PostsServiceTest {
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build());
+        Assertions.assertThrows(BadRequestException.class, () -> postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build()));
 
         Mockito.verify(shareSubscribersClient, Mockito.times(0)).deleteFromSubscribers(id);
     }

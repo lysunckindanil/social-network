@@ -1,4 +1,4 @@
-package org.example.webservice.controller;
+package org.example.webservice.controller.subscribers;
 
 
 import lombok.RequiredArgsConstructor;

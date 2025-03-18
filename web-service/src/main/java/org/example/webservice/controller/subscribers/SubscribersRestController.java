@@ -1,4 +1,4 @@
-package org.example.webservice.controller;
+package org.example.webservice.controller.subscribers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.profiles.ProfileDto;
@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("subscribing")
 @RequiredArgsConstructor
 @RestController
-public class SubscribersControllerApi {
+public class SubscribersRestController {
     private final SubscriberService subscriberService;
 
     @PostMapping("/onPageable")

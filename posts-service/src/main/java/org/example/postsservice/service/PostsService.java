@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,24 +24,13 @@ public class PostsService {
     private final PostRepository postRepository;
     private final ShareSubscribersClient shareSubscribersClient;
 
-    public List<PostDto> getPostsByProfileUsername(String username) {
-        Optional<Profile> author = profileRepository.findByUsername(username);
-        if (author.isEmpty())
-            return new ArrayList<>();
-
-        return postRepository.findByAuthor(author.get())
-                .stream()
-                .map(PostsService::wrapPost)
-                .toList();
-    }
-
     public List<PostDto> getPostsByProfileUsernamePageable(GetPostsPageableDto dto) {
         String username = dto.getProfileUsername();
         int page = dto.getPage();
         int size = dto.getSize();
         Optional<Profile> author = profileRepository.findByUsername(username);
         if (author.isEmpty())
-            return new ArrayList<>();
+            throw new BadRequestException("Username does not exist");
 
         Sort.TypedSort<Post> post = Sort.sort(Post.class);
         Sort sort = post.by(Post::getCreatedAt).descending();
@@ -58,9 +46,9 @@ public class PostsService {
     public void addPostByUsername(AddPostDto postDto) {
         Post post = unwrapPost(postDto.getPost());
         Optional<Profile> authorOptional = profileRepository.findByUsername(postDto.getProfileUsername());
-        if (authorOptional.isEmpty()) {
-            return;
-        }
+        if (authorOptional.isEmpty())
+            throw new BadRequestException("Username does not exist");
+
         Profile author = authorOptional.get();
         post.setAuthor(author);
         postRepository.save(post);
@@ -70,15 +58,20 @@ public class PostsService {
     @Transactional
     public void deletePost(DeletePostDto postDto) {
         Optional<Profile> author = profileRepository.findByUsername(postDto.getUsername());
-        if (author.isEmpty()) return;
+        if (author.isEmpty())
+            throw new BadRequestException("Username does not exist");
+
         Optional<Post> postToDeleteOptional = postRepository.findById(postDto.getPostId());
-        if (postToDeleteOptional.isPresent()) {
-            Post postToDelete = postToDeleteOptional.get();
-            if (!postToDelete.getAuthor().getId().equals(author.get().getId())) return;
-            postToDelete.setAuthor(null);
-            postRepository.save(postToDelete);
-            shareSubscribersClient.deleteFromSubscribers(postToDelete.getId());
-        }
+        if (postToDeleteOptional.isEmpty())
+            throw new BadRequestException("Post does not exist");
+
+        Post postToDelete = postToDeleteOptional.get();
+        if (!postToDelete.getAuthor().getId().equals(author.get().getId()))
+            throw new BadRequestException("Post does not belong to this profile");
+
+        postToDelete.setAuthor(null);
+        postRepository.save(postToDelete);
+        shareSubscribersClient.deleteFromSubscribers(postToDelete.getId());
     }
 
     private static Post unwrapPost(PostDto post) {

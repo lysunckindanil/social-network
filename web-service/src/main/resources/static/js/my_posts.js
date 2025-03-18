@@ -4,7 +4,7 @@ function getPosts() {
     const token = $("meta[name='_csrf']").attr("content");
     const username = document.getElementById("username").innerText
     $.ajax({
-        url: '/posts/getPosts',
+        url: '/posts',
         headers: {"X-CSRF-TOKEN": token},
         method: 'post',
         dataType: 'json',

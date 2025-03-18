@@ -152,7 +152,8 @@
                     <p class="card-text postContent">
                         Content
                     </p>
-                    <form method="post" th:action="@{/posts/delete}">
+                    <form method="post" th:action="@{/posts/post}">
+                        <input type="hidden" name="_method" value="delete">
                         <button name="postId" class="deletePostButton btn btn-sm btn-danger">Delete post</button>
                     </form>
                 </div>
