@@ -1,8 +1,10 @@
 package org.example.profileservice.service;
 
+import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.model.Profile;
 import org.example.profileservice.repo.ProfileRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -40,6 +42,14 @@ class ProfileServiceTest {
     }
 
     @Test
+    void getProfileByUsername_UserDoesntExist_Throws() {
+        Profile profile = new Profile();
+        profile.setUsername("u");
+        profile.setPassword("p");
+        Assertions.assertThrows(BadRequestException.class, () -> profileService.getProfileByUsername(profile.getUsername()));
+    }
+
+    @Test
     void getAllProfiles_AddProfiles_ReturnsAllProfiles() {
         Profile profile = new Profile();
         profile.setUsername("u");
@@ -49,8 +59,8 @@ class ProfileServiceTest {
         profile.setUsername("u1");
         profile.setPassword("p");
         profileRepository.save(profile);
-        assertEquals(2, profileService.getAllProfiles().size());
-        assertEquals("u", profileService.getAllProfiles().getFirst().getUsername());
-        assertEquals("u1", profileService.getAllProfiles().getLast().getUsername());
+        assertEquals(2, profileService.getAllProfilesPageable(GetProfilesPageableDto.builder().page(0).size(3).build()).size());
     }
+
+
 }

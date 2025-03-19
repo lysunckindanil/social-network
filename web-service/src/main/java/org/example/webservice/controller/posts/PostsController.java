@@ -1,7 +1,8 @@
 package org.example.webservice.controller.posts;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.webservice.dto.posts.PostDto;
 import org.example.webservice.service.posts.PostsService;
@@ -9,14 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 
 @RequestMapping("posts")
 @RequiredArgsConstructor
 @Controller
 public class PostsController {
     private final PostsService postsService;
+    private final ObjectMapper objectMapper;
 
     @ModelAttribute("username")
     public String getUsername(Principal principal) {
@@ -35,12 +37,12 @@ public class PostsController {
     }
 
     @PostMapping("/post")
-    public String addPost(@ModelAttribute PostDto post, Principal principal, Model model) {
+    public String addPost(@ModelAttribute PostDto post, Principal principal, Model model) throws JsonProcessingException {
         try {
             postsService.addPost(principal.getName(), post);
         } catch (FeignException e) {
             model.addAttribute("new_post", post);
-            model.addAttribute("error", e.contentUTF8());
+            model.addAttribute("error", objectMapper.readValue(e.contentUTF8(), HashMap.class).get("error"));
             return "posts/create";
         }
         return "redirect:/posts";
@@ -50,10 +52,5 @@ public class PostsController {
     public String deletePost(@RequestParam("postId") Long postId, Principal principal) {
         postsService.deletePost(postId, principal.getName());
         return "redirect:/posts";
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public void handleFeignException(FeignException e, HttpServletResponse response) throws IOException {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.contentUTF8());
     }
 }

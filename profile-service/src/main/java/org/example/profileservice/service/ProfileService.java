@@ -20,15 +20,8 @@ public class ProfileService {
 
     public ProfileDto getProfileByUsername(String username) {
         Optional<Profile> profileOptional = profileRepository.findByUsername(username);
-        if (profileOptional.isEmpty()) return null;
+        if (profileOptional.isEmpty()) throw new BadRequestException("Invalid username");
         return wrapToDto(profileOptional.get());
-    }
-
-    public List<ProfileDto> getAllProfiles() {
-        return profileRepository.findAll()
-                .stream()
-                .map(ProfileService::wrapToDto)
-                .toList();
     }
 
     public List<ProfileDto> getAllProfilesPageable(GetProfilesPageableDto dto) {

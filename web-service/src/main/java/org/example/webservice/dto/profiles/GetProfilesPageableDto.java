@@ -6,6 +6,6 @@ import lombok.Data;
 @Builder
 @Data
 public class GetProfilesPageableDto {
-    private final int page;
-    private final int size;
+    Integer page;
+    Integer size;
 }
