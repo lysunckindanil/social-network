@@ -1,6 +1,7 @@
 package org.example.subscriberservice.service;
 
 import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
+import org.example.subscriberservice.dto.GetSubscribersPageableDto;
 import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
@@ -49,35 +50,137 @@ class SubscriberServiceTest {
     }
 
     @Test
-    void findProfileSubscribedBy() {
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user3").build());
+    void findProfileSubscribedByPageable() {
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user2")
+                .build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user3")
+                .build());
 
         Assertions.assertEquals(2, profileSubscriberRepository.findAll().size());
-        Assertions.assertEquals(2, subscriberService.findProfileSubscribedBy("user1").size());
+        Assertions.assertEquals(2, subscriberService.findProfileSubscribedByPageable(GetSubscribersPageableDto
+                        .builder()
+                        .profileUsername("user1")
+                        .page(0)
+                        .size(5)
+                        .build())
+                .size());
     }
 
     @Test
-    void getProfileSubscribedOn() {
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user2").subscriberUsername("user1").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user3").subscriberUsername("user1").build());
-        Assertions.assertEquals(2, subscriberService.getProfileSubscribedOn("user1").size());
+    void findProfileSubscribedByPageable_UserDoesNotExist_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.findProfileSubscribedByPageable(
+                GetSubscribersPageableDto.builder()
+                        .profileUsername("user10")
+                        .page(1)
+                        .size(1)
+                        .build()));
+    }
+
+
+    @Test
+    void findProfileSubscribedOnPageable() {
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user2")
+                .subscriberUsername("user1")
+                .build());
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user3")
+                .subscriberUsername("user1")
+                .build());
+        Assertions.assertEquals(2, subscriberService.findProfileSubscribedOnPageable(GetSubscribersPageableDto
+                        .builder()
+                        .profileUsername("user1")
+                        .page(0)
+                        .size(5)
+                        .build())
+                .size());
+
     }
 
     @Test
-    void findProfileSubscribedBy_AddVerySubscriberMoreThanOne_AddsOnlyOne() {
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
-        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build());
-        Assertions.assertEquals(1, subscriberService.findProfileSubscribedBy("user1").size());
+    void findProfileSubscribedOnPageable_UserDoesNotExist_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.findProfileSubscribedOnPageable(
+                GetSubscribersPageableDto.builder()
+                        .profileUsername("user10")
+                        .page(1)
+                        .size(1)
+                        .build()));
     }
 
+    @Test
+    void addSubscriber_RelationYetExists_ThrowsException() {
+        subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user2")
+                .build());
+
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user2")
+                .build()));
+    }
+
+    @Test
+    void addSubscriber_UsernamesEquals_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user1")
+                .build()));
+    }
+
+    @Test
+    void addSubscriber_UserDoesNotExist_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user10")
+                .subscriberUsername("user2")
+                .build()));
+
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.addSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user30")
+                .build()));
+    }
 
     @Test
     void deleteSubscriber_DeleteSubscriber_SubscriberDeleted() {
-        AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder().profileUsername("user1").subscriberUsername("user2").build();
+        AddAndDeleteSubscriberDto dto = AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user2")
+                .build();
         subscriberService.addSubscriber(dto);
         subscriberService.deleteSubscriber(dto);
         Assertions.assertEquals(0, profileSubscriberRepository.count());
-        Assertions.assertEquals(0, subscriberService.findProfileSubscribedBy("user1").size());
+        Assertions.assertEquals(0, subscriberService.findProfileSubscribedByPageable(GetSubscribersPageableDto
+                        .builder()
+                        .profileUsername("user1")
+                        .page(0)
+                        .size(5)
+                        .build())
+                .size());
+    }
+
+    @Test
+    void deleteSubscriber_RelationDoesNotExist_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.deleteSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user2")
+                .build()));
+    }
+
+    @Test
+    void deleteSubscriber_UserDoesNotExist_ThrowsException() {
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.deleteSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user10")
+                .subscriberUsername("user2")
+                .build()));
+
+        Assertions.assertThrows(BadRequestException.class, () -> subscriberService.deleteSubscriber(AddAndDeleteSubscriberDto.builder()
+                .profileUsername("user1")
+                .subscriberUsername("user30")
+                .build()));
     }
 }
