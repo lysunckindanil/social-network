@@ -1,4 +1,4 @@
-package org.example.subscriberservice.service;
+package org.example.postsservice.util;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {

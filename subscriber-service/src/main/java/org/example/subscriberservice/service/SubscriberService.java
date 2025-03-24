@@ -10,6 +10,7 @@ import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.model.ProfileSubscriber;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
+import org.example.subscriberservice.util.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

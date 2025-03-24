@@ -1,10 +1,10 @@
 package org.example.webservice.service.subscribers;
 
 import lombok.RequiredArgsConstructor;
+import org.example.webservice.dto.profiles.ProfileDto;
 import org.example.webservice.dto.subscribers.AddAndDeleteSubscriberDto;
 import org.example.webservice.dto.subscribers.GetSubscribersPageableDto;
 import org.example.webservice.dto.subscribers.IsSubscriberDto;
-import org.example.webservice.dto.profiles.ProfileDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;

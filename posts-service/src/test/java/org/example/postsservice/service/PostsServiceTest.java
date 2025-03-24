@@ -8,6 +8,7 @@ import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
 import org.example.postsservice.repo.ProfileRepository;
+import org.example.postsservice.util.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

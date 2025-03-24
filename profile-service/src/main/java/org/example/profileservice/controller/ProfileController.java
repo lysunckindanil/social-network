@@ -4,14 +4,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
-import org.example.profileservice.util.BadRequestException;
 import org.example.profileservice.service.ProfileService;
+import org.example.profileservice.util.BadRequestException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +30,7 @@ public class ProfileController {
     @PostMapping("/getAllPageable")
     List<ProfileDto> getAllPageable(@RequestBody @Valid GetProfilesPageableDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return profileService.getAllProfilesPageable(dto);
     }

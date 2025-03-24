@@ -9,6 +9,7 @@ import org.example.postsservice.model.Post;
 import org.example.postsservice.model.Profile;
 import org.example.postsservice.repo.PostRepository;
 import org.example.postsservice.repo.ProfileRepository;
+import org.example.postsservice.util.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

@@ -6,8 +6,8 @@ import org.example.subscriberservice.dto.AddAndDeleteSubscriberDto;
 import org.example.subscriberservice.dto.GetSubscribersPageableDto;
 import org.example.subscriberservice.dto.IsSubscriberDto;
 import org.example.subscriberservice.dto.ProfileDto;
-import org.example.subscriberservice.service.BadRequestException;
 import org.example.subscriberservice.service.SubscriberService;
+import org.example.subscriberservice.util.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,7 +25,7 @@ public class SubscriberController {
     @PostMapping("/isSubscribedOn")
     public Boolean isSubscribedOn(@Valid @RequestBody IsSubscriberDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return subscriberService.isProfileSubscribedOn(dto);
     }
@@ -32,7 +33,7 @@ public class SubscriberController {
     @PostMapping("/findProfileSubscribedByPageable")
     public List<ProfileDto> findProfileSubscribedByPageable(@Valid @RequestBody GetSubscribersPageableDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return subscriberService.findProfileSubscribedByPageable(dto);
     }
@@ -40,7 +41,7 @@ public class SubscriberController {
     @PostMapping("/findProfileSubscribedOnPageable")
     public List<ProfileDto> findProfileSubscribedOnPageable(@Valid @RequestBody GetSubscribersPageableDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         return subscriberService.findProfileSubscribedOnPageable(dto);
     }
@@ -48,7 +49,7 @@ public class SubscriberController {
     @PostMapping("/addSubscriber")
     public ResponseEntity<Void> addSubscriber(@Valid @RequestBody AddAndDeleteSubscriberDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         subscriberService.addSubscriber(dto);
         return ResponseEntity.noContent().build();
@@ -57,7 +58,7 @@ public class SubscriberController {
     @PostMapping("/deleteSubscriber")
     public ResponseEntity<Void> deleteSubscriber(@Valid @RequestBody AddAndDeleteSubscriberDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
+            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
         }
         subscriberService.deleteSubscriber(dto);
         return ResponseEntity.noContent().build();

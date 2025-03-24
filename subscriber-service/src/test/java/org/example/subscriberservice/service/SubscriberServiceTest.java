@@ -5,6 +5,7 @@ import org.example.subscriberservice.dto.GetSubscribersPageableDto;
 import org.example.subscriberservice.model.Profile;
 import org.example.subscriberservice.repo.ProfileRepository;
 import org.example.subscriberservice.repo.ProfileSubscriberRepository;
+import org.example.subscriberservice.util.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
