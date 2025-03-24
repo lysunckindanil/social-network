@@ -53,12 +53,11 @@ class ProfileControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(dto))
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
-        dto.setSize(1);
-        dto.setPage(null);
+        GetProfilesPageableDto dto1 = GetProfilesPageableDto.builder().size(1).build();
         mvc.perform(
                 post("/getAllPageable")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(dto))
+                        .content(mapper.writeValueAsString(dto1))
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 

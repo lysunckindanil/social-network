@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class GetProfilesPageableDto {
     @NotNull
-    Integer page;
+    private final Integer page;
     @NotNull
-    Integer size;
+    private final Integer size;
 }

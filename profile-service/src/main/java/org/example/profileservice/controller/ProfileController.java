@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
-import org.example.profileservice.service.BadRequestException;
+import org.example.profileservice.util.BadRequestException;
 import org.example.profileservice.service.ProfileService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

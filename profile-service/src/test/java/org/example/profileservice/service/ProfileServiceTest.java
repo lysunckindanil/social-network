@@ -4,6 +4,7 @@ import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.model.Profile;
 import org.example.profileservice.repo.ProfileRepository;
+import org.example.profileservice.util.BadRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

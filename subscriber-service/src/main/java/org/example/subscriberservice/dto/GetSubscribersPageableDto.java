@@ -9,9 +9,9 @@ import lombok.Data;
 @Builder
 public class GetSubscribersPageableDto {
     @NotEmpty(message = "Profile username should not be empty")
-    String profileUsername;
+    private String profileUsername;
     @NotNull(message = "Number of page should not be empty")
-    Integer page;
+    private Integer page;
     @NotNull(message = "Size of page should not be empty")
-    Integer size;
+    private Integer size;
 }

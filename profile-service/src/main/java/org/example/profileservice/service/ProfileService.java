@@ -5,6 +5,7 @@ import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.model.Profile;
 import org.example.profileservice.repo.ProfileRepository;
+import org.example.profileservice.util.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
