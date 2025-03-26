@@ -1,6 +1,6 @@
 package org.example.postsservice.controller;
 
-import jakarta.validation.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.postsservice.dto.AddPostDto;
 import org.example.postsservice.dto.DeletePostDto;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,17 +36,6 @@ public class PostsController {
     public ResponseEntity<Void> addPost(@RequestBody @Valid AddPostDto dto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors().stream().findAny().get().getDefaultMessage());
-        }
-        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            Validator validator = factory.getValidator();
-            Set<ConstraintViolation<PostDto>> violations = validator.validate(dto.getPost());
-            if (!violations.isEmpty()) {
-                if (violations.size() == 2)
-                    throw new BadRequestException("Label and content should not be empty");
-                throw new BadRequestException(violations.stream().findAny().get().getMessage());
-            }
-        } catch (ValidationException e) {
-            throw new BadRequestException(e.getMessage());
         }
 
         postsService.addPostByUsername(dto);

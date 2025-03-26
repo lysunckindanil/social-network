@@ -8,10 +8,10 @@ import lombok.Data;
 @Builder
 @Data
 public class GetPostsPageableDto {
-    @NotEmpty
+    @NotEmpty(message = "Username should not be empty")
     private String profileUsername;
-    @NotNull
+    @NotNull(message = "Page should not be empty")
     private Integer page;
-    @NotNull
+    @NotNull(message = "Size should not be empty")
     private Integer size;
 }
