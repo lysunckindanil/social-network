@@ -20,17 +20,6 @@ public class SubscribersPostService {
     private final PostSubscriberRepository postSubscriberRepository;
     private final ProfileRepository profileRepository;
 
-    public List<PostDto> getSubscribersPosts(String username) {
-        Optional<Profile> profileOptional = profileRepository.findByUsername(username);
-        if (profileOptional.isEmpty()) return new ArrayList<>();
-        Profile profile = profileOptional.get();
-
-        return postSubscriberRepository.findPostsBySubscriber(profile)
-                .stream()
-                .map(SubscribersPostService::wrapPost)
-                .toList();
-    }
-
     public List<PostDto> getSubscribersPostsPageable(GetPostsPageableDto dto) {
         String username = dto.getProfileUsername();
         int page = dto.getPage();

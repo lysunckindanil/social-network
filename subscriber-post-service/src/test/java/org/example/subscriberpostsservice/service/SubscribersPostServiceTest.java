@@ -41,54 +41,6 @@ class SubscribersPostServiceTest {
     }
 
     @Test
-    void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPosts() {
-        Profile profile = new Profile();
-        profile.setUsername("user");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-
-        Post post = new Post();
-        post.setLabel("l");
-        post.setContent("c");
-        post.setAuthor(profile);
-        postRepository.save(post);
-        postSubscriberRepository.save(new PostSubscriber(post, profile));
-
-        post = new Post();
-        post.setLabel("l");
-        post.setContent("c");
-        post.setAuthor(profile);
-        postRepository.save(post);
-        postSubscriberRepository.save(new PostSubscriber(post, profile));
-
-
-        Assertions.assertEquals(2, subscribersPostService.getSubscribersPosts("user").size());
-    }
-
-    @Test
-    void getSubscribersPosts_AuthorNull_ReturnsEmptyList() {
-        Profile profile = new Profile();
-        profile.setUsername("user");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-
-        Post post = new Post();
-        post.setLabel("l");
-        post.setContent("c");
-        postRepository.save(post);
-        postSubscriberRepository.save(new PostSubscriber(post, profile));
-
-        post = new Post();
-        post.setLabel("l");
-        post.setContent("c");
-        postRepository.save(post);
-        postSubscriberRepository.save(new PostSubscriber(post, profile));
-
-        Assertions.assertEquals(2, postSubscriberRepository.count());
-        Assertions.assertEquals(0, subscribersPostService.getSubscribersPosts("user").size());
-    }
-
-    @Test
     void getSubscribersPosts_AddedPosts_ReturnsQuantityOfPostsPageable() {
         Profile profile = new Profile();
         profile.setUsername("user");
@@ -113,20 +65,4 @@ class SubscribersPostServiceTest {
         List<PostDto> posts = subscribersPostService.getSubscribersPostsPageable(dto);
         Assertions.assertEquals(2, posts.size());
     }
-
-    @Test
-    void getSubscribersPosts_ZeroPosts_ReturnsZeroPosts() {
-        Profile profile = new Profile();
-        profile.setUsername("user");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-        Assertions.assertEquals(0, subscribersPostService.getSubscribersPosts("user").size());
-    }
-
-
-    @Test
-    void getSubscribersPosts_ProfileNotExists_ReturnsZeroPosts() {
-        Assertions.assertEquals(0, subscribersPostService.getSubscribersPosts("user").size());
-    }
-
 }

@@ -24,7 +24,6 @@ public class SubscriberPostServiceImpl implements SubscriberPostService {
         return subscriberPostServiceClient.getPosts(dto);
     }
 
-
     @FeignClient(name = "subscriber-post-service", path = "subscriber-post-service")
     interface SubscriberPostServiceClient {
         @PostMapping("/getByUsernamePageable")

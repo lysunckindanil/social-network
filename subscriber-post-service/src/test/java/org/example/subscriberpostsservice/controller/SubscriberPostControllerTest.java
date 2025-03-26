@@ -32,24 +32,6 @@ class SubscriberPostControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    void getByUsername_UsernameNotProvided_ThrowsException() throws Exception {
-        mockMvc.perform(
-                post("/getByUsername")
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
-        Mockito.verify(subscribersPostService, Mockito.never()).getSubscribersPosts(Mockito.anyString());
-    }
-
-    @Test
-    void getByUsername_UsernameProvided_ServiceCalled() throws Exception {
-        mockMvc.perform(
-                post("/getByUsername")
-                        .content("username")
-        ).andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(subscribersPostService, Mockito.times(1))
-                .getSubscribersPosts("username");
-    }
-
-    @Test
     void getByUsernamePageable_InvalidData_ThrowsException() throws Exception {
         mockMvc.perform(
                 post("/getByUsernamePageable")

@@ -6,8 +6,10 @@ import org.example.webservice.dto.profiles.ProfileDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +35,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @FeignClient(name = "profile-service", path = "profile-service")
     interface ProfileServiceClient {
-        @PostMapping("/getByUsername")
-        ProfileDto getByUsername(@RequestBody String username);
+        @GetMapping("/getByUsername")
+        ProfileDto getByUsername(@RequestParam("username") String username);
 
         @PostMapping("/getAllPageable")
         List<ProfileDto> getAllPageable(@RequestBody GetProfilesPageableDto dto);
