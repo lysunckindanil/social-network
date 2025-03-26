@@ -1,4 +1,4 @@
-package org.example.sharepostsservice.model;
+package org.example.subscriberpostsservice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,20 +12,20 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "post_subscriber")
-public class PostSubscriber {
+@Table(name = "profile_subscriber")
+public class ProfileSubscriber {
     @Embeddable
     public static class Id implements Serializable {
-        @Column(name = "post_id")
-        private Long postId;
+        @Column(name = "profile_id")
+        private Long profileId;
         @Column(name = "subscriber_id")
         private Long subscriberId;
 
         public Id() {
         }
 
-        public Id(Long postId, Long subscriberId) {
-            this.postId = postId;
+        public Id(Long profileId, Long subscriberId) {
+            this.profileId = profileId;
             this.subscriberId = subscriberId;
         }
 
@@ -33,23 +33,24 @@ public class PostSubscriber {
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) return false;
             Id id = (Id) o;
-            return Objects.equals(postId, id.postId) && Objects.equals(subscriberId, id.subscriberId);
+            return Objects.equals(profileId, id.profileId) && Objects.equals(subscriberId, id.subscriberId);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(postId, subscriberId);
+            return Objects.hash(profileId, subscriberId);
         }
     }
 
     @EmbeddedId
     private Id id = new Id();
 
-    @MapsId("postId")
+    @MapsId("profileId")
     @ManyToOne
     @JoinColumn(
-            name = "post_id", insertable = false, updatable = false)
-    private Post post;
+            name = "profile_id", insertable = false, updatable = false)
+    private Profile profile;
+
 
     @MapsId("subscriberId")
     @ManyToOne
@@ -57,10 +58,9 @@ public class PostSubscriber {
             name = "subscriber_id", insertable = false, updatable = false)
     private Profile subscriber;
 
-
-    public PostSubscriber(Post post, Profile subscriber) {
-        this.id = new Id(post.getId(), subscriber.getId());
-        this.post = post;
+    public ProfileSubscriber(Profile profile, Profile subscriber) {
+        this.id = new Id(profile.getId(), subscriber.getId());
+        this.profile = profile;
         this.subscriber = subscriber;
     }
 }

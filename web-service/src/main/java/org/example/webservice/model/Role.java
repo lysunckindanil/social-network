@@ -13,7 +13,9 @@ import lombok.Setter;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Override

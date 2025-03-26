@@ -55,7 +55,6 @@
     <module>profile-service</module>
     <module>subscriber-service</module>
     <module>posts-service</module>
-    <module>share-posts-service</module>
     <module>subscriber-post-service</module>
     <module>web-service</module>
   </modules>

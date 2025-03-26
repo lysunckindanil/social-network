@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -35,16 +34,14 @@ class PostsServiceTest {
     private PostRepository postRepository;
     @Autowired
     private ProfileRepository profileRepository;
-    private ShareSubscribersClient shareSubscribersClient;
 
     private PostsService postsService;
 
     @BeforeAll
     void setUp() {
-        shareSubscribersClient = Mockito.mock(ShareSubscribersClient.class);
-        Mockito.doNothing().when(shareSubscribersClient).shareSubscribers(Mockito.any(), Mockito.any());
-        postsService = new PostsService(profileRepository, postRepository, shareSubscribersClient);
+        postsService = new PostsService(profileRepository, postRepository);
     }
+
 
     @Test
     void createPost_CreatedAtIsNotNull() {
@@ -108,20 +105,6 @@ class PostsServiceTest {
     }
 
     @Test
-    void addPostByUsername_AddPosts_CallsSharePostsToSubscribers() {
-        Profile profile = new Profile();
-        profile.setUsername("u");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-        PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addPostDto);
-        Long postId = postRepository.findAll().getFirst().getId();
-        Long profileId = profile.getId();
-        Mockito.verify(shareSubscribersClient).shareSubscribers(profileId, postId);
-    }
-
-    @Test
     void addPostByUsername_AddPostsDiffUsers_AddsPostsToRepository() {
         Profile profile = new Profile();
         profile.setUsername("u");
@@ -177,7 +160,7 @@ class PostsServiceTest {
     }
 
     @Test
-    void deletePostByUsername_DeletePost_WrongUsername_ThrowsAndNoDeletesFromAuthor() {
+    void deletePostByUsername_DeletePost_WrongUsername_Throws() {
         Profile profile = new Profile();
         profile.setUsername("u");
         profile.setPassword("p");
@@ -193,34 +176,20 @@ class PostsServiceTest {
     }
 
     @Test
-    void deletePostByUsername_DeletePost_CallsDeleteFromSubscribers() {
+    void deletePostByUsername_DeletePost_CorrectData_Deletes() {
         Profile profile = new Profile();
         profile.setUsername("u");
         profile.setPassword("p");
         profileRepository.save(profile);
+
         PostDto postDto = PostDto.builder().label("l").content("c").build();
         AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
         postsService.addPostByUsername(addPostDto);
         Long id = postRepository.findAll().getFirst().getId();
-        postsService.deletePost(DeletePostDto.builder().postId(id).username("u").build());
+        Assertions.assertDoesNotThrow(() -> postsService.deletePost(DeletePostDto.builder().postId(id).username("u").build()));
 
-        Mockito.verify(shareSubscribersClient, Mockito.times(1)).deleteFromSubscribers(id);
+        Assertions.assertEquals(0, postRepository.findByAuthor(profile).size());
+        Assertions.assertEquals(0, postRepository.count());
     }
-
-    @Test
-    void deletePostByUsername_DeletePost_WrongUsername_ThrowsAndNoCallsDeleteFromSubscribers() {
-        Profile profile = new Profile();
-        profile.setUsername("u");
-        profile.setPassword("p");
-        profileRepository.save(profile);
-        PostDto postDto = PostDto.builder().label("l").content("c").build();
-        AddPostDto addPostDto = AddPostDto.builder().profileUsername(profile.getUsername()).post(postDto).build();
-        postsService.addPostByUsername(addPostDto);
-        Long id = postRepository.findAll().getFirst().getId();
-        Assertions.assertThrows(BadRequestException.class, () -> postsService.deletePost(DeletePostDto.builder().postId(id).username("u1").build()));
-
-        Mockito.verify(shareSubscribersClient, Mockito.times(0)).deleteFromSubscribers(id);
-    }
-
 
 }

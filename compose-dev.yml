@@ -8,3 +8,13 @@ services:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
+
+  postgres:
+    image: postgres:latest
+    restart: on-failure
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: social_network_db
+    ports:
+      - "5500:5432"

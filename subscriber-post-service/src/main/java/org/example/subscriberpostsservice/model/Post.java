@@ -1,12 +1,12 @@
 package org.example.subscriberpostsservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -17,15 +17,15 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @NotEmpty
+    @Column(nullable = false, name = "label")
     private String label;
-    @NotEmpty
+    @Column(nullable = false, name = "content")
     private String content;
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false, name = "created_at")
     private LocalDateTime createdAt;
 
-    @JoinColumn(name = "author_id")
-    @ManyToOne()
+    @JoinColumn(name = "author_id", nullable = false)
+    @ManyToOne
     private Profile author;
 }

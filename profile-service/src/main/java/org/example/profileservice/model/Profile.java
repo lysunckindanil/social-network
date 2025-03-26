@@ -1,7 +1,6 @@
 package org.example.profileservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,11 +13,12 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @NotEmpty
-    @Column(unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @NotEmpty
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "email")
     private String email;
+    @Column(name = "photo_url")
     private String photoUrl;
 }

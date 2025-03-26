@@ -26,9 +26,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
     ports:
       - "5432:5432"
 
@@ -36,10 +36,9 @@ services:
     image: docker.io/library/subscriber-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - HIBERNATE_DDL_AUTO
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
     depends_on:
       - discovery-service
 
@@ -47,10 +46,9 @@ services:
     image: docker.io/library/profile-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - HIBERNATE_DDL_AUTO
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
     depends_on:
       - discovery-service
 
@@ -58,10 +56,9 @@ services:
     image: docker.io/library/posts-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - HIBERNATE_DDL_AUTO
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
     depends_on:
       - discovery-service
 
@@ -69,10 +66,9 @@ services:
     image: docker.io/library/subscriber-post-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - HIBERNATE_DDL_AUTO
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
     depends_on:
       - discovery-service
 
@@ -80,12 +76,11 @@ services:
     image: docker.io/library/web-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - HIBERNATE_DDL_AUTO
-      - API_AUTH_KEY
-      - REDIS_PASSWORD
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: social_network_db
+      API_AUTH_KEY: secret
+      REDIS_PASSWORD: secret
     depends_on:
       - discovery-service
     ports:
@@ -99,7 +94,7 @@ services:
     image: docker.io/library/gateway-service:0.0.1-SNAPSHOT
     restart: on-failure
     environment:
-      - API_AUTH_KEY
+      API_AUTH_KEY: secret
     depends_on:
       - discovery-service
 

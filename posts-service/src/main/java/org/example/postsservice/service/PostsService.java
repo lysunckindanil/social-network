@@ -23,7 +23,6 @@ import java.util.Optional;
 public class PostsService {
     private final ProfileRepository profileRepository;
     private final PostRepository postRepository;
-    private final ShareSubscribersClient shareSubscribersClient;
 
     @Transactional(readOnly = true)
     public List<PostDto> getPostsByProfileUsernamePageable(GetPostsPageableDto dto) {
@@ -52,7 +51,6 @@ public class PostsService {
         Profile author = authorOptional.get();
         post.setAuthor(author);
         postRepository.save(post);
-        shareSubscribersClient.shareSubscribers(author.getId(), post.getId());
     }
 
     @Transactional
@@ -69,9 +67,7 @@ public class PostsService {
         if (!postToDelete.getAuthor().getId().equals(author.get().getId()))
             throw new BadRequestException("Post does not belong to this profile");
 
-        postToDelete.setAuthor(null);
-        postRepository.save(postToDelete);
-        shareSubscribersClient.deleteFromSubscribers(postToDelete.getId());
+        postRepository.delete(postToDelete);
     }
 
     private static Post unwrapPost(PostDto post) {

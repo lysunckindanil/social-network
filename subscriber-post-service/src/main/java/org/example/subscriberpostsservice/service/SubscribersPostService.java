@@ -5,34 +5,33 @@ import org.example.subscriberpostsservice.dto.GetPostsPageableDto;
 import org.example.subscriberpostsservice.dto.PostDto;
 import org.example.subscriberpostsservice.model.Post;
 import org.example.subscriberpostsservice.model.Profile;
-import org.example.subscriberpostsservice.repo.PostSubscriberRepository;
+import org.example.subscriberpostsservice.repo.PostRepository;
 import org.example.subscriberpostsservice.repo.ProfileRepository;
+import org.example.subscriberpostsservice.util.BadRequestException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SubscribersPostService {
-    private final PostSubscriberRepository postSubscriberRepository;
     private final ProfileRepository profileRepository;
+    private final PostRepository postRepository;
 
     public List<PostDto> getSubscribersPostsPageable(GetPostsPageableDto dto) {
         String username = dto.getProfileUsername();
         int page = dto.getPage();
         int size = dto.getSize();
         Optional<Profile> author = profileRepository.findByUsername(username);
-        if (author.isEmpty())
-            return new ArrayList<>();
+        if (author.isEmpty()) throw new BadRequestException("Username not found");
 
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return postSubscriberRepository.findPostsBySubscriberPageableOrderByCreatedAtDesc(author.get(), pageRequest)
-                .stream()
-                .map(SubscribersPostService::wrapPost)
-                .toList();
+        Sort.TypedSort<Post> post = Sort.sort(Post.class);
+        Sort sort = post.by(Post::getCreatedAt).descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return postRepository.findSubscribedPostsByProfile(author.get(), pageRequest).stream().map(SubscribersPostService::wrapPost).toList();
     }
 
     private static PostDto wrapPost(Post post) {
