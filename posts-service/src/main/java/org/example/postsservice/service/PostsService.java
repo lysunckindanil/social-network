@@ -25,17 +25,16 @@ public class PostsService {
     private final PostRepository postRepository;
     private final ShareSubscribersClient shareSubscribersClient;
 
+    @Transactional(readOnly = true)
     public List<PostDto> getPostsByProfileUsernamePageable(GetPostsPageableDto dto) {
         String username = dto.getProfileUsername();
-        int page = dto.getPage();
-        int size = dto.getSize();
         Optional<Profile> author = profileRepository.findByUsername(username);
         if (author.isEmpty())
             throw new BadRequestException("Username does not exist");
 
         Sort.TypedSort<Post> post = Sort.sort(Post.class);
         Sort sort = post.by(Post::getCreatedAt).descending();
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), sort);
 
         return postRepository.findByAuthor(author.get(), pageRequest)
                 .stream()

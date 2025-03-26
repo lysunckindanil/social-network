@@ -1,37 +1,31 @@
 package org.example.profileservice.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.example.profileservice.dto.GetProfilesPageableDto;
 import org.example.profileservice.dto.ProfileDto;
 import org.example.profileservice.service.ProfileService;
-import org.example.profileservice.util.BadRequestException;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
+@Validated
 @RequiredArgsConstructor
 @RestController
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PostMapping("/getByUsername")
-    ProfileDto getByUsername(@RequestBody String username) {
-        if (username == null || username.isEmpty()) {
-            throw new BadRequestException("Username cannot be null or empty");
-        }
+    @GetMapping("/getByUsername")
+    ProfileDto getByUsername(@RequestParam(value = "username", required = false)
+                             @NotEmpty(message = "Username should not be empty")
+                             String username) {
         return profileService.getProfileByUsername(username);
     }
 
     @PostMapping("/getAllPageable")
-    List<ProfileDto> getAllPageable(@RequestBody @Valid GetProfilesPageableDto dto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new BadRequestException(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
+    List<ProfileDto> getAllPageable(@RequestBody @Valid GetProfilesPageableDto dto) {
         return profileService.getAllProfilesPageable(dto);
     }
 }

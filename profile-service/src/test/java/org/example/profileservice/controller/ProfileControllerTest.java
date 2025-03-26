@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ActiveProfiles("test")
@@ -32,16 +33,15 @@ class ProfileControllerTest {
     @Test
     void getByUsername_Empty_Throws() throws Exception {
         mvc.perform(
-                post("/getByUsername")
-                        .contentType(MediaType.APPLICATION_JSON)
+                get("/getByUsername")
         ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     void getByUsername_Full_Ok() throws Exception {
         mvc.perform(
-                post("/getByUsername")
-                        .content("username")
+                get("/getByUsername")
+                        .param("username", "username")
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
